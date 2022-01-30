@@ -1,0 +1,500 @@
+\documentclass[10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{nopageno}
+\usepackage{float}
+
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{multirow}
+
+\usepackage{geometry}
+\geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=10mm,
+ right=10mm,
+ top=10mm,
+ bottom=10mm,
+}
+
+\begin{document}
+
+
+\begin{center}
+    \Huge\textbf{CS260 Coursework 2}\\
+\end{center}
+
+
+\vspace{-6mm}\section{Introduction}\vspace{-2mm}
+This document indicates our current understanding of the proposed project, and
+will be used alongside Deutsche Bank to clarify our position. We detail and
+analyse the requirements for a proposed mentoring software platform which should
+function internally at Deutsche Bank. Many employees want a broader
+understanding of how different departments within the company work in unison to
+successfully complete business projects. Alongside this, employees may also have
+weaknesses in certain business areas, which could be improved by working with
+more experienced people in different departments. A robust mentoring software
+platform would solve these issues, by appropriately assigning users
+knowledgeable mentors who could help them at a personal and professional level.
+
+\vspace{-4mm}\section{Glossary}\vspace{-2mm}
+\begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
+    \item
+        \textbf{Mentor:} The users who can approve a requested meeting and
+        select confirm a date.
+    \item
+        \textbf{Mentee:} The users who can request a meeting in a series of
+        targeted dates.
+    \item
+        \textbf{Plan of action:} The future task and achievement milestones that
+        can be created by mentee and mentor, and mentee can mark it as complete
+        or not.
+    \item
+        \textbf{Meeting:} This is the event that is held by a mentor and a mentee
+        in a specific time duration. Mentors teach business knowledge to
+        mentees. After the meeting, all users are available to provide feedback.
+    \item
+        \textbf{Workshop:} This is an event that is held by multiple people. The
+        main purpose is to major in mentees' weaknesses.
+    \item
+        \textbf{Feedback:} Mentor and mentee can summarise a review with each
+        other, based on their behaviours and sentiment during the whole training
+        period.
+    \item
+        \textbf{Group session:} This function is nearly the same as a workshop,
+        except there is no set topic.
+    \item
+        \textbf{Event:} A broad term that means meeting, workshop or group session.
+\end{itemize}
+
+\vspace{-8mm}\section{User stories}\vspace{-2mm}
+User A has recently graduated from university, and has joined Deutsche Bank in
+the Human Resources department. Coming from a non-technical background and being
+thrown into a very tech focused environment has led the user to believe it would
+be beneficial for them to have a general idea of the technologies they were
+using worked under the hood. They would therefore like to be paired with an
+experienced mentor who knows the inner workings of Deutsche Bank's technology
+system.
+
+User B has been working as a manager at Deutsche Bank for 7 years, and has
+mentored many employees throughout the years. The user notes that many of the
+mentees have a keen interest in how conflict in the workplace is handled from a
+managerial position. Rather than having to teach the same principles repeatedly
+for each mentee, the user would like a system that would allow them to create
+group sessions where these management principles could be taught to multiple
+mentees at once.
+
+User C has recently started mentoring employees at Deutsche Bank, and would like
+to do as much as possible to ensure their mentoring actually provides value to
+the mentees. Whilst the user believes the sessions are productive, there's no
+formal way for them to attain mentee feedback. The user would therefore like a
+system where mentees could provide feedback after each session. This would then
+allow the user to make changes about the way they mentor, to maximise their
+value to each employee.
+
+
+\vspace{-4mm}\section{Functional requirements}\vspace{-2mm}                         % TODO: Add some waffle about process and italicising developer requirements. Put non-functional first?
+\begin{longtable}{|p{0.55\linewidth}|p{0.4\linewidth}|}
+    \hline
+    \textbf{Functional requirements}
+        &
+    \textbf{Justification}
+    \\ \hline\hline
+
+    \textbf{F00 (Must Have) }
+    The user can register an account.
+    \textit{The user will be able to create an account by providing an email and
+    password, and add data about themselves.}
+        &
+    A user account system is necessary for users to identify themselves and to
+    access the application's functionality.
+    \\ \hline
+
+    \textbf{F01 (Could Have) }
+    The website will teach new users with tutorials.
+    \textit{The first time after the account is created, a tutorial for the
+    major features of the website will be provided.}
+        &
+    Users are provided enough information to fully understand the application's
+    features and functionality.
+    \\ \hline
+
+    \textbf{F02 (Must Have) }
+    The user will be able to log into their account using their email and
+    password and reset their password via email if they need to.
+    \textit{The system will check the database to see if a matching account
+    exists, and send a password reset link if required.}
+        &
+    User accounts are required to match up individuals. Being able to reset the
+    password by email is important as people often forget their passwords.
+    \\ \hline
+
+    \textbf{F03 (Must Have) }
+    The user will have a profile page, allowing them to view and modify data.
+    \textit{Data includes: their email address; their name; their job title;
+    whether they want to be a mentor, mentee, or both; their business area; 1-5
+    strengths; and 1-5 weaknesses. A “save” button will be used to update any
+    modified data and ensure that no essential data is left empty.}
+        &
+    Users must be able to update their profile page to keep the system
+    up-to-date, and the profiles must include their basic information along with
+    weaknesses and strengths in order for the system to suggest possible mentor
+    and mentee pairing.
+    \\ \hline
+
+    \textbf{F04 (Must Have) }
+    Any changes to the profile which will break the rules of mentoring between
+    current relationships will notify the user.
+    \textit{The notice is a warning and still allows the user to break the
+    relationship.}
+        &
+    This forms a good compromise between maintaining the rules of mentoring,
+    and not accidentally breaking good relationships
+    \\ \hline
+
+    \textbf{F05 (Must Have) }
+    Allow mentees to request a mentor, who will have strengths matching their
+    weaknesses.
+    \textit{The system will add the user to the list of people looking for
+    mentors.}
+        &
+    In order for mentors to be paired with mentees, mentees must first seek a
+    mentor by specifying an area of weakness.
+    \\ \hline
+
+    \textbf{F06 (Must Have) }
+    When selecting a mentee, a mentor will get access to their profile to help
+    the mentor make a decision.
+    \textit{Data will include their name, strengths, weaknesses, job title and
+    business area.}
+        &
+    This allows the mentor to gauge which mentee is most suitable to them,
+    adding a human element to the matching process.
+    \\ \hline
+
+    \textbf{F07 (Must Have) }
+    Mentors will be able to select mentees to mentor from a list of mentees who
+    satisfy the rules of mentoring, ordered by the likelihood of them being a
+    good match with the mentor.
+    \textit{The list will be filtered to exclude invalid mentees, e.g. same
+    business area, and the total order for the list of mentees to select from
+    will be based on matching metrics using data stored by the system.}             % TODO: Matching metrics comment?
+        &
+    This complements the above requirement by supplementing the human element of
+    matching with a computational one which filters invalid matches, and
+    encourages ones which would be good based on feedback and aggregated
+    metrics.
+    \\ \hline
+
+    \textbf{F08 (Must Have) }
+    When a mentor selects a mentee, the mentee will be able to accept or reject
+    the offer of mentoring.
+    \textit{The mentor profile is shown, and, if rejected, the mentee will then
+    not be shown to that mentor for a specified period of time.}
+        &
+    This allows mentees to view the profiles from their available mentors and
+    choose who they see the most fit, and avoids mentors repeatedly requesting
+    mentees in a short time.
+    \\ \hline
+
+    \textbf{F09 (Must Have) }
+    Mentors will be prompted to select mentees if they are not mentoring anyone.
+    Mentees will only be allowed to have one mentor at a time.
+    \textit{Mentors can have several mentees if they want, however the system
+    must follow the rules of mentoring.}
+        &
+    Mentors should always have someone to mentor if there is any mentee
+    compatible with them, as otherwise there may not be enough mentors.
+    \\ \hline
+
+    \textbf{F10 (Must Have) }
+    Both mentors and mentees will be able to terminate the relationship at any
+    time, and feedback should be required for why it was terminated.
+    \textit{This feedback includes a numerical rating and text to be shown to
+    the other person.}
+        &
+    Termination of any mentor/mentee relationships can be due to reasons of poor
+    fit. Feedback is also necessary for mentors to improve their mentorship.
+    \\ \hline
+
+    \textbf{F11 (Must Have) }
+    Mentees will be able to propose a meeting, providing a brief description of
+    the agenda of the meeting, and/or the category it relates to.
+    \textit{The agenda will be free text whereas the category will be from the
+    discrete list of strengths/weaknesses.}
+        &
+    This follows the first rule of mentoring where the mentee must drive the
+    relationship whenever they need unblocking.
+    \\ \hline
+
+    \textbf{F12 (Should Have) }
+    Mentors will be prompted to suggest three meeting start/end times that would
+    work for them (and info about where it will be).
+    \textit{Must ensure that the meetings are not at the same time as another
+    event in the system.}
+        &
+    This is to allow for flexibility in meeting time proposals by the mentor,
+    whilst still following the rule of mentors giving up time/
+    \\ \hline
+
+    \textbf{F13 (Must Have) }
+    Mentees will be able to either accept one of the meeting start/end times, or
+    send a request back to the mentor asking for more meeting start/end times.
+    \textit{The mentor must give up time to the mentee so this cycle is required.}
+        &
+    For a meeting to go ahead, both parties must be free for it. This confirms
+    this, given the above requirement of mentors suggesting times for meetings.
+    \\ \hline
+
+    \textbf{F14 (Must Have) }
+    After the end time of the meeting has passed, both users will be prompted to
+    provide feedback on the meeting.
+    \textit{They will summarise the meeting with a free text field, and numeric
+    metrics, and whether the meeting was attended and be able to see the other's
+    feedback.}
+        &
+    This is to allow the recording of discussions and for the users to reflect
+    on the meeting where necessary.
+    \\ \hline
+
+    \textbf{F15 (Must Have) }
+    Plans of action for a mentor/mentee pair will be able to be created by both
+    parties.
+    \textit{The system only allows for plans of actions to be created between a
+    pair of people.}
+        &
+    This is suggested by the mentor and followed through by the mentee when
+    possible to resolve the weaknesses of the mentee.
+    \\ \hline
+
+    \textbf{F16 (Must Have) }
+    New milestones will be able to be added and modified by both parties, being
+    either personal or professional, having a description, a priority, and a
+    target completion date.
+    \textit{The description will be free text, priority and a number and
+    completion date.}
+        &
+    Plans of action have milestones to keep track of the progress made by the
+    mentee. It is important for the mentee to have set goals and priorities to
+    work towards.
+    \\ \hline
+
+    \textbf{F17 (Must Have) }
+    Milestones will be able to be marked as completed by mentees, and if a
+    milestone has not been completed after its target completion date, mentees
+    will be prompted to mark it as complete or update its target date.
+    \textit{This prompt will be given the next time the mentee signs in.}
+        &
+    This ensures that the mentee is able to see their progress, and the mentor
+    can provide further guidance to the mentee if they remain on a milestone for
+    a prolonged period.
+    \\ \hline
+
+    \textbf{F18 (Should Have) }                                                     % TODO: This is fulfilling the spec, so really should be must have?
+    General feedback will be able to be provided at any time.
+    \textit{Including free text submissions and updateable numerical metrics,
+    and feedback for specific topic areas will be provided in the same way to
+    refine the suggestion process.}
+        &
+    This is so feedback can be provided outside of just meetings and termination
+    of relationships.
+    \\ \hline
+
+    \textbf{F19 (Should Have) }
+    If there are enough people with a specified weakness, people identified as
+    experts in that area will be prompted to organise a workshop on it.
+    \textit{Using prior feedback, the system can determine if a person is an
+    expert.}
+        &
+    Experts are able to run workshops to cover a specific 'weakness' topic
+    extensively and potentially through a group setting.
+    \\ \hline
+
+    \textbf{F20 (Must Have) }
+    To create a workshop, the user will set a workshop start/end, and a brief
+    description of what the workshop will cover within the specified weakness
+    category.
+    \textit{The workshop will then be registered as an event within the system
+    that anyone can go to.}
+        &
+    Information on the workshops can be viewed on the dashboard on the site. The
+    description should provide attendees an idea of what the workshop will focus
+    on.
+    \\ \hline
+
+    \textbf{F21 (Must Have) }
+    Group sessions will be created, run, and reviewed in the same way as
+    workshops.
+        &
+    Group sessions are equivalent to workshops within the system, with the one
+    difference outlined in the glossary not being in the system.
+    \\ \hline
+
+    \textbf{F22 (Must Have) }
+    Signed in users will be able to submit feedback/bug reports to the system.
+    \textit{There will be a button at the top of the dashboard that allows you
+    to go to the feedback screen.}
+        &
+    Feedback/bug reports is crucial to the maintenance and further development
+    of the application.
+    \\ \hline
+
+    \textbf{F23 (Should Have) }
+    The user will be able to disclose security issues.
+    \textit{There will be a security.txt file for responsible disclosure of
+    security issues - not necessarily requiring the user to be signed in.}
+        &
+    System administrators must be made aware of any security issues, so they can
+    resolve them promptly/
+    \\ \hline
+
+    \textbf{F24 (Must Have) }
+    The system will have a dashboard that gives a personalised view of the users
+    current meetings, plans of actions, workshops/group sessions and access to
+    the profile page.
+    \textit{This will be the main page the user gets placed on when they log in.}
+        &
+    Users must be able to navigate the site easily, so a dashboard where
+    important notifications are shown will facilitate this.
+    \\ \hline
+
+    \textbf{F25 (Must Have) }
+    Users will be able to see a list of current workshops.
+    \textit{It will be an ordered list of workshops grouped into weeks and then
+    ordered by rating, which can be filtered by the users weaknesses.}
+    &
+    This will allow users to easily select workshops most relevant to them.
+    \\ \hline
+
+\end{longtable}
+
+
+\vspace{-4mm}\section{Non-functional requirements}\vspace{-2mm}
+\begin{longtable}{|p{0.55\linewidth}|p{0.4\linewidth}|}
+    \hline
+    \textbf{Non-functional requirements}
+        &
+    \textbf{Justification}
+    \\ \hline\hline
+
+    \textbf{NF00 (Must Have) }
+    The system will be intuitive to use and navigate.
+    \textit{The system must have a UI that makes it inherently clear to the user
+    what all parts of the interface do. Each part of the UI will have a clear,
+    distinct and useful purpose that is unambiguous.}
+        &
+    The user is able to clearly identify the functionalities of each widget
+    through concise and thorough UI design.
+    \\ \hline
+
+    \textbf{NF01 (Must Have) }
+    The system will be simple to use even for users with less technical experience.
+    \textit{The UI and the tutorial will make the system suitable for everyone.}
+        &
+    The user does not need any familiarity with the application before beginning
+    to use it.
+    \\ \hline
+
+    \textbf{NF03 (Should Have) }
+    The system will be quick to respond to the user.
+    \textit{90th percentile of API request times are under 10 seconds.}
+        &
+    The user should not feel any notable delay in the responsiveness of the
+    system.
+    \\ \hline
+
+    \textbf{NF04 (Won't Have) }
+    The system will be able to handle large and varied numbers of users.
+    \textit{This will not be explicitly supported, but design choices will be
+    made to facilitate it in future development}
+        &
+    This is out of scope of the prototype, however, it is useful to design so
+    it can be easily scaled by future maintainers
+    \\ \hline
+
+    \textbf{NF05 (Must Have) }
+    The system will be kept up to date.
+    \textit{The system will be easy to maintain and modularised so that each        % TODO: Not sure how relevant this is?
+    section of the software can independently be worked upon and inserted back
+    into the system when doing maintenance. All code should be appropriately
+    commented.}
+        &
+    The system should be regularly updated to improve performance and
+    responsiveness.
+    \\ \hline
+
+    \textbf{NF06 (Must Have) }
+    The system will be easy to test and validate its properties.
+    \textit{The system will be modularised so that it can be tested on a system
+    scale and so that each independent unit can be unit tested. Acceptance
+    testing for the usability of the UI should be possible. CI/CD will be used
+    to facilitate this.}
+        &
+    The system must be tested and validated to ensure the functionalities and UI
+    work correctly and are following its intended design.
+    \\ \hline
+
+    \textbf{NF07 (Must Have) }
+    The system will follow all relevant laws.
+    \textit{The system will comply with GDPR, cookie laws and any other relevant
+    laws.}
+        &
+    It is paramount that the system is legal for it to be used in a corporate
+    setting.
+    \\ \hline
+
+    \textbf{NF08 (Must Have) }
+    The site will employ good security practises.
+    \textit{Such as hashing/salting passwords and sanitising user input.}
+        &
+    Security is crucial to ensuring that any registered user's data is protected.
+    \\ \hline
+
+\end{longtable}
+
+\vspace{-4mm}\section{Team organisation}\vspace{-2mm}
+\subsection{Team roles}\vspace{-2mm}
+
+\begin{table}[H]
+\begin{tabular}{p{0.2\linewidth}|p{0.1\linewidth}|p{0.6\linewidth}}
+    \hline
+    \textbf{Team member} & \textbf{Role}                      & \textbf{Responsibilities} \\ \hline\hline
+    Dan Risk             & Project manager                    &
+        Schedule meetings, coordinate tasks for group members to balance team
+        workload and ensure the project is on schedule to meet the deadline.
+    \\ \hline
+    Ben Lewis            & \multirow{3}{1\linewidth}{Website developer} & \multirow{3}{1\linewidth}{
+        Design front-end website layout and functions, interpret information
+        sent from back-end and display it to the user.
+    } \\
+    Jay Re Ng            & \\
+    John-Loong Gao       & \\ \hline
+    Edmund Goodman       & \multirow{3}{1\linewidth}{Back-end engineer} & \multirow{3}{1\linewidth}{
+        Implement the system to interpret and process data received from the
+        front-end, provide data to be displayed to the front-end, and manage
+        effective data storage in the system database.
+    } \\
+    Tomas Chapman Fromm  & \\
+    Rahul Vanmali        & \\
+    \hline
+\end{tabular}
+\end{table}
+
+Additionally, Tomas Chapman Fromm was allocated as Business Analyst, and Ben        % TODO: Add some more waffle here
+Lewis as team leaders for website development and back-end engineering
+respectively.
+
+\vspace{-4mm}\subsection{Scheduling}\vspace{-2mm}
+In-person group meetings Monday and Friday, as well as additional meetings or
+collaborative work time to help meet deadlines. Monday meetings to see progress
+on weekend tasks and set tasks for the week, Friday meetings to see progress on
+week and set tasks for the weekend.
+
+\vspace{-4mm}\subsection{References}\vspace{-2mm}                                   % TODO: Add some more waffle here
+References
+
+\end{document}
