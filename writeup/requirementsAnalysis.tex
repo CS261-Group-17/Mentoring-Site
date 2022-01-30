@@ -5,8 +5,13 @@
 \usepackage{enumitem}
 \usepackage{longtable}
 \usepackage{nopageno}
-\usepackage{geometry}
 \usepackage{float}
+
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{multirow}
+
+\usepackage{geometry}
 \geometry{
  a4paper,
  total={170mm,257mm},
@@ -92,7 +97,7 @@ allow the user to make changes about the way they mentor, to maximise their
 value to each employee.
 
 
-\vspace{-4mm}\section{Functional requirements}\vspace{-2mm}
+\vspace{-4mm}\section{Functional requirements}\vspace{-2mm}                         % TODO: Add some waffle about process and italicising developer requirements. Put non-functional first?
 \begin{longtable}{|p{0.55\linewidth}|p{0.4\linewidth}|}
     \hline
     \textbf{Functional requirements}
@@ -129,13 +134,6 @@ value to each employee.
     \\ \hline
 
     \textbf{F03 (Must Have) }
-    The site will employ good security practises.
-    \textit{Such as hashing/salting passwords and sanitising user input.}
-        &
-    Security is crucial to ensuring that any registered user’s data is protected.
-    \\ \hline
-
-    \textbf{F04 (Must Have) }
     The user will have a profile page, allowing them to view and modify data.
     \textit{Data includes: their email address; their name; their job title;
     whether they want to be a mentor, mentee, or both; their business area; 1-5
@@ -148,7 +146,7 @@ value to each employee.
     and mentee pairing.
     \\ \hline
 
-    \textbf{F05 (Must Have) }
+    \textbf{F04 (Must Have) }
     Any changes to the profile which will break the rules of mentoring between
     current relationships will notify the user.
     \textit{The notice is a warning and still allows the user to break the
@@ -158,7 +156,7 @@ value to each employee.
     and not accidentally breaking good relationships
     \\ \hline
 
-    \textbf{F06 (Must Have) }
+    \textbf{F05 (Must Have) }
     Allow mentees to request a mentor, who will have strengths matching their
     weaknesses.
     \textit{The system will add the user to the list of people looking for
@@ -168,7 +166,7 @@ value to each employee.
     mentor by specifying an area of weakness.
     \\ \hline
 
-    \textbf{F07 (Must Have) }
+    \textbf{F06 (Must Have) }
     When selecting a mentee, a mentor will get access to their profile to help
     the mentor make a decision.
     \textit{Data will include their name, strengths, weaknesses, job title and
@@ -178,13 +176,13 @@ value to each employee.
     adding a human element to the matching process.
     \\ \hline
 
-    \textbf{F08 (Must Have) }
+    \textbf{F07 (Must Have) }
     Mentors will be able to select mentees to mentor from a list of mentees who
     satisfy the rules of mentoring, ordered by the likelihood of them being a
     good match with the mentor.
     \textit{The list will be filtered to exclude invalid mentees, e.g. same
     business area, and the total order for the list of mentees to select from
-    will be based on matching metrics using data stored by the system.}             % Matching metrics comment?
+    will be based on matching metrics using data stored by the system.}             % TODO: Matching metrics comment?
         &
     This complements the above requirement by supplementing the human element of
     matching with a computational one which filters invalid matches, and
@@ -192,7 +190,7 @@ value to each employee.
     metrics.
     \\ \hline
 
-    \textbf{F09 (Must Have) }
+    \textbf{F08 (Must Have) }
     When a mentor selects a mentee, the mentee will be able to accept or reject
     the offer of mentoring.
     \textit{The mentor profile is shown, and, if rejected, the mentee will then
@@ -203,7 +201,7 @@ value to each employee.
     mentees in a short time.
     \\ \hline
 
-    \textbf{F10 (Must Have) }
+    \textbf{F09 (Must Have) }
     Mentors will be prompted to select mentees if they are not mentoring anyone.
     Mentees will only be allowed to have one mentor at a time.
     \textit{Mentors can have several mentees if they want, however the system
@@ -213,7 +211,7 @@ value to each employee.
     compatible with them, as otherwise there may not be enough mentors.
     \\ \hline
 
-    \textbf{F11 (Must Have) }
+    \textbf{F10 (Must Have) }
     Both mentors and mentees will be able to terminate the relationship at any
     time, and feedback should be required for why it was terminated.
     \textit{This feedback includes a numerical rating and text to be shown to
@@ -223,7 +221,7 @@ value to each employee.
     fit. Feedback is also necessary for mentors to improve their mentorship.
     \\ \hline
 
-    \textbf{F12 (Must Have) }
+    \textbf{F11 (Must Have) }
     Mentees will be able to propose a meeting, providing a brief description of
     the agenda of the meeting, and/or the category it relates to.
     \textit{The agenda will be free text whereas the category will be from the
@@ -233,7 +231,7 @@ value to each employee.
     relationship whenever they need unblocking.
     \\ \hline
 
-    \textbf{F13 (Should Have) }
+    \textbf{F12 (Should Have) }
     Mentors will be prompted to suggest three meeting start/end times that would
     work for them (and info about where it will be).
     \textit{Must ensure that the meetings are not at the same time as another
@@ -243,7 +241,7 @@ value to each employee.
     whilst still following the rule of mentors giving up time/
     \\ \hline
 
-    \textbf{F14 (Must Have) }
+    \textbf{F13 (Must Have) }
     Mentees will be able to either accept one of the meeting start/end times, or
     send a request back to the mentor asking for more meeting start/end times.
     \textit{The mentor must give up time to the mentee so this cycle is required.}
@@ -252,7 +250,7 @@ value to each employee.
     this, given the above requirement of mentors suggesting times for meetings.
     \\ \hline
 
-    \textbf{F15 (Must Have) }
+    \textbf{F14 (Must Have) }
     After the end time of the meeting has passed, both users will be prompted to
     provide feedback on the meeting.
     \textit{They will summarise the meeting with a free text field, and numeric
@@ -263,7 +261,7 @@ value to each employee.
     on the meeting where necessary.
     \\ \hline
 
-    \textbf{F16 (Must Have) }
+    \textbf{F15 (Must Have) }
     Plans of action for a mentor/mentee pair will be able to be created by both
     parties.
     \textit{The system only allows for plans of actions to be created between a
@@ -273,7 +271,7 @@ value to each employee.
     possible to resolve the weaknesses of the mentee.
     \\ \hline
 
-    \textbf{F17 (Must Have) }
+    \textbf{F16 (Must Have) }
     New milestones will be able to be added and modified by both parties, being
     either personal or professional, having a description, a priority, and a
     target completion date.
@@ -285,7 +283,7 @@ value to each employee.
     work towards.
     \\ \hline
 
-    \textbf{F18 (Must Have) }
+    \textbf{F17 (Must Have) }
     Milestones will be able to be marked as completed by mentees, and if a
     milestone has not been completed after its target completion date, mentees
     will be prompted to mark it as complete or update its target date.
@@ -296,7 +294,7 @@ value to each employee.
     a prolonged period.
     \\ \hline
 
-    \textbf{F19 (Should Have) }                                                     % This is fulfilling the spec, so really should be must have?
+    \textbf{F18 (Should Have) }                                                     % TODO: This is fulfilling the spec, so really should be must have?
     General feedback will be able to be provided at any time.
     \textit{Including free text submissions and updateable numerical metrics,
     and feedback for specific topic areas will be provided in the same way to
@@ -306,7 +304,7 @@ value to each employee.
     of relationships.
     \\ \hline
 
-    \textbf{F20 (Should Have) }
+    \textbf{F19 (Should Have) }
     If there are enough people with a specified weakness, people identified as
     experts in that area will be prompted to organise a workshop on it.
     \textit{Using prior feedback, the system can determine if a person is an
@@ -316,7 +314,7 @@ value to each employee.
     extensively and potentially through a group setting.
     \\ \hline
 
-    \textbf{F21 (Must Have) }
+    \textbf{F20 (Must Have) }
     To create a workshop, the user will set a workshop start/end, and a brief
     description of what the workshop will cover within the specified weakness
     category.
@@ -328,7 +326,7 @@ value to each employee.
     on.
     \\ \hline
 
-    \textbf{F22 (Must Have) }
+    \textbf{F21 (Must Have) }
     Group sessions will be created, run, and reviewed in the same way as
     workshops.
         &
@@ -336,7 +334,7 @@ value to each employee.
     difference outlined in the glossary not being in the system.
     \\ \hline
 
-    \textbf{F23 (Must Have) }
+    \textbf{F22 (Must Have) }
     Signed in users will be able to submit feedback/bug reports to the system.
     \textit{There will be a button at the top of the dashboard that allows you
     to go to the feedback screen.}
@@ -345,7 +343,7 @@ value to each employee.
     of the application.
     \\ \hline
 
-    \textbf{F24 (Should Have) }
+    \textbf{F23 (Should Have) }
     The user will be able to disclose security issues.
     \textit{There will be a security.txt file for responsible disclosure of
     security issues - not necessarily requiring the user to be signed in.}
@@ -354,7 +352,7 @@ value to each employee.
     resolve them promptly/
     \\ \hline
 
-    \textbf{F25 (Must Have) }
+    \textbf{F24 (Must Have) }
     The system will have a dashboard that gives a personalised view of the users
     current meetings, plans of actions, workshops/group sessions and access to
     the profile page.
@@ -364,7 +362,7 @@ value to each employee.
     important notifications are shown will facilitate this.
     \\ \hline
 
-    \textbf{F27 (Must Have) }
+    \textbf{F25 (Must Have) }
     Users will be able to see a list of current workshops.
     \textit{It will be an ordered list of workshops grouped into weeks and then
     ordered by rating, which can be filtered by the users weaknesses.}
@@ -372,36 +370,123 @@ value to each employee.
     This will allow users to easily select workshops most relevant to them.
     \\ \hline
 
-    % \textbf{F00 (Must Have) }
-    % aaa
-    % \textit{aaa}
-    % &
-    % aaa
-    % \\ \hline
-
 \end{longtable}
 
 
 \vspace{-4mm}\section{Non-functional requirements}\vspace{-2mm}
 \begin{longtable}{|p{0.55\linewidth}|p{0.4\linewidth}|}
     \hline
-    \textbf{Functional requirements}
+    \textbf{Non-functional requirements}
         &
     \textbf{Justification}
     \\ \hline\hline
 
-    \textbf{F00 (Must Have) }
-    aaa
-    \textit{aaa}
-    &
-    aaa
+    \textbf{NF00 (Must Have) }
+    The system will be intuitive to use and navigate.
+    \textit{The system must have a UI that makes it inherently clear to the user
+    what all parts of the interface do. Each part of the UI will have a clear,
+    distinct and useful purpose that is unambiguous.}
+        &
+    The user is able to clearly identify the functionalities of each widget
+    through concise and thorough UI design.
+    \\ \hline
+
+    \textbf{NF01 (Must Have) }
+    The system will be simple to use even for users with less technical experience.
+    \textit{The UI and the tutorial will make the system suitable for everyone.}
+        &
+    The user does not need any familiarity with the application before beginning
+    to use it.
+    \\ \hline
+
+    \textbf{NF03 (Should Have) }
+    The system will be quick to respond to the user.
+    \textit{90th percentile of API request times are under 10 seconds.}
+        &
+    The user should not feel any notable delay in the responsiveness of the
+    system.
+    \\ \hline
+
+    \textbf{NF04 (Won't Have) }
+    The system will be able to handle large and varied numbers of users.
+    \textit{This will not be explicitly supported, but design choices will be
+    made to facilitate it in future development}
+        &
+    This is out of scope of the prototype, however, it is useful to design so
+    it can be easily scaled by future maintainers
+    \\ \hline
+
+    \textbf{NF05 (Must Have) }
+    The system will be kept up to date.
+    \textit{The system will be easy to maintain and modularised so that each        % TODO: Not sure how relevant this is?
+    section of the software can independently be worked upon and inserted back
+    into the system when doing maintenance. All code should be appropriately
+    commented.}
+        &
+    The system should be regularly updated to improve performance and
+    responsiveness.
+    \\ \hline
+
+    \textbf{NF06 (Must Have) }
+    The system will be easy to test and validate its properties.
+    \textit{The system will be modularised so that it can be tested on a system
+    scale and so that each independent unit can be unit tested. Acceptance
+    testing for the usability of the UI should be possible. CI/CD will be used
+    to facilitate this.}
+        &
+    The system must be tested and validated to ensure the functionalities and UI
+    work correctly and are following its intended design.
+    \\ \hline
+
+    \textbf{NF07 (Must Have) }
+    The system will follow all relevant laws.
+    \textit{The system will comply with GDPR, cookie laws and any other relevant
+    laws.}
+        &
+    It is paramount that the system is legal for it to be used in a corporate
+    setting.
+    \\ \hline
+
+    \textbf{NF08 (Must Have) }
+    The site will employ good security practises.
+    \textit{Such as hashing/salting passwords and sanitising user input.}
+        &
+    Security is crucial to ensuring that any registered user's data is protected.
     \\ \hline
 
 \end{longtable}
 
 \vspace{-4mm}\section{Team organisation}\vspace{-2mm}
 \subsection{Team roles}\vspace{-2mm}
-Table
+
+\begin{table}[H]
+\begin{tabular}{p{0.2\linewidth}|p{0.1\linewidth}|p{0.6\linewidth}}
+    \hline
+    \textbf{Team member} & \textbf{Role}                      & \textbf{Responsibilities} \\ \hline\hline
+    Dan Risk             & Project manager                    &
+        Schedule meetings, coordinate tasks for group members to balance team
+        workload and ensure the project is on schedule to meet the deadline.
+    \\ \hline
+    Ben Lewis            & \multirow{3}{1\linewidth}{Website developer} & \multirow{3}{1\linewidth}{
+        Design front-end website layout and functions, interpret information
+        sent from back-end and display it to the user.
+    } \\
+    Jay Re Ng            & \\
+    John-Loong Gao       & \\ \hline
+    Edmund Goodman       & \multirow{3}{1\linewidth}{Back-end engineer} & \multirow{3}{1\linewidth}{
+        Implement the system to interpret and process data received from the
+        front-end, provide data to be displayed to the front-end, and manage
+        effective data storage in the system database.
+    } \\
+    Tomas Chapman Fromm  & \\
+    Rahul Vanmali        & \\
+    \hline
+\end{tabular}
+\end{table}
+
+Additionally, Tomas Chapman Fromm was allocated as Business Analyst, and Ben        % TODO: Add some more waffle here
+Lewis as team leaders for website development and back-end engineering
+respectively.
 
 \vspace{-4mm}\subsection{Scheduling}\vspace{-2mm}
 In-person group meetings Monday and Friday, as well as additional meetings or
@@ -409,7 +494,7 @@ collaborative work time to help meet deadlines. Monday meetings to see progress
 on weekend tasks and set tasks for the week, Friday meetings to see progress on
 week and set tasks for the weekend.
 
-\vspace{-4mm}\subsection{References}\vspace{-2mm}
+\vspace{-4mm}\subsection{References}\vspace{-2mm}                                   % TODO: Add some more waffle here
 References
 
 \end{document}
