@@ -7,6 +7,11 @@
 \usepackage{nopageno}
 \usepackage{float}
 
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, filecolor=magenta, urlcolor=blue,
+    citecolor=black}
+
 \usepackage[normalem]{ulem}
 \useunder{\uline}{\ul}{}
 \usepackage{multirow}
@@ -25,7 +30,10 @@
 
 
 \begin{center}
-    \Huge\textbf{CS261 Coursework 2}\\
+    \Huge\textbf{CS261 Coursework Requirements Analysis}\\
+    \vspace{2mm}
+    \large{\textit{\textbf{Group 17:} Ben Lewis, Dan Risk, Edmund Goodman,
+    Jay Re Ng, John-Loong Gao, Rahul Vanmali, Tomás Chapmann Fromm}}
 \end{center}
 
 
@@ -72,13 +80,13 @@ knowledgeable mentors who could help them at a personal and professional level.
 \end{itemize}
 
 \vspace{-8mm}\section{User stories}\vspace{-2mm}
-User A has recently graduated from university, and has joined Deutsche Bank in
-the Human Resources department. Coming from a non-technical background and being
-thrown into a very tech focused environment has led the user to believe it would
-be beneficial for them to have a general idea of the technologies they were
-using worked under the hood. They would therefore like to be paired with an
-experienced mentor who knows the inner workings of Deutsche Bank's technology
-system.
+User A has recently graduated from university, and has joined
+Deutsche Bank in the Human Resources department. Coming from a non-technical
+background and being thrown into a very tech focused environment has led the
+user to believe it would be beneficial for them to have a general idea of the
+technologies they were using worked under the hood. They would therefore like to
+be paired with an experienced mentor who knows the inner workings of Deutsche
+Bank's technology system.
 
 User B has been working as a manager at Deutsche Bank for 7 years, and has
 mentored many employees throughout the years. The user notes that many of the
@@ -261,22 +269,22 @@ value to each employee.
     on the meeting where necessary.
     \\ \hline
 
-    \textbf{F15 (Must Have) }
-    Plans of action for a mentor/mentee pair will be able to be created by both
-    parties.
-    \textit{The system only allows for plans of actions to be created between a
-    pair of people.}
+    \textbf{F15 (Could Have) }
+    Sentiment analysis will be used on the free text feedback provided by users.
+    \textit{This will provide a supplementary metric which can be analysed for
+    use in planning by the system.}
         &
-    This is suggested by the mentor and followed through by the mentee when
-    possible to resolve the weaknesses of the mentee.
+    Additional metrics mean more data which can improve the way events or
+    mentees are presented by the system, encouraging users to make decisions the
+    system believes will be more optimal.
     \\ \hline
 
+
     \textbf{F16 (Must Have) }
-    New milestones will be able to be added and modified by both parties, being
-    either personal or professional, having a description, a priority, and a
-    target completion date.
-    \textit{The description will be free text, priority and a number and
-    completion date.}
+    Every user will start with their own empty plan of action when they create
+    an account, to which they can add milestones.
+    \textit{Users can have plans of actions without a mentor, and the milestones
+    will contain a description, a priority, and a target completion date}
         &
     Plans of action have milestones to keep track of the progress made by the
     mentee. It is important for the mentee to have set goals and priorities to
@@ -284,6 +292,18 @@ value to each employee.
     \\ \hline
 
     \textbf{F17 (Must Have) }
+    When a user starts being mentored, their mentor will be able to see their
+    plan of action.
+    \textit{The mentor will only be able to see milestones after they started
+    mentoring the mentee.}
+        &
+    The long term goals of a user are not necessarily linked to a mentor, so
+    a plan of action which persists across mentors is beneficial. However, such
+    plans of action may contain sensitive information from the past a mentor
+    should not have access to.
+    \\ \hline
+
+    \textbf{F18 (Should Have) }
     Milestones will be able to be marked as completed by mentees, and if a
     milestone has not been completed after its target completion date, mentees
     will be prompted to mark it as complete or update its target date.
@@ -294,7 +314,7 @@ value to each employee.
     a prolonged period.
     \\ \hline
 
-    \textbf{F18 (Should Have) }                                                     % TODO: This is fulfilling the spec, so really should be must have?
+    \textbf{F19 (Must Have) }
     General feedback will be able to be provided at any time.
     \textit{Including free text submissions and updateable numerical metrics,
     and feedback for specific topic areas will be provided in the same way to
@@ -304,7 +324,7 @@ value to each employee.
     of relationships.
     \\ \hline
 
-    \textbf{F19 (Should Have) }
+    \textbf{F20 (Should Have) }
     If there are enough people with a specified weakness, people identified as
     experts in that area will be prompted to organise a workshop on it.
     \textit{Using prior feedback, the system can determine if a person is an
@@ -314,7 +334,7 @@ value to each employee.
     extensively and potentially through a group setting.
     \\ \hline
 
-    \textbf{F20 (Must Have) }
+    \textbf{F21 (Must Have) }
     To create a workshop, the user will set a workshop start/end, and a brief
     description of what the workshop will cover within the specified weakness
     category.
@@ -326,7 +346,7 @@ value to each employee.
     on.
     \\ \hline
 
-    \textbf{F21 (Must Have) }
+    \textbf{F22 (Must Have) }
     Group sessions will be created, run, and reviewed in the same way as
     workshops.
         &
@@ -334,7 +354,7 @@ value to each employee.
     difference outlined in the glossary not being in the system.
     \\ \hline
 
-    \textbf{F22 (Must Have) }
+    \textbf{F23 (Must Have) }
     Signed in users will be able to submit feedback/bug reports to the system.
     \textit{There will be a button at the top of the dashboard that allows you
     to go to the feedback screen.}
@@ -343,16 +363,17 @@ value to each employee.
     of the application.
     \\ \hline
 
-    \textbf{F23 (Should Have) }
+    \textbf{F24 (Should Have) }
     The user will be able to disclose security issues.
-    \textit{There will be a security.txt file for responsible disclosure of
-    security issues - not necessarily requiring the user to be signed in.}
+    \textit{There will be a security.txt file \cite{security_txt} for
+    responsible disclosure ofsecurity issues - not necessarily requiring the
+    user to be signed in.}
         &
     System administrators must be made aware of any security issues, so they can
-    resolve them promptly/
+    resolve them promptly.
     \\ \hline
 
-    \textbf{F24 (Must Have) }
+    \textbf{F25 (Must Have) }
     The system will have a dashboard that gives a personalised view of the users
     current meetings, plans of actions, workshops/group sessions and access to
     the profile page.
@@ -362,12 +383,43 @@ value to each employee.
     important notifications are shown will facilitate this.
     \\ \hline
 
-    \textbf{F25 (Must Have) }
+    \textbf{F26 (Must Have) }
     Users will be able to see a list of current workshops.
     \textit{It will be an ordered list of workshops grouped into weeks and then
     ordered by rating, which can be filtered by the users weaknesses.}
     &
     This will allow users to easily select workshops most relevant to them.
+    \\ \hline
+
+    \textbf{F27 (Won't Have) }
+    The prototype system will not use Deutsche Bank branding.
+    \textit{A simple generic theme will be used, which could then later be
+    easily changed to include Deutsche Bank branding.}
+    &
+    This is specified as out of scope by the project specification, and it would
+    be simple to change to include it in the future.
+    \\ \hline
+
+    \textbf{F28 (Won't Have) }
+    The system will not support video conferencing or messaging.
+    \textit{Meetings will be set up as having times, and can then have either
+    physical locations or video conference links included in their description.}
+    &
+    This is beyond the scope of the project, as meetings are specified to happen
+    in person, or on a different system. Messaging could be convenient for
+    scheduling meetings, however, this is also out of scope.
+    \\ \hline
+
+    \textbf{F29 (Should Have) }
+    Users will have an inbox of notifications which will indicate upcoming
+    events such as meetings or milestone targets.
+    \textit{The inbox will be presented as a date ordered list, notifications
+    will be recorded as read or unread, so the number of unread notifications
+    can be indicated to the user.}
+    &
+    This allows users to easily keep track of events which are upcoming, as
+    otherwise it would be easy for example to forget about a meeting which
+    was scheduled some time in the future.
     \\ \hline
 
 \end{longtable}
@@ -401,10 +453,11 @@ value to each employee.
 
     \textbf{NF03 (Should Have) }
     The system will be quick to respond to the user.
-    \textit{90th percentile of API request times are under 10 seconds.}
+    \textit{90th percentile of API request times will be under 1 seconds.}
         &
     The user should not feel any notable delay in the responsiveness of the
-    system.
+    system. This threshold is noted as the bound for retaining "user's flow
+    of thought" by Jakob Nielsen \cite{usability_engineering}.
     \\ \hline
 
     \textbf{NF04 (Won't Have) }
@@ -440,18 +493,36 @@ value to each employee.
 
     \textbf{NF07 (Must Have) }
     The system will follow all relevant laws.
-    \textit{The system will comply with GDPR, cookie laws and any other relevant
-    laws.}
+    \textit{The system will comply with data protection \cite{data_protection} and cookie laws \cite{cookie_law}, along
+    with any other relevant legislation.}
         &
     It is paramount that the system is legal for it to be used in a corporate
     setting.
     \\ \hline
 
     \textbf{NF08 (Must Have) }
-    The site will employ good security practises.
+    The system will employ good security practises.
     \textit{Such as hashing/salting passwords and sanitising user input.}
         &
     Security is crucial to ensuring that any registered user's data is protected.
+    \\ \hline
+
+    \textbf{NF09 (Won't Have) }
+    The system will not have a dedicated mobile or desktop app, it will only
+    run as a web app in a browser
+    \textit{Such as hashing/salting passwords and sanitising user input.}
+        &
+    It is out of scope to concurrently design multiple different types of app
+    concurrently, so only the most widely accessible type will be developed.
+    \\ \hline
+
+    \textbf{NF10 (Should Have) }
+    The system will be accessible to those with disabilities \cite{accessibility}.
+    \textit{Techniques such as high contrast modes, enlarged text, and
+    optimisation for screen readers will be used to facilitate use by all.}
+        &
+    It is important for companies to be inclusive, and ensuring that websites
+    are usable by those with disabilities is required to achieve this.
     \\ \hline
 
 \end{longtable}
@@ -478,15 +549,15 @@ value to each employee.
         front-end, provide data to be displayed to the front-end, and manage
         effective data storage in the system database.
     } \\
-    Tomas Chapman Fromm  & \\
+    Tomás Chapman Fromm  & \\
     Rahul Vanmali        & \\
     \hline
 \end{tabular}
 \end{table}
 
-Additionally, Tomas Chapman Fromm was allocated as Business Analyst, and Ben        % TODO: Add some more waffle here
-Lewis as team leaders for website development and back-end engineering
-respectively.
+Additionally, Tomás Chapman Fromm was allocated as Business Analyst, and Ben
+Lewis and Edmund Goodman as team leaders for website development and back-end
+engineering respectively.
 
 \vspace{-4mm}\subsection{Scheduling}\vspace{-2mm}
 In-person group meetings Monday and Friday, as well as additional meetings or
@@ -494,7 +565,8 @@ collaborative work time to help meet deadlines. Monday meetings to see progress
 on weekend tasks and set tasks for the week, Friday meetings to see progress on
 week and set tasks for the weekend.
 
-\vspace{-4mm}\subsection{References}\vspace{-2mm}                                   % TODO: Add some more waffle here
-References
+\bibliographystyle{ieeetr}
+\bibliography{references.bib}
+
 
 \end{document}
