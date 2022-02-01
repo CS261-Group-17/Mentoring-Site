@@ -13,3 +13,7 @@
 .*.lb
 
 */__latexindent_temp.tex
+
+
+*.bbl
+*.blg
