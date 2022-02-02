@@ -105,7 +105,12 @@ allow the user to make changes about the way they mentor, to maximise their
 value to each employee.
 
 
-\vspace{-4mm}\section{Functional requirements}\vspace{-2mm}                         % TODO: Add some waffle about process and italicising developer requirements. Put non-functional first?
+\vspace{-4mm}\section{Functional requirements}\vspace{-2mm}
+We used the specification along with our user stories to create our system
+requirements. We separated the requirements into functional and non-functional,
+and used the MoSCoW technique to prioritise them. We typeset customer facing
+requirements as normal text, and developer facing ones italicised.
+
 \begin{longtable}{|p{0.55\linewidth}|p{0.4\linewidth}|}
     \hline
     \textbf{Functional requirements}
@@ -165,58 +170,62 @@ value to each employee.
     \\ \hline
 
     \textbf{F05 (Must Have) }
-    Allow mentees to request a mentor, who will have strengths matching their       % TODO:Change this to mentee picking mentor
-    weaknesses.
-    \textit{The system will add the user to the list of people looking for
-    mentors.}
+    Allow mentees to select a mentor from a list of users who would like to
+    be a mentor, and who satisfy the rules of mentoring between the pair
+    \textit{The system will only show users who fulfill the rules of mentoring,
+    including being in different business areas, and having strengths matching
+    the mentees weaknesses.}
         &
-    In order for mentors to be paired with mentees, mentees must first seek a
-    mentor by specifying an area of weakness.
+    This ensures that all relationships are mentee driven, as they select who
+    they would like to mentor them, and maintains the rules of mentoring by
+    filtering invalid matches from the list.
     \\ \hline
 
     \textbf{F06 (Must Have) }
-    When selecting a mentee, a mentor will get access to their profile to help
-    the mentor make a decision.
+    When selecting a mentor, a user will get access to their profile to help
+    them make a decision.
     \textit{Data will include their name, strengths, weaknesses, job title and
     business area.}
         &
-    This allows the mentor to gauge which mentee is most suitable to them,
-    adding a human element to the matching process.
+    This allows the user to gauge which mentor is most suitable to them,
+    adding a human element to the matching process, as full automation can never
+    fully account for human opinions.
     \\ \hline
 
     \textbf{F07 (Must Have) }
-    Mentors will be able to select mentees to mentor from a list of mentees who
-    satisfy the rules of mentoring, ordered by the likelihood of them being a
-    good match with the mentor.
-    \textit{The list will be filtered to exclude invalid mentees, e.g. same
-    business area, and the total order for the list of mentees to select from
-    will be based on matching metrics using data stored by the system.}             % TODO: Matching metrics comment?
+    The list of possible mentors will be ordered by a metric which the system
+    uses to determine which mentor will be the best match with the user.
+    \textit{The ordering be based on a metric which compares both user data, for
+    example the number of shared strengths/weaknesses, and feedback about the
+    mentor from previous mentees, for example Elo rating system
+    \cite{chess_ranking} on their general feedback.}
         &
     This complements the above requirement by supplementing the human element of
-    matching with a computational one which filters invalid matches, and
-    encourages ones which would be good based on feedback and aggregated
-    metrics.
+    matching with a computational one which encourages ones which would be good
+    based on feedback and aggregated metrics.
     \\ \hline
 
     \textbf{F08 (Must Have) }
-    When a mentor selects a mentee, the mentee will be able to accept or reject
-    the offer of mentoring.
-    \textit{The mentor profile is shown, and, if rejected, the mentee will then
-    not be shown to that mentor for a specified period of time.}
+    When a mentee selects a mentor, the mentor will be able to accept or reject
+    the proposal of mentoring.
+    \textit{The mentee profile is shown, and, if rejected, the mentor will then
+    not be shown to that mentee in their list for a specified period of time.}
         &
-    This allows mentees to view the profiles from their available mentors and
-    choose who they see the most fit, and avoids mentors repeatedly requesting
-    mentees in a short time.
+    This allows mentors to view the profiles from their available mentees and
+    choose who they think would be the best fit, and avoids mentees repeatedly
+    requesting mentors in a short time.
     \\ \hline
 
     \textbf{F09 (Must Have) }
-    Mentors will be prompted to select mentees if they are not mentoring anyone.
-    Mentees will only be allowed to have one mentor at a time.
-    \textit{Mentors can have several mentees if they want, however the system
-    must follow the rules of mentoring.}
+    Mentees will only be allowed to have one mentor at a time. Mentors will
+    be allowed to have multiple mentees at a time
+    \textit{The system should not show the list to select new mentors if a
+    user already has one. Notifications of mentee requests should always be
+    shown}
         &
-    Mentors should always have someone to mentor if there is any mentee
-    compatible with them, as otherwise there may not be enough mentors.
+    Clarification of the specification with the customer representation was
+    sought, and they stated that mentees can only have one mentor, but mentors
+    can have multiple mentees.
     \\ \hline
 
     \textbf{F10 (Must Have) }
@@ -250,15 +259,28 @@ value to each employee.
     \\ \hline
 
     \textbf{F13 (Must Have) }
-    Mentees will be able to either accept one of the meeting start/end times, or        % TODO: Mentee can cancel, mentor can only reschedule
+    Mentees will be able to either accept one of the meeting start/end times, or
     send a request back to the mentor asking for more meeting start/end times.
-    \textit{The mentor must give up time to the mentee so this cycle is required.}
+    \textit{Mentees can propose a meeting, then mentors will be sent a
+    notification to pick three times when this occurs, and send it back to the
+    mentee.}
         &
-    For a meeting to go ahead, both parties must be free for it. This confirms
-    this, given the above requirement of mentors suggesting times for meetings.
+    The mentor must give up time to the mentee so this cycle is required. For a
+    meeting to go ahead, both parties must be free for it, which is ensured here
+    by mentors suggesting times for meetings, and mentees accepting them.
     \\ \hline
 
-    \textbf{F14 (Must Have) }
+    \textbf{F14 (Should Have) }
+    Mentees will be able to cancel meetings, whereas mentors can only reschedule
+    meetings, re-entering the cycle of proposing meeting times to the mentee.
+    \textit{The mentee should have a button to cancel, and the mentor one to
+    reschedule.}
+        &
+    This follows the rules of mentoring that mentors must give up time to their
+    mentees
+    \\ \hline
+
+    \textbf{F15 (Must Have) }
     After the end time of the meeting has passed, both users will be prompted to
     provide feedback on the meeting.
     \textit{They will summarise the meeting with a free text field, and numeric
@@ -269,7 +291,7 @@ value to each employee.
     on the meeting where necessary.
     \\ \hline
 
-    \textbf{F15 (Could Have) }
+    \textbf{F16 (Could Have) }
     Sentiment analysis will be used on the free text feedback provided by users.
     \textit{This will provide a supplementary metric which can be analysed for
     use in planning by the system.}
@@ -280,7 +302,7 @@ value to each employee.
     \\ \hline
 
 
-    \textbf{F16 (Must Have) }
+    \textbf{F17 (Must Have) }
     Every user will start with their own empty plan of action when they create
     an account, to which they can add milestones.
     \textit{Users can have plans of actions without a mentor, and the milestones
@@ -291,7 +313,7 @@ value to each employee.
     work towards.
     \\ \hline
 
-    \textbf{F17 (Must Have) }
+    \textbf{F18 (Must Have) }
     When a user starts being mentored, their mentor will be able to see their
     plan of action.
     \textit{The mentor will only be able to see milestones after they started
@@ -303,7 +325,7 @@ value to each employee.
     should not have access to.
     \\ \hline
 
-    \textbf{F18 (Should Have) }
+    \textbf{F19 (Should Have) }
     Milestones will be able to be marked as completed by mentees, and if a
     milestone has not been completed after its target completion date, mentees
     will be prompted to mark it as complete or update its target date.
@@ -314,7 +336,7 @@ value to each employee.
     a prolonged period.
     \\ \hline
 
-    \textbf{F19 (Must Have) }
+    \textbf{F20 (Must Have) }
     General feedback will be able to be provided at any time.
     \textit{Including free text submissions and updateable numerical metrics,
     and feedback for specific topic areas will be provided in the same way to
@@ -324,7 +346,7 @@ value to each employee.
     of relationships.
     \\ \hline
 
-    \textbf{F20 (Should Have) }
+    \textbf{F21 (Should Have) }
     If there are enough people with a specified weakness, people identified as
     experts in that area will be prompted to organise a workshop on it.
     \textit{Using prior feedback, the system can determine if a person is an
@@ -334,7 +356,7 @@ value to each employee.
     extensively and potentially through a group setting.
     \\ \hline
 
-    \textbf{F21 (Must Have) }
+    \textbf{F22 (Must Have) }
     To create a workshop, the user will set a workshop start/end, and a brief
     description of what the workshop will cover within the specified weakness
     category.
@@ -346,7 +368,7 @@ value to each employee.
     on.
     \\ \hline
 
-    \textbf{F22 (Must Have) }
+    \textbf{F23 (Must Have) }
     Group sessions will be created, run, and reviewed in the same way as
     workshops.
         &
@@ -354,7 +376,7 @@ value to each employee.
     difference outlined in the glossary not being in the system.
     \\ \hline
 
-    \textbf{F23 (Must Have) }
+    \textbf{F24 (Must Have) }
     Signed in users will be able to submit feedback/bug reports to the system.
     \textit{There will be a button at the top of the dashboard that allows you
     to go to the feedback screen.}
@@ -363,7 +385,7 @@ value to each employee.
     of the application.
     \\ \hline
 
-    \textbf{F24 (Should Have) }
+    \textbf{F25 (Should Have) }
     The user will be able to disclose security issues.
     \textit{There will be a security.txt file \cite{security_txt} for
     responsible disclosure ofsecurity issues - not necessarily requiring the
@@ -373,7 +395,7 @@ value to each employee.
     resolve them promptly.
     \\ \hline
 
-    \textbf{F25 (Must Have) }
+    \textbf{F26 (Must Have) }
     The system will have a dashboard that gives a personalised view of the users
     current meetings, plans of actions, workshops/group sessions and access to
     the profile page.
@@ -383,7 +405,7 @@ value to each employee.
     important notifications are shown will facilitate this.
     \\ \hline
 
-    \textbf{F26 (Must Have) }
+    \textbf{F27 (Must Have) }
     Users will be able to see a list of current workshops.
     \textit{It will be an ordered list of workshops grouped into weeks and then
     ordered by rating, which can be filtered by the users weaknesses.}
@@ -391,7 +413,7 @@ value to each employee.
     This will allow users to easily select workshops most relevant to them.
     \\ \hline
 
-    \textbf{F27 (Won't Have) }
+    \textbf{F28 (Won't Have) }
     The prototype system will not use Deutsche Bank branding.
     \textit{A simple generic theme will be used, which could then later be
     easily changed to include Deutsche Bank branding.}
@@ -400,7 +422,7 @@ value to each employee.
     be simple to change to include it in the future.
     \\ \hline
 
-    \textbf{F28 (Won't Have) }
+    \textbf{F29 (Won't Have) }
     The system will not support video conferencing or messaging.
     \textit{Meetings will be set up as having times, and can then have either
     physical locations or video conference links included in their description.}
@@ -410,7 +432,7 @@ value to each employee.
     scheduling meetings, however, this is also out of scope.
     \\ \hline
 
-    \textbf{F29 (Should Have) }
+    \textbf{F30 (Should Have) }
     Users will have an inbox of notifications which will indicate upcoming
     events such as meetings or milestone targets.
     \textit{The inbox will be presented as a date ordered list, notifications
@@ -434,24 +456,17 @@ value to each employee.
     \\ \hline\hline
 
     \textbf{NF00 (Must Have) }
-    The system will be intuitive to use and navigate.
-    \textit{The system must have a UI that makes it inherently clear to the user
-    what all parts of the interface do. Each part of the UI will have a clear,
-    distinct and useful purpose that is unambiguous.}
+    The system will be intuitive to use and navigate, even for users with less
+    technical experience.
+    \textit{Each part of the UI will have a clear, distinct, and unambiguous
+    purpose. The UI will have a system tutorial for new users.}
         &
     The user is able to clearly identify the functionalities of each widget
-    through concise and thorough UI design.
+    through concise and thorough UI design, and no familiarity with the
+    application will be needed to use it.
     \\ \hline
 
-    \textbf{NF01 (Must Have) }
-    The system will be simple to use even for users with less technical experience.
-    \textit{The UI and the tutorial will make the system suitable for everyone.}
-        &
-    The user does not need any familiarity with the application before beginning
-    to use it.
-    \\ \hline
-
-    \textbf{NF03 (Should Have) }
+    \textbf{NF02 (Should Have) }
     The system will be quick to respond to the user.
     \textit{90th percentile of API request times will be under 1 seconds.}
         &
@@ -460,7 +475,7 @@ value to each employee.
     of thought" by Jakob Nielsen \cite{usability_engineering}.
     \\ \hline
 
-    \textbf{NF04 (Won't Have) }
+    \textbf{NF03 (Won't Have) }
     The system will be able to handle large and varied numbers of users.
     \textit{This will not be explicitly supported, but design choices will be
     made to facilitate it in future development.}
@@ -469,54 +484,55 @@ value to each employee.
     it can be easily scaled by future maintainers.
     \\ \hline
 
-    \textbf{NF05 (Must Have) }
-    The system will be kept up to date.
-    \textit{The system will be easy to maintain and modularised so that each        % TODO: Not sure how relevant this is?
-    section of the software can independently be worked upon and inserted back
-    into the system when doing maintenance. All code should be appropriately
-    commented.}
+    \textbf{NF04 (Must Have) }
+    The system will be easy to maintain.
+    \textit{The system modularised so each section of the software can
+    be independently changed and tested for maintenance. All code should be
+    readable and appropriately commented.}
         &
-    The system should be regularly updated to improve performance and
-    responsiveness.
+    It is important that the system is maintainable, as software projects can
+    spend up to 80\% of their lifecycle in the maintenance phase, so designing
+    them to make maintenance easy is paramount
     \\ \hline
 
-    \textbf{NF06 (Must Have) }
+    \textbf{NF05 (Must Have) }
     The system will be easy to test and validate its properties.
-    \textit{The system will be modularised so that it can be tested on a system
-    scale and so that each independent unit can be unit tested. Acceptance
-    testing for the usability of the UI should be possible. CI/CD will be used
-    to facilitate this.}
+    \textit{The system will be modularised so that it can be both tested on a
+    system-wide scale and so that each independent unit can be unit tested.
+    Acceptance testing for the usability of the UI should be possible.
+    CI/CD will be used to ensure testing procedures are followed.}
         &
     The system must be tested and validated to ensure the functionalities and UI
     work correctly and are following its intended design.
     \\ \hline
 
-    \textbf{NF07 (Must Have) }
+    \textbf{NF06 (Must Have) }
     The system will follow all relevant laws.
-    \textit{The system will comply with data protection \cite{data_protection} and cookie laws \cite{cookie_law}, along
-    with any other relevant legislation.}
+    \textit{The system will comply with data protection \cite{data_protection}
+    and cookie laws \cite{cookie_law}, along with any other relevant
+    legislation.}
         &
     It is paramount that the system is legal for it to be used in a corporate
     setting.
     \\ \hline
 
-    \textbf{NF08 (Must Have) }
+    \textbf{NF07 (Must Have) }
     The system will employ good security practises.
     \textit{Such as hashing/salting passwords and sanitising user input.}
         &
-    Security is crucial to ensuring that any registered user's data is protected.
+    Security is crucial to ensuring that any registered user's data is
+    protected.
     \\ \hline
 
-    \textbf{NF09 (Won't Have) }
+    \textbf{NF08 (Won't Have) }
     The system will not have a dedicated mobile or desktop app, it will only
-    run as a web app in a browser
-    \textit{Such as hashing/salting passwords and sanitising user input.}
+    run as a web app in a browser.
         &
     It is out of scope to concurrently design multiple different types of app
     concurrently, so only the most widely accessible type will be developed.
     \\ \hline
 
-    \textbf{NF10 (Should Have) }
+    \textbf{NF9 (Should Have) }
     The system will be accessible to those with disabilities \cite{accessibility}.
     \textit{Techniques such as high contrast modes, enlarged text, and
     optimisation for screen readers will be used to facilitate use by all.}
@@ -565,8 +581,9 @@ collaborative work time to help meet deadlines. Monday meetings to see progress
 on weekend tasks and set tasks for the week, Friday meetings to see progress on
 week and set tasks for the weekend.
 
+\nocite{*}
 \bibliographystyle{ieeetr}
-\bibliography{requirementsAnalysis.bib}
+\vspace{-4mm}\bibliography{requirementsAnalysis.bib}
 
 
 \end{document}
