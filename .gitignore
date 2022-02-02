@@ -1,19 +1,90 @@
-## Core latex/pdflatex auxiliary files:
+# LaTeX/BibTeX #
 *.aux
-*.lof
 *.log
-*.lot
-*.fls
 *.out
 *.toc
-*.fmt
-*.fot
-*.cb
-*.cb2
-.*.lb
-
 */__latexindent_temp.tex
-
-
 *.bbl
 *.blg
+
+# Python
+*.py[cod]
+__pycache__/
+.env
+.venv
+env/
+venv/
+ENV/
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Logs
+logs
+*.log
+pip-log.txt
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Sphinx documentation
+docs/_build/
+
+# Webpack
+webpack-stats.json
+dist/
+
+# npm
+node_modules
+
+# Compass
+.sass-cache
+
+# User-uploaded media
+media/
+
+# Collected staticfiles
+*/staticfiles/
+
+.cache/
+**/certs
