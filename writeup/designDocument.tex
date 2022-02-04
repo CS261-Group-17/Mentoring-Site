@@ -6,6 +6,8 @@
 \usepackage{longtable}
 \usepackage{nopageno}
 \usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
 
 \usepackage{rotating}
 \def\rot{\rotatebox}
@@ -88,7 +90,16 @@ management process, as it provides a visual representation of current project
 progress.
 
 \subsection{Project schedule}
-
+\includegraphics{Timetable}
+\\
+The timeline outlines which features of the system will be implemented each
+week, divided according to the team which is working on them, with final product
+documentation separated as this is a collaborative effort by the whole team. As
+we are following a Scrum methodology, task order may be adjusted weekly so that
+the project remains on track, so which features are completed in each week will
+most likely change. It also acts as a reminder that the final report should be
+completed, when time is available, concurrently with the project itself, so it
+doesn’t need to be written in its entirety in the few days before submission.
 \subsection{Risk management}
 
 % \begin{table}[]
@@ -105,8 +116,6 @@ progress.
 % \caption{}
 % \label{tab:my-table}
 % \end{table}
-
-\subsection{System attributes}
 
 \section{Technical description}
 
@@ -127,20 +136,176 @@ is explicitly not to be used, although it would be incorporated in the
 production system. Instead, a generic and simple theme should be used in the
 prototype, which could then be later replaced with the correct branding.
 
+\subsection{System attributes}
+This section will communicate the different qualities needed by software, what
+is within our scope, how we have addressed them, and what we are not doing for
+this prototype.\\ The end goal of the software engineering lifecycle is to end
+with satisfied customers. As such, it is crucial that usability of the software
+is given important consideration. Our goal is to ensure that the website is
+intuitive to use, has little ambiguity and can be learnt ideally without
+assistance even for non-technical users. There will be a wide coverage of
+acceptance testing carried out to ensure this is achieved. Along with this, our
+prototype aims, if possible, to make our system accessible to people with
+disabilities with features such as enlarging text and higher contrast colours.
+\\Compatibility and portability are important points to consider since we want to
+make our system as portable as it needs to be, and compatible with systems used
+by most of our users. Being a web app, makes it portable since every user will
+have some access to a device able to run a browser. Extreme cases such as legacy
+browsers will not be prioritised since it is unlikely to be used. The prototype
+will not include desktop and mobile applications since it is out of the scope
+and not needed with a web app, this early in the mentoring system. \\Security is a
+relevant quality to consider, especially since we do not want to create issues
+for any relevant parties involved. Complete and effective considerations to
+security for most areas of vulnerability is out of scope for a prototype
+implementing its core functionalities. Important security details such as
+account access protection through salted/hashed stored passwords are to be
+implemented. Data will only be accessed through the REST API, allowing us to
+ensure only required data is sent, and adds a layer of security since our
+database is not directly interacted with. Allows us to also validate any user
+information before storing it in the database.
+
 \subsection{Technologies used}
+A fundamental decision in the project is deciding which technologies should be
+used to compose the so-called “tech stack”. Since this is such an important set
+of decisions, we carefully considered a number of options with respect to a set
+of criteria which assess the quality of a component technology choice. These
+criteria include:\\ 
+\begin{itemize}
+    \item Suitability, how well does the technology match the problem
+our system solves? 
+    \item Documentation and popularity, does the choice have strong
+documentation and an active community likely to have already answered problems
+we may encounter? 
+    \item Consistency, how well the choice meshes with the other
+component technologies? 
+    \item Performance, will the technology run sufficiently fast,
+and can it be scaled later needing to switch to something else more performant?
+    \item Experience, how much prior knowledge does our team have of the technology? 
+\end{itemize}
+
+We decided to implement the project as a web application, as opposed to a mobile or
+desktop only one. This is because it is generic and can be accessed by almost
+all users, as essentially every modern device has a web browser. However, this
+design choice must later be taken into consideration when ensuring the UI is
+suitable for mobile. This choice was made as the system must be widely
+accessible by users with many different types of devices, and a web application
+was the only suitable choice for this.
+
+We chose Django for our backend framework, which runs on top of Python. This is
+suitable for our system as it facilitates fast development, which is required to
+finish our prototype in the very short turnaround of around five weeks, with
+very short code sprints, and it inherently supports our non-functional
+requirements of security and scalability. Furthermore, it has robust
+documentation and is widely used with an active community. Additionally, Python
+is so ubiquitous that it can interface consistently with almost any other
+technology choice, for example persistent data storage and sentiment analysis.
+Finally, our team has a lot of experience with Python development, and
+additionally testing techniques for Python, mitigating learning curves and
+ensuring bug-free code.
+
+Since we are making a web application, we will use HTML/CSS/JS. We decided to
+use the Vue.JS framework for the frontend JS, as it facilitates writing
+responsive websites, but has a much less steep learning curve than other
+frameworks such as React, and is known to integrate well with Django, the
+backend framework we propose using. Furthermore, we are going to use bootstrap
+as the CSS framework as it allows us to quickly develop a professional looking
+website with little hassle by providing building block CSS classes. 
+
+We chose PostgreSQL to store our persistent data in the form of a relational
+database. This is because the type of data recorded by the system is well suited
+to storage in a relational schema. For example, storing a set of users, each of
+whom have various properties and relationships with other users is a very good
+match for this model. Furthermore, postgresql has very good documentation in
+comparison to other relational databases, and it meshes well into our tech stack
+as django and postgresql are commonly used in tandem. Finally, all of our team
+has experience with it due to the CS258 databases module.
+
+We chose the python library NLTK (natural language toolkit) to implement our
+sentiment analysis. This is because it is compatible with the rest of the
+backend framework, which is already written in python, and it is the most
+popular and widely used library within its field.
+
+We will use JSON for the REST API, as it is incredibly ubiquitous, and links
+easily into most web frameworks, as it is a subset of javascript. Additionally,
+both our backend and frontend team members have experience with it, which is
+crucial as it will form the link between the two sides of the technology stack,
+
+We chose docker for our containerisation. This supports all of the rest of the
+tech stack, and allows “lift-and-shift”, which is a very useful property for
+prototype systems. Additionally, it is by far the most widely used choice for
+containerisation, and has good documentation. Finally, none of our team has
+experience with any form of containerisation, so choices cannot be compared by
+this metric.
+
+We chose git with GitHub for our version control. This is because it is the
+industry standard for version control, every member of our team had at least
+rudimentary experience with it from CS133, and some members of our team had
+experience with advanced features for CI/CD such as GitHub Actions.
 
 \subsection{System architecture}
+Our system architecture follows the MVC (Model View Controller) architecture
+which is a well-known model to be successful in creating a system that presents
+data obtained through a controller that interacts with the database. This is
+reflected in the docker containerisation figure with our website being the view,
+the Django system being the controller, and Postgresql as the model. Being
+modularised to 3 separate components, allows easy distribution of development,
+with each focusing on a subset of skill sets. One downfall is that the system is
+tightly connected in that if one system fails, the rest falls… (include REST API
+also easy reference).\\
+\includegraphics{architecture}
 
-\subsubsection{Data model}
-\subsubsection{Database design}
+\subsubsection{Database Design}
+\includegraphics{DB}
+
+\subsubsection{Object Structure}
+\includegraphics{Objects}
+
 \subsubsection{API design}
+% Edmund do it
 
 \section{UI/UX design}
 
-\subsection{Site design}
-\subsubsection{Page design}
-\subsubsection{Page heirarchy}
-\subsubsection{UI design principles and accessibility}
+\subsection{Page Hierarchy}
+The landing page is the login screen which can lead to either the sign up or
+dashboard. The dashboard is the central hub for the user where all pages can be
+accessed from. The profile page will show all the users data and allow for the
+user to modify it. The user can also request reset password emails that will
+lead to a separate reset password page. Once the user has reset their password
+they are landed onto their profile page.
+
+Another page that can be accessed from the dashboard is the plans of actions
+page. It will display the users plan of action and also if they have mentees
+then their plan of actions are shown to. Users can click on a plan of action to
+go to the individual plan of action page which allows the user to edit and
+change the plan of action there.
+
+Another page is the schedule page which essentially shows the users meetings and
+group events coming up. It will also show requests from the system that the user
+should interact with such as feedback requests and meeting requests from the
+users mentees. If the user wants to inspect an individual event, then they will
+be directed to the individual events page that will show the user all the
+information about the event and allow the users with the correct permissions to
+modify the page.
+
+Furthermore, the group events page advertises potential group events that the
+user could potentially go to. The user can filter and search for different group
+events that they may be interested in.
+
+Finally, the user can go to the website feedback page to provide feedback about
+the website
+
+\includegraphics{Hierarchy}
+
+\subsection{Page Design}
+The dashboard is the central page for users that displays all the useful
+information for the user, such as their upcoming meetings, their current plan of
+action and allows them to get a new mentee or mentor. The navigation bar at the
+top of the page will be on most of the pages and will allow the user to access
+all the other pages of the website as well as their notifications. The
+notifications inform the user about any recent events that they may be
+interested in such as giving feedback about a recent event or a mentee/mentor
+meeting coming up. The drop down button next to the notification bell will link
+to the user’s profile page, the website feedback form and a sign out button.
 
 \subsection{User-system interaction}
 \subsubsection{Use case diagram}
