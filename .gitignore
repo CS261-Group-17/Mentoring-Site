@@ -1,4 +1,4 @@
-# LaTeX/BibTeX #
+# LaTeX/BibTeX
 *.aux
 *.log
 *.out
@@ -6,6 +6,9 @@
 */__latexindent_temp.tex
 *.bbl
 *.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
 
 # Python
 *.py[cod]
