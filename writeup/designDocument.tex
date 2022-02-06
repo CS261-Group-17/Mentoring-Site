@@ -165,6 +165,8 @@ database is not directly interacted with. Allows us to also validate any user
 information before storing it in the database.
 
 \subsection{Technologies used}
+
+% NEED TO UPDATE THIS TO USE TABLE
 A fundamental decision in the project is deciding which technologies should be
 used to compose the so-called “tech stack”. Since this is such an important set
 of decisions, we carefully considered a number of options with respect to a set
@@ -258,43 +260,62 @@ also easy reference).\\
 \includegraphics{DB}
 
 \subsubsection{Object Structure}
-\includegraphics{Objects}
+\includegraphics[scale=0.32]{Objects}
 
 \subsubsection{API design}
-% Edmund do it
+% Edmund do it, long table
 
 \section{UI/UX design}
 
 \subsection{Page Hierarchy}
-The landing page is the login screen which can lead to either the sign up or
-dashboard. The dashboard is the central hub for the user where all pages can be
-accessed from. The profile page will show all the users data and allow for the
-user to modify it. The user can also request reset password emails that will
-lead to a separate reset password page. Once the user has reset their password
-they are landed onto their profile page.
+The page hierarchy below displays the sites that our webpage comprises of. Here
+is a brief outline of what each page will consist of: 
+\begin{itemize}
+    \item Login Screen: The landing page of the website that allows the user to
+    login to go to the dashboard or the sign up page to create an account. 
+    \item Sign Up: Allows the user to create an account. 
+    \item Dashboard: The central hub for the user where all pages can be
+    accessed from and displays useful information that may be useful (look at
+    page designs for more detail). 
+    \item Profile: This page has 3 purposes: resetting the users password,
+    seeing the users data and modifying the users data. 
+    \item Plans of Action: Displays the users plan of action and their mentees
+    plans of actions too if they have any. 
+    \item Individual POA: If the user clicks on a POA, then they come to this
+    page where the POA can be viewed and modified. 
+    \item Schedule: Shows the users schedule, allows them to request meetings
+    and has a list of feedback and meeting requests that the user should respond
+    to. 
+    \item Group Events: Allows the user to search for workshops and group
+    sessions within the system that they can attend.
+    \item Individual Event: A page that details an event (meeting or group
+    event) and allows the owner of an event to modify or delete the event.
+\end{itemize}
 
-Another page that can be accessed from the dashboard is the plans of actions
-page. It will display the users plan of action and also if they have mentees
-then their plan of actions are shown to. Users can click on a plan of action to
-go to the individual plan of action page which allows the user to edit and
-change the plan of action there.
+\includegraphics[scale=0.25]{Hierarchy}
 
-Another page is the schedule page which essentially shows the users meetings and
-group events coming up. It will also show requests from the system that the user
-should interact with such as feedback requests and meeting requests from the
-users mentees. If the user wants to inspect an individual event, then they will
-be directed to the individual events page that will show the user all the
-information about the event and allow the users with the correct permissions to
-modify the page.
+\subsection{User-system interaction}
+The specification was also very vague about how to match up mentors and mentees,
+therefore this diagram clarifies all the ambiguities around this.
+\begin{itemize}
+    \item The user can only have 1 mentor at a time
+    \item The system can give the user a list of potential other users who are currently looking for mentees
+    \item The user then picks one of these users and a mentor mentee request is sent to the potential mentor
+    \item If the potential mentor accepts, then a relationship is formed
+    \item Otherwise, the mentee needs to choose another mentor from the list
+\end{itemize}
+\includegraphics[scale=0.7]{MentorMentee}
 
-Furthermore, the group events page advertises potential group events that the
-user could potentially go to. The user can filter and search for different group
-events that they may be interested in.
-
-Finally, the user can go to the website feedback page to provide feedback about
-the website
-
-\includegraphics{Hierarchy}
+The diagram below displays what functions the Schedule page has. This handles a
+lot of ambiguities around how the meeting and feedback system will work within
+our system. The important points from this diagram is that:
+\begin{itemize}
+    \item Mentee’s can cancel meetings, but mentors can only reschedule
+    \item Mentee’s can request a meeting, but mentors cannot not
+    \item For a meeting to be officially approved, both parties need to agree on the time and date otherwise they go into this loop of suggesting times to each other
+    \item The user will be prompted on the schedule page to give feedback to recent events they have gone to
+\end{itemize}
+\includegraphics[scale=0.7]{Meeting}
 
 \subsection{Page Design}
 The dashboard is the central page for users that displays all the useful
@@ -307,7 +328,7 @@ interested in such as giving feedback about a recent event or a mentee/mentor
 meeting coming up. The drop down button next to the notification bell will link
 to the user’s profile page, the website feedback form and a sign out button.
 \\
-\includegraphics[scale=0.8]{Dashboard}
+\includegraphics[scale=0.3]{Dashboard}
 \\
 The schedule page will have the users calender and all the requests the user has
 (meeting and feedback). This user is not a mentee so the request meeting button
@@ -316,16 +337,34 @@ would be a request meeting button at the bottom. Additionally, clicking on a
 meeting will take the user to the individual event page for the meeting which
 will have the feedback log for the meeting.
 \\
-\includegraphics{Schedule}
-
-\subsection{User-system interaction}
-\subsubsection{Use case diagram}
-\subsubsection{Sequence diagram}
+\includegraphics[scale=0.3]{Schedule}
 
 \section{Testing}
 \subsection{Test cases}
+% Need to use a long table, Edmund
 \subsection{Unit and integration testing}
-\subsection{Acceptance testing}
+Tests will form an integral part of our development cycle, as we plan to follow
+the agile test driven development ideologies. We will implement this by creating
+unit tests for all of the above test cases, allowing us to ensure all the
+required properties of the system are met. These can then be run throughout the
+development process. All of the tests will be automatically run on a pull
+request to the GitHub repository, and must pass in order for the code to be
+merged into the main branch, to ensure its validity. This is an implementation
+of “continuous integration” from CI/CD, and will be implemented using GitHub
+actions.
+
+There are many tools for unit testing which can be used. Since we are using a
+python backend framework, we will use PyTest for unit tests on the backend code,
+along with codecov to assess the coverage of the tests, and pylint to ensure
+that stylistic code is being written. Since we are using a javascript frontend
+framework, we will use Jest for unit tests on the frontend code and UI, along
+with ESLint to check that the Javascript is correct. Finally, we will use
+Postman to test that the API serves the correct data. There are relatively few
+tools for integration testing, and it will likely mostly have to be done by
+hand. We will use the Puppeteer tool to automate this task as far as possible.
+The combination of all of these tools allows us to create a testing suite which
+will fully cover our system.
+
 
 \bibliographystyle{ieeetr}
 \bibliography{designDocument.bib}
