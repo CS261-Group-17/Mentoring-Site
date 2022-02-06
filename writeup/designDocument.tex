@@ -53,14 +53,24 @@ to workflow and project organisation. Design choices include a prototype user
 interface design and technical diagrams demonstrating user interactions between
 multiple users and the system. Furthermore, our testing strategy and technical
 descriptions such as choice of technologies used and system architecture will be
-covered in depth to illustrate more full idea of the final product.
+covered in depth to illustrate a fuller idea of the final product.
 
 \section{Process documentation and planning}
 \subsection{Development methodology}
 We opted for an agile development methodology based on the Scrum model. The
 development timeline will be broken down into a large initial planning phase and
-a series of week-long sprints. We will have multiple meetings each sprint cycle
-to assess progress (sprint review) and adapt the plan if required.
+a series of week-long sprints. We chose to elect our project manager as scrum
+master, since this role is similar to that of the project manager in organising
+the team and improving workflow. We will use Trello to create and manage a scrum
+board, which will allow for easy management of the product backlog. At the start
+of each sprint, we will meet to discuss the items from the product backlog to be
+completed in that sprint - this will usually be decided according to the project
+timeline below, however some small adaptations may need to be made. Each day
+within the sprint, the team will discuss progress and bring to attention any
+challenges they are facing. At the end of the sprint, we will carry out a sprint
+review, and each developer can showcase parts of the system which have been
+completed. The sprint cycle is completed with a sprint retrospective, where
+improvements can be made to the development process before the next sprint.
 
 An agile methodology is optimal for a short timeframe as it allows rapid product
 development with concurrent implementation and testing so we can make effective
@@ -72,36 +82,44 @@ on time is critical. Additionally, contact with the client is limited so
 requirements are unlikely to change and the project will not deviate much from
 the initial plan.
 
+
 \subsection{Project organisation and communication}
 We decided on a flat team hierarchy since we have similar levels of software
 development experience, self-managed but with well defined responsibilities. To
 communicate between meetings, we decided to use Discord, as it is already a
 popular choice within the team and is easy to learn for new users. It offers
 both text and voice chat as well as a number of features such as GitHub
-integration, so we are notified via Discord when on changes, for example when
-pull requests are made.
+integration, so we are notified via Discord when pull requests are made, for
+example.
 
 Discord can be used for online meetings however we aim to convene in-person at
 least twice a week, as this enables us to share ideas much more easily and
 maintain focus during meetings. At these meetings we can compare progress on the
 system with our plan, and assign tasks based on documentation or what tasks need
-doing in order to stay on schedule. We will use Trello to assist in the task
-management process, as it provides a visual representation of current project
-progress.
+doing in order to stay on schedule. We will use Trello to manage the product
+backlog, and see which tasks are currently in progress, to ensure the project
+will be completed by the deadline.
+
 
 \subsection{Project schedule}
-\includegraphics{Timetable}
-\\
-The timeline outlines which features of the system will be implemented each
-week, divided according to the team which is working on them, with final product
-documentation separated as this is a collaborative effort by the whole team. As
-we are following a Scrum methodology, task order may be adjusted weekly so that
-the project remains on track, so which features are completed in each week will
-most likely change. It also acts as a reminder that the final report should be
-completed, when time is available, concurrently with the project itself, so it
-doesn’t need to be written in its entirety in the few days before submission.
-\subsection{Risk management}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Timetable}
+    \caption{Gantt chart of the project schedule.}
+    \label{fig:project_schedule_gantt}
+\end{figure}
 
+The timeline outlines which features of the system will be implemented in each
+weekly sprint, divided according to the team which is working on them, with
+final product documentation separated as this is a collaborative effort by the
+whole team. As we are following a Scrum methodology, task order may be adjusted
+weekly, ie. in each sprint, so that the project remains on track, so which
+features are completed in each week will most likely change. It also acts as a
+reminder that the final report should be completed, when time is available,
+concurrently with the project itself, so it doesn't need to be written in its
+entirety in the few days before submission.
+
+\subsection{Risk management}
 % \begin{table}[]
 \begin{longtable}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.1\linewidth}|p{0.08\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.08\linewidth}|}
 \hline \rot{45}{\textbf{Risk}} & \rot{45}{\textbf{Impact}} & \rot{45}{\textbf{Likelihood}} & \rot{45}{\textbf{Severity}} & \rot{45}{\textbf{Mitigation}} & \rot{45}{\textbf{Contingency}} & \rot{45}{\textbf{Residual}} \\ \hline\hline
@@ -122,21 +140,15 @@ doesn’t need to be written in its entirety in the few days before submission.
 \subsection{Scope}
 Our system must satisfy a complex specification, so its development must be
 carefully planned and executed. However, the goal is to create a prototype, not
-a finished product. As such, various aspects which might be required for a
-system going into production are not needed within a prototype.
-
-One example of this is limitations on the scalability, for example the number of
-concurrent users. It is much more important that key features are implemented
-than being able to support dynamically changing high numbers of concurrent
-users, as the prototype will likely only be tested by a few users at any time.
-However, this does not mean that the prototype should not be designed without a
-good basis for facilitating scalability later as the system moves through its
-lifecycle. Another example of this is the use of Deutsche Bank branding, which
-is explicitly not to be used, although it would be incorporated in the
-production system. Instead, a generic and simple theme should be used in the
-prototype, which could then be later replaced with the correct branding.
+a finished product. This means that some features that would be required in
+production, but are either do not fit in the timescale for the prototype, e.g. ,
+or would require integration from external systems, e.g. company calendar
+applications, should not be implemented. Our requirements analysis fully defines
+the scope of what we will implement.
 
 \subsection{System attributes}
+
+% TODO: THIS NEEDS TO BE UPDATED
 This section will communicate the different qualities needed by software, what
 is within our scope, how we have addressed them, and what we are not doing for
 this prototype.\\ The end goal of the software engineering lifecycle is to end
@@ -171,18 +183,23 @@ A fundamental decision in the project is deciding which technologies should be
 used to compose the so-called “tech stack”. Since this is such an important set
 of decisions, we carefully considered a number of options with respect to a set
 of criteria which assess the quality of a component technology choice. These
-criteria include:\\ 
+criteria include:
 \begin{itemize}
-    \item Suitability, how well does the technology match the problem
-our system solves? 
-    \item Documentation and popularity, does the choice have strong
-documentation and an active community likely to have already answered problems
-we may encounter? 
-    \item Consistency, how well the choice meshes with the other
-component technologies? 
-    \item Performance, will the technology run sufficiently fast,
-and can it be scaled later needing to switch to something else more performant?
-    \item Experience, how much prior knowledge does our team have of the technology? 
+    \item
+        Suitability, how well does the technology match the problem
+        our system solves?
+    \item
+        Documentation and popularity, does the choice have strong
+        documentation and an active community likely to have already answered problems
+        we may encounter?
+    \item
+        Consistency, how well the choice meshes with the other
+        component technologies?
+    \item
+        Performance, will the technology run sufficiently fast,
+        and can it be scaled later needing to switch to something else more performant?
+    \item
+        Experience, how much prior knowledge does our team have of the technology?
 \end{itemize}
 
 We decided to implement the project as a web application, as opposed to a mobile or
@@ -211,7 +228,7 @@ responsive websites, but has a much less steep learning curve than other
 frameworks such as React, and is known to integrate well with Django, the
 backend framework we propose using. Furthermore, we are going to use bootstrap
 as the CSS framework as it allows us to quickly develop a professional looking
-website with little hassle by providing building block CSS classes. 
+website with little hassle by providing building block CSS classes.
 
 We chose PostgreSQL to store our persistent data in the form of a relational
 database. This is because the type of data recorded by the system is well suited
@@ -251,48 +268,115 @@ data obtained through a controller that interacts with the database. This is
 reflected in the docker containerisation figure with our website being the view,
 the Django system being the controller, and Postgresql as the model. Being
 modularised to 3 separate components, allows easy distribution of development,
-with each focusing on a subset of skill sets. One downfall is that the system is
-tightly connected in that if one system fails, the rest falls… (include REST API
-also easy reference).\\
-\includegraphics{architecture}
+with each focusing on a subset of skill sets. One downfall of this architecture
+is that the system is tightly connected in that if one system fails, the rest
+falls - however we believe that this is outweighed by the benefits of this
+architecture. Furthermore, the fact that it is a trusted design pattern suggests
+it is not an inherently problematic approach. A REST API will be used to serve
+data to the user, allowing both static site pages and dynamic JSON data to be
+served from the Django backend.
+
+We decided to containerise our model, as the specification stated that Deutsche
+Bank already uses containers for this type of application, so it will provide
+modularity within their existing systems. Furthermore, it gives the property of
+easy “lift-and-shift”, meaning that all the dependencies can be handled within
+the containers, which themselves are portable and compatible across machines.
+
+We decided against using microservices, instead opting for a monolithic
+architecture. This was predominantly for two reasons: Django has a higher
+overhead than other backend frameworks like Flask, so making multiple
+microservices can reduce performance; and there is not a clean way nor a good
+reason to split the internal logical model into separate microservices.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{architecture}
+    \caption{A system diagram of our system architecture.}
+    \label{fig:system_architecture_diagram}
+\end{figure}
+
+The containerisation has two distinct parts. The first is the three containers
+dynamically interact with each other based on user requests, with the NginX
+container serving requests into the Django backend container, which runs the
+internal logic, and can look up data from the postgresql database container. The
+second is the final container which generates the static site content from
+Vue.js to pure HTML, CSS, and Javascript. This is then copied into the Django
+container so it only needs to be generated once, not on a request-by-request
+basis.
 
 \subsubsection{Database Design}
-\includegraphics{DB}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{DB}
+    \caption{A entity relationship diagram of our database structure.}
+    \label{fig:entity_relationship_diagram}
+\end{figure}
+
 
 \subsubsection{Object Structure}
-\includegraphics[scale=0.32]{Objects}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Objects}
+    \caption{A UML class diagram of our object structure.}
+    \label{fig:uml_class_diagram}
+\end{figure}
+
 
 \subsubsection{API design}
+We have planned to design an API which will be used by the front-end to
+interface with the core back-end components of the system. We've decided to
+settle on a REST API implementation, as it emphasises client-server decoupling,
+which will make it easier to separate front-end and back-end tasks between our
+developers—something which is of the utmost importance when working in a
+smaller, less experienced team. The REST API system will give the front-end
+developers access to fixed API endpoints, which will act as a bridge between the
+front-end and back-end of the application. The front-end developers won't need
+to know how these endpoints are implemented, they only need to know what
+functionality they provide. This will save development time as developers can
+now focus on their specialties. This modular way of designing the API allows for
+back-end code to be modified without having to consult the front-end developers
+about potential consequences. As long as the specification is followed, a
+back-end modification should have no effect on how the front-end developers
+interact with the system. Overall, this will save time as unnecessary
+communication between developers will be eliminated.
 % Edmund do it, long table
 
 \section{UI/UX design}
 
 \subsection{Page Hierarchy}
 The page hierarchy below displays the sites that our webpage comprises of. Here
-is a brief outline of what each page will consist of: 
+is a brief outline of what each page will consist of:
 \begin{itemize}
     \item Login Screen: The landing page of the website that allows the user to
-    login to go to the dashboard or the sign up page to create an account. 
-    \item Sign Up: Allows the user to create an account. 
+    login to go to the dashboard or the sign up page to create an account.
+    \item Sign Up: Allows the user to create an account.
     \item Dashboard: The central hub for the user where all pages can be
     accessed from and displays useful information that may be useful (look at
-    page designs for more detail). 
+    page designs for more detail).
     \item Profile: This page has 3 purposes: resetting the users password,
-    seeing the users data and modifying the users data. 
+    seeing the users data and modifying the users data.
     \item Plans of Action: Displays the users plan of action and their mentees
-    plans of actions too if they have any. 
+    plans of actions too if they have any.
     \item Individual POA: If the user clicks on a POA, then they come to this
-    page where the POA can be viewed and modified. 
+    page where the POA can be viewed and modified.
     \item Schedule: Shows the users schedule, allows them to request meetings
     and has a list of feedback and meeting requests that the user should respond
-    to. 
+    to.
     \item Group Events: Allows the user to search for workshops and group
     sessions within the system that they can attend.
     \item Individual Event: A page that details an event (meeting or group
     event) and allows the owner of an event to modify or delete the event.
 \end{itemize}
 
-\includegraphics[scale=0.25]{Hierarchy}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Hierarchy}
+    \caption{A diagram of website page hierarchy.}
+    \label{fig:website_page_hierarchy}
+\end{figure}
+
 
 \subsection{User-system interaction}
 The specification was also very vague about how to match up mentors and mentees,
@@ -304,18 +388,30 @@ therefore this diagram clarifies all the ambiguities around this.
     \item If the potential mentor accepts, then a relationship is formed
     \item Otherwise, the mentee needs to choose another mentor from the list
 \end{itemize}
-\includegraphics[scale=0.7]{MentorMentee}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{MentorMentee}
+    \caption{A diagram of the states required to match a mentor and a mentee.}
+    \label{fig:state_mentor_mentee_diagram}
+\end{figure}
 
 The diagram below displays what functions the Schedule page has. This handles a
 lot of ambiguities around how the meeting and feedback system will work within
 our system. The important points from this diagram is that:
 \begin{itemize}
-    \item Mentee’s can cancel meetings, but mentors can only reschedule
-    \item Mentee’s can request a meeting, but mentors cannot not
+    \item Mentee's can cancel meetings, but mentors can only reschedule
+    \item Mentee's can request a meeting, but mentors cannot not
     \item For a meeting to be officially approved, both parties need to agree on the time and date otherwise they go into this loop of suggesting times to each other
     \item The user will be prompted on the schedule page to give feedback to recent events they have gone to
 \end{itemize}
-\includegraphics[scale=0.7]{Meeting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Meeting}
+    \caption{A diagram of the states required to schedule a meeting.}
+    \label{fig:state_meeting_diagram}
+\end{figure}
 
 \subsection{Page Design}
 The dashboard is the central page for users that displays all the useful
@@ -326,18 +422,28 @@ all the other pages of the website as well as their notifications. The
 notifications inform the user about any recent events that they may be
 interested in such as giving feedback about a recent event or a mentee/mentor
 meeting coming up. The drop down button next to the notification bell will link
-to the user’s profile page, the website feedback form and a sign out button.
-\\
-\includegraphics[scale=0.3]{Dashboard}
-\\
+to the user's profile page, the website feedback form and a sign out button.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Dashboard}
+    \caption{The initial design of our system dashboard.}
+    \label{fig:dashboard_design}
+\end{figure}
+
 The schedule page will have the users calender and all the requests the user has
 (meeting and feedback). This user is not a mentee so the request meeting button
 at the bottom is currently missing, but if the user was a mentee then there
 would be a request meeting button at the bottom. Additionally, clicking on a
 meeting will take the user to the individual event page for the meeting which
 will have the feedback log for the meeting.
-\\
-\includegraphics[scale=0.3]{Schedule}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Schedule}
+    \caption{The initial design of our system schedule page.}
+    \label{fig:dashboard_design}
+\end{figure}
 
 \section{Testing}
 \subsection{Test cases}
@@ -351,19 +457,19 @@ development process. All of the tests will be automatically run on a pull
 request to the GitHub repository, and must pass in order for the code to be
 merged into the main branch, to ensure its validity. This is an implementation
 of “continuous integration” from CI/CD, and will be implemented using GitHub
-actions.
+Actions.
 
 There are many tools for unit testing which can be used. Since we are using a
-python backend framework, we will use PyTest for unit tests on the backend code,
-along with codecov to assess the coverage of the tests, and pylint to ensure
-that stylistic code is being written. Since we are using a javascript frontend
-framework, we will use Jest for unit tests on the frontend code and UI, along
-with ESLint to check that the Javascript is correct. Finally, we will use
-Postman to test that the API serves the correct data. There are relatively few
-tools for integration testing, and it will likely mostly have to be done by
-hand. We will use the Puppeteer tool to automate this task as far as possible.
-The combination of all of these tools allows us to create a testing suite which
-will fully cover our system.
+python backend framework, we will use `PyTest' for unit tests on the backend
+code, along with `codecov' to assess the coverage of the tests, and `pylint' to
+ensure that stylistic code is being written. Since we are using a javascript
+frontend framework, we will use `Jest' for unit tests on the frontend code and
+UI, along with `ESLint' to check that the Javascript is correct. Finally, we
+will use Postman to test that the API serves the correct data. There are
+relatively few tools for integration testing, and it will likely mostly have to
+be done by hand. We will use the `Puppeteer' tool to automate this task as far
+as possible. The combination of all of these tools allows us to create a testing
+suite which will fully cover our system.
 
 
 \bibliographystyle{ieeetr}
