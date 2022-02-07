@@ -103,6 +103,20 @@ doing in order to stay on schedule. We will use Trello to manage the product
 backlog, and see which tasks are currently in progress, to ensure the project
 will be completed by the deadline.
 
+\subsection{Risk management}
+% \begin{table}[]
+\begin{longtable}{|p{0.105\linewidth}|p{0.15\linewidth}|p{0.075\linewidth}|p{0.06\linewidth}|p{0.175\linewidth}|p{0.15\linewidth}|p{0.06\linewidth}|}
+\hline \rot{45}{\textbf{Risk}} & \rot{45}{\textbf{Impact}} & \rot{45}{\textbf{Likelihood}} & \rot{45}{\textbf{Severity}} & \rot{45}{\textbf{Mitigation}} & \rot{45}{\textbf{Contingency}} & \rot{45}{\textbf{Residual}} \\ \hline\hline
+    Team members unable to work & Smaller team until the member can resume work                     & 2 & 7 & Team members take precautions                                 & Reduce scope and reallocate work across team  & 2 \\ \hline
+    Task longer than expected   & Project delayed until task completed                              & 5 & 4 & Allocate buffer time to allow overrunning tasks               & Re-assign team members to load balance        & 4 \\ \hline
+    Poor code quality           & System fails testing or linting procedures                        & 5 & 4 & Code review and automated testing through CI/CD               & Re-assign team memebrs to fix pair program    & 3 \\ \hline
+    Requirements change         & Design and existing code must be changed                          & 3 & 8 & Use an agile methodology to facilitate requirements change    & Update project plan and proceed with new one  & 3 \\ \hline
+    Code lost                   & Code must be re-written                                           & 1 & 7 & Use `git` as version control, and remote backup to GitHub     & Restore code from local or remote backups     & 1 \\ \hline
+    Problems with dependencies  & Component of project fails external library or technology         & 2 & 4 & Choose technologies and dependencies carefully                & Find replacement library or technology        & 2 \\ \hline
+    Scope creep                 & Addition of unnecessary features causing growth of project scale  & 7 & 4 & Include extra features in project timeline, and stick to it   & Drop lowest priority features                 & 5 \\ \hline
+    \caption{The risk register, for our project}
+    \label{tab:risk_table}
+\end{longtable}
 
 \subsection{Project schedule}
 \begin{figure}[H]
@@ -122,21 +136,6 @@ reminder that the final report should be completed, when time is available,
 concurrently with the project itself, so it doesn't need to be written in its
 entirety in the few days before submission.
 
-\subsection{Risk management}
-% \begin{table}[]
-\begin{longtable}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.1\linewidth}|p{0.08\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.08\linewidth}|}
-\hline \rot{45}{\textbf{Risk}} & \rot{45}{\textbf{Impact}} & \rot{45}{\textbf{Likelihood}} & \rot{45}{\textbf{Severity}} & \rot{45}{\textbf{Mitigation}} & \rot{45}{\textbf{Contingency}} & \rot{45}{\textbf{Residual}} \\ \hline\hline
-    Team members unable to work & Smaller team until the member can resume work                     & 2 & 7 & Team members take precautions                                 & Reduce scope and reallocate work across team  & 2 \\ \hline
-    Task longer than expected   & Project delayed until task completed                              & 5 & 4 & Allocate buffer time to allow overrunning tasks               & Re-assign team members to load balance        & 4 \\ \hline
-    Poor code quality           & System fails testing or linting procedures                        & 5 & 4 & Code review and automated testing through CI/CD               & Re-assign team memebrs to fix pair program    & 3 \\ \hline
-    Requirements change         & Design and existing code must be changed                          & 3 & 8 & Use an agile methodology to facilitate requirements change    & Update project plan and proceed with new one  & 3 \\ \hline
-    Code lost                   & Code must be re-written                                           & 1 & 7 & Use `git` as version control, and remote backup to GitHub     & Restore code from local or remote backups     & 1 \\ \hline
-    Problems with dependencies  & Component of project fails external library or technology         & 2 & 4 & Choose technologies and dependencies carefully                & Find replacement library or technology        & 2 \\ \hline
-    Scope creep                 & Addition of unnecessary features causing growth of project scale  & 7 & 4 & Include extra features in project timeline, and stick to it   & Drop lowest priority features                 & 5 \\ \hline
-\end{longtable}
-% \caption{}
-% \label{tab:my-table}
-% \end{table}
 
 \section{Technical description}
 
@@ -226,23 +225,6 @@ criteria include:
     \item
         Experience, how much prior knowledge does our team have of the technology?
 \end{itemize}
-
-% \begin{table}[]
-%     \begin{tabular}{lll}
-%     Category & Choice & Justification \\
-%              &        &               \\
-%              &        &               \\
-%              &        &               \\
-%              &        &               \\
-%              &        &               \\
-%              &        &               \\
-%              &        &               \\
-%              &        &
-%     \end{tabular}
-%     \caption{}
-%     \label{tab:my-table}
-%     \end{table}
-
 
 \begin{longtable}{|p{0.085\linewidth}|p{0.09\linewidth}|p{0.75\linewidth}|}
     \hline \textbf{Category} & \textbf{Choice} & \textbf{Justification} \\ \hline\hline
@@ -404,29 +386,16 @@ Notifications and Milestones will be searched by userID to obtain a user's
 relevant data entries. Authentication stores a token to be matched with what is
 stored in the user's cookies to reduce the number of logins as it can be
 annoying for users.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{UserDB}
-    \caption{User Schema.}
-    \label{fig:User Schema}
-\end{figure}
 
 Pairing table reflects the current mentor-mentee pairings between users.
 Important constraint is that a userID must be unique in the menteeID column
 since mentee's can only have one mentor. Event table is different from a meeting
 in that it has multiple mentees, a capacity of number of people that can join
-and a type – GroupSession or Workshop. ProposeMeeting can only store one
+and a type - GroupSession or Workshop. ProposeMeeting can only store one
 proposition for a meeting at a time relative to a pairing. If the mentor
 rejects, it is reflected by a boolean and a note for the mentee.
 RejectMentoringOffer is expected to be used in suggestion lists, to temporarily
 hide a mentee in the case that mentee rejects a mentoring offer (F08).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{MentoringDB}
-    \caption{Mentoring Schema.}
-    \label{fig:Mentoring Schema}
-\end{figure}
 
 Feedback has been decomposed to 4 types. To ensure efficiency and scalability,
 each type of feedback has its own table rather than trying to abstract
@@ -439,16 +408,39 @@ used by developers to improve their system.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{FeedbackDB}
-    \caption{Feedback Schema.}
-    \label{fig:Feedback Schema}
+    \subfloat[\centering The user tables schema.]{{\includegraphics[width=0.45\textwidth]{UserDB} }}
+    \qquad
+    \subfloat[\centering The mentoring tables schema.]{{\includegraphics[width=0.45\textwidth]{MentoringDB} }}
+    \newline
+    \subfloat[\centering The feedback tables schema.]{{\includegraphics[width=0.65\textwidth]{FeedbackDB} }}
+    \caption{Table schemas of groups within our systems' database schema}
+    \label{fig:db_entity_relationship}
 \end{figure}
 
+% \begin{figure}[H]
+%     \centering
+%     \subfloat[\centering The feedback tables schema.]{{\includegraphics[width=0.5\textwidth]{FeedbackDB} }}
+%     \qquad
+%     \subfloat[\centering The entity relationship for the database.]{{\includegraphics[width=0.75\textwidth]{ER} }}
+%     \caption{Table schemas and entity relationship diagrams for the tables in the database schema}
+%     \label{fig:db_entiry_relationship}
+% \end{figure}
 
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.55\textwidth]{FeedbackDB}
+%     \caption{The feedback tables schema.}
+%     \label{fig:Feedback_Schema}
+% \end{figure}
+
+The three subgroups shown in the above figures all relate to each other in the
+way shown in the final figure. This is done to make the complex schema more
+easily parsable, whilst retaining detail.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{ER}
+    \includegraphics[width=1\textwidth]{ER}
     \caption{Entity Relationship Diagram.}
     \label{fig:Entity Diagram}
 \end{figure}
@@ -473,7 +465,7 @@ will flow.
 % TODO: CHECK ; Believe I have updated this to the most recent one
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Objects}
+    \includegraphics[width=1\textwidth]{Objects}
     \caption{A UML class diagram of our object structure.}
     \label{fig:uml_class_diagram}
 \end{figure}
@@ -498,7 +490,7 @@ interact with the system. Overall, this will save time as unnecessary
 communication between developers will be eliminated.
 
 
-\begin{longtable}{|p{0.127\linewidth}|p{0.07\linewidth}|p{0.75\linewidth}|}
+\begin{longtable}{|p{0.128\linewidth}|p{0.08\linewidth}|p{0.75\linewidth}|}
     \hline \textbf{Resource} & \textbf{HTTP method} & \textbf{Description} \\ \hline\hline
     register
     &
@@ -718,7 +710,7 @@ is a brief outline of what each page will consist of:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Hierarchy}
+    \includegraphics[width=0.55\textwidth]{Hierarchy}
     \caption{A diagram of website page hierarchy.}
     \label{fig:website_page_hierarchy}
 \end{figure}
