@@ -6,6 +6,9 @@
 \usepackage{longtable}
 \usepackage{nopageno}
 \usepackage{float}
+\usepackage{placeins}
+
+\usepackage{subfig}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
@@ -137,54 +140,76 @@ entirety in the few days before submission.
 
 \section{Technical description}
 
+% TODO: Decide whether to drop
 \subsection{Scope}
 Our system must satisfy a complex specification, so its development must be
 carefully planned and executed. However, the goal is to create a prototype, not
 a finished product. This means that some features that would be required in
-production, but are either do not fit in the timescale for the prototype, e.g. ,
-or would require integration from external systems, e.g. company calendar
-applications, should not be implemented. Our requirements analysis fully defines
-the scope of what we will implement.
+production, which do not fit in the timescale for the prototype, e.g. , or would
+require integration from external systems, e.g. company calendar applications,
+should not be implemented. Our requirements analysis fully defines the scope of
+what we will implement.
 
 \subsection{System attributes}
+It is crucial that the system's usability is considered. Our goal is to ensure
+that the website is intuitive to use, has little ambiguity and can ideally be
+learnt without assistance even by non-technical users. Thorough acceptance
+testing will be carried out to ensure this is achieved. Along with this, our
+prototype aims to make our system accessible to people with disabilities, by
+including features such as enlarging text and higher contrast colours.
 
-% TODO: THIS NEEDS TO BE UPDATED
-This section will communicate the different qualities needed by software, what
-is within our scope, how we have addressed them, and what we are not doing for
-this prototype.\\ The end goal of the software engineering lifecycle is to end
-with satisfied customers. As such, it is crucial that usability of the software
-is given important consideration. Our goal is to ensure that the website is
-intuitive to use, has little ambiguity and can be learnt ideally without
-assistance even for non-technical users. There will be a wide coverage of
-acceptance testing carried out to ensure this is achieved. Along with this, our
-prototype aims, if possible, to make our system accessible to people with
-disabilities with features such as enlarging text and higher contrast colours.
-\\Compatibility and portability are important points to consider since we want to
-make our system as portable as it needs to be, and compatible with systems used
-by most of our users. Being a web app, makes it portable since every user will
-have some access to a device able to run a browser. Extreme cases such as legacy
-browsers will not be prioritised since it is unlikely to be used. The prototype
-will not include desktop and mobile applications since it is out of the scope
-and not needed with a web app, this early in the mentoring system. \\Security is a
-relevant quality to consider, especially since we do not want to create issues
-for any relevant parties involved. Complete and effective considerations to
-security for most areas of vulnerability is out of scope for a prototype
-implementing its core functionalities. Important security details such as
-account access protection through salted/hashed stored passwords are to be
-implemented. Data will only be accessed through the REST API, allowing us to
-ensure only required data is sent, and adds a layer of security since our
-database is not directly interacted with. Allows us to also validate any user
-information before storing it in the database.
+Both compatibility and portability are important aspects to consider when
+designing a system. As the system is a web app, it is inherently compatible
+since every user will have some access to a device able to run a browser.
+Furthermore, since websites use standardised languages such as HTML, they are by
+definition portable across devices running valid browsers. Extreme cases such as
+legacy browsers will not be prioritised since it is unlikely to be used. The
+prototype will not include desktop and mobile applications since it would be
+difficult to make portable across systems, and so is out of the scope of the
+prototype.
+
+Security is also important to consider, especially due to the legal obligations
+on processing of user data that grow more stringent over time. It is impossible
+to have a system which is both functional and perfectly secure, however, the
+threat surface for any prototype system is very small, so it is sufficient to
+follow simple best practises, such as account access protection through hashing
+and salting stored passwords. Data will only be accessed through the REST API,
+allowing us to ensure only required data is sent, and adds a layer of security
+since our database is not directly interacted with. Furthermore, it also allows
+us to also validate any user information before storing it in the database.
+
+Robustness, reliability and fault tolerance must also be accounted for in the
+design. One of the benefits of containerisation in these categories, as if a
+fault occurs, the individual container containing the broken component can be
+restarted or fixed independently from the rest of the system. This means that
+the uptime of the system as a whole is less likely to be damaged, and if it is
+it will be down for a shorter period of time.
+
+Modularity and reuse, and extensibility are further important design components.
+Modularity is largely implemented by splitting the architecture up into two
+sections: the frontend and the backend. These can then be developed largely
+separately, relying on a predefined API to communicate with each other, then
+integrated together later. This also improves extensibility, for example as new
+frontend designs can be added without changing the backend by using pre-existing
+API calls.
+
+Correctness is the final aspect which we consider in the design. Correctness of
+complex systems is much more arbitrary than of simple algorithms. For example,
+an algorithm could be formally proved to always give the correct output given
+any input, but a complex system can only be shown to satisfy its requirements.
+This is done by comprehensive testing of every component in the system, known as
+end-to-end testing - and is discussed in our testing section.
+
 
 \subsection{Technologies used}
 
 % NEED TO UPDATE THIS TO USE TABLE
 A fundamental decision in the project is deciding which technologies should be
-used to compose the so-called “tech stack”. Since this is such an important set
+used to compose the so-called ``tech stack''. Since this is such an important set
 of decisions, we carefully considered a number of options with respect to a set
 of criteria which assess the quality of a component technology choice. These
 criteria include:
-\begin{itemize}
+\begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
     \item
         Suitability, how well does the technology match the problem
         our system solves?
@@ -202,70 +227,130 @@ criteria include:
         Experience, how much prior knowledge does our team have of the technology?
 \end{itemize}
 
-We decided to implement the project as a web application, as opposed to a mobile or
-desktop only one. This is because it is generic and can be accessed by almost
-all users, as essentially every modern device has a web browser. However, this
-design choice must later be taken into consideration when ensuring the UI is
-suitable for mobile. This choice was made as the system must be widely
-accessible by users with many different types of devices, and a web application
-was the only suitable choice for this.
+% \begin{table}[]
+%     \begin{tabular}{lll}
+%     Category & Choice & Justification \\
+%              &        &               \\
+%              &        &               \\
+%              &        &               \\
+%              &        &               \\
+%              &        &               \\
+%              &        &               \\
+%              &        &               \\
+%              &        &
+%     \end{tabular}
+%     \caption{}
+%     \label{tab:my-table}
+%     \end{table}
 
-We chose Django for our backend framework, which runs on top of Python. This is
-suitable for our system as it facilitates fast development, which is required to
-finish our prototype in the very short turnaround of around five weeks, with
-very short code sprints, and it inherently supports our non-functional
-requirements of security and scalability. Furthermore, it has robust
-documentation and is widely used with an active community. Additionally, Python
-is so ubiquitous that it can interface consistently with almost any other
-technology choice, for example persistent data storage and sentiment analysis.
-Finally, our team has a lot of experience with Python development, and
-additionally testing techniques for Python, mitigating learning curves and
-ensuring bug-free code.
 
-Since we are making a web application, we will use HTML/CSS/JS. We decided to
-use the Vue.JS framework for the frontend JS, as it facilitates writing
-responsive websites, but has a much less steep learning curve than other
-frameworks such as React, and is known to integrate well with Django, the
-backend framework we propose using. Furthermore, we are going to use bootstrap
-as the CSS framework as it allows us to quickly develop a professional looking
-website with little hassle by providing building block CSS classes.
+\begin{longtable}{|p{0.085\linewidth}|p{0.09\linewidth}|p{0.75\linewidth}|}
+    \hline \textbf{Category} & \textbf{Choice} & \textbf{Justification} \\ \hline\hline
 
-We chose PostgreSQL to store our persistent data in the form of a relational
-database. This is because the type of data recorded by the system is well suited
-to storage in a relational schema. For example, storing a set of users, each of
-whom have various properties and relationships with other users is a very good
-match for this model. Furthermore, postgresql has very good documentation in
-comparison to other relational databases, and it meshes well into our tech stack
-as django and postgresql are commonly used in tandem. Finally, all of our team
-has experience with it due to the CS258 databases module.
 
-We chose the python library NLTK (natural language toolkit) to implement our
-sentiment analysis. This is because it is compatible with the rest of the
-backend framework, which is already written in python, and it is the most
-popular and widely used library within its field.
+    Application type
+    &
+    Web app
+    &
+    Suitable as it is portable and compatible
+    across devices, since it is run in-browser, and can be designed to support
+    differing view widths such as mobile. All of the team has experience with
+    web design.
+    \\ \hline
 
-We will use JSON for the REST API, as it is incredibly ubiquitous, and links
-easily into most web frameworks, as it is a subset of javascript. Additionally,
-both our backend and frontend team members have experience with it, which is
-crucial as it will form the link between the two sides of the technology stack,
+    Backend framework
+    &
+    Django
+    &
+    Suitable as it facilitates fast development, needed for prototyping, and
+    inherently supports non-functional requirements of security and scalability,
+    and it is popular. Because of this, it has consistent integrations with
+    other categories. Based on python, which team has experience with.
+    \\ \hline
 
-We chose docker for our containerisation. This supports all of the rest of the
-tech stack, and allows “lift-and-shift”, which is a very useful property for
-prototype systems. Additionally, it is by far the most widely used choice for
-containerisation, and has good documentation. Finally, none of our team has
-experience with any form of containerisation, so choices cannot be compared by
-this metric.
+    Web server
+    &
+    NginX
+    &
+    Suitable as it serves static web content effectively, and is an industry
+    standard. More performant than its competitor apache. Consistent with Django
+    backend in common technology stacks
+    \\ \hline
 
-We chose git with GitHub for our version control. This is because it is the
-industry standard for version control, every member of our team had at least
-rudimentary experience with it from CS133, and some members of our team had
-experience with advanced features for CI/CD such as GitHub Actions.
+    Frontend framework
+    &
+    Vue.js and Bootstrap
+    &
+    Since we are making a web application, we will use HTML/CSS/JS. We decided
+    to use the Vue.JS framework to develop the frontend, as it facilitates
+    writing responsive websites, but has a much less steep learning curve than
+    other frameworks, and is known to integrate well with Django. Using a
+    framework, provides us with powerful tools that allow us to develop the
+    frontend quicker than if we did this project without it. Furthermore, we are
+    going to use bootstrap as the CSS framework as it allows us to quickly
+    develop a professional looking website with little hassle.
+    \\ \hline
+
+    Database
+    &
+    PostgreSQL
+    &
+    Suitable as it is a relational database, which fits the type of data we need
+    to store, e.g. user accounts, calendars, etc. and it is popular. It has very
+    strong documentation compared to other SQL flavours, It is consistent, as it
+    has a good integration with Django. All of the team has experience with it
+    from a previous module
+    \\ \hline
+
+    API
+    &
+    JSON REST
+    &
+    Suitable as it facilitates the access of only the required data. It is
+    incredibly ubiquitous, as it is a subset of Javascript, and hence is
+    consistent with our Vue.js framework. Both our backend and frontend team
+    members have experience with it, which is crucial as it will form the link
+    between the two sides of the technology stack
+    \\ \hline
+
+    Container- isation
+    &
+    Docker
+    &
+    % TODO: ADD REFERENCE https://www.techrepublic.com/article/the-10-most-popular-container-tools-for-businesses/
+    Suitable as it is the de-facto standard for containerisation (57\% share),
+    so strong documentation and an active community. Consistent with all of the
+    other technologies. \\ \hline
+
+    Version control
+    &
+    git with GitHub
+    &
+    Suitable as it is full featured, supporting branching for collaboration,
+    remote backups, and CI/CD through GitHub actions. Industry standard, so
+    strong documentation and an active community. Consistent with all other
+    technologies. All of the team has experience with it from a previous module.
+    \\ \hline
+
+\end{longtable}
+
+When deciding on our technologies, we considered using some form of machine
+learning in the project - specifically for the matching system for mentors and
+mentees. However, we decided against doing this for a number of reasons. We
+thought that an algorithmic solution would produce better solutions, given the
+varied type of metrics that are recorded, and the fact that not enough data
+points on what a good match entails would be recorded to adequately train a
+model, as mentoring relationships are likely to last years at a time. However,
+we did decide to use sentiment analysis on feedback, as more (helpful), data
+metrics almost always improves prediction quality of an algorithm. We plan to
+use the python library NLTK to implement this, as it is consistent with our
+python backend, and an industry standard for this type of application.
 
 \subsection{System architecture}
 Our system architecture follows the MVC (Model View Controller) architecture
 which is a well-known model to be successful in creating a system that presents
 data obtained through a controller that interacts with the database. This is
-reflected in the docker containerisation figure with our website being the view,
+reflected in the Docker containerisation figure with our website being the view,
 the Django system being the controller, and Postgresql as the model. Being
 modularised to 3 separate components, allows easy distribution of development,
 with each focusing on a subset of skill sets. One downfall of this architecture
@@ -279,7 +364,7 @@ served from the Django backend.
 We decided to containerise our model, as the specification stated that Deutsche
 Bank already uses containers for this type of application, so it will provide
 modularity within their existing systems. Furthermore, it gives the property of
-easy “lift-and-shift”, meaning that all the dependencies can be handled within
+easy ``lift-and-shift'', meaning that all the dependencies can be handled within
 the containers, which themselves are portable and compatible across machines.
 
 We decided against using microservices, instead opting for a monolithic
@@ -287,6 +372,11 @@ architecture. This was predominantly for two reasons: Django has a higher
 overhead than other backend frameworks like Flask, so making multiple
 microservices can reduce performance; and there is not a clean way nor a good
 reason to split the internal logical model into separate microservices.
+
+When designing our system architecture, we took into account the ``twelve factor
+application'' principles. For example using a workflow based around git to fulfil
+the codebase and release principles, or using docker to fulfil the dependencies,
+and port binding one.
 
 \begin{figure}[H]
     \centering
@@ -310,7 +400,7 @@ The User table stores relevant user information required by the overall system.
 BusinessArea and StrengthWeakness tables lists all possible options the user may
 choose as it is not free text. PasswordReset should only have unique userIDs to
 ensure there is only one reset code, and should be removed if it has expired.
-Notifications and Milestones will be searched by userID to obtain a user’s
+Notifications and Milestones will be searched by userID to obtain a user's
 relevant data entries. Authentication stores a token to be matched with what is
 stored in the user's cookies to reduce the number of logins as it can be
 annoying for users.
@@ -323,7 +413,7 @@ annoying for users.
 
 Pairing table reflects the current mentor-mentee pairings between users.
 Important constraint is that a userID must be unique in the menteeID column
-since mentee’s can only have one mentor. Event table is different from a meeting
+since mentee's can only have one mentor. Event table is different from a meeting
 in that it has multiple mentees, a capacity of number of people that can join
 and a type – GroupSession or Workshop. ProposeMeeting can only store one
 proposition for a meeting at a time relative to a pairing. If the mentor
@@ -341,7 +431,7 @@ hide a mentee in the case that mentee rejects a mentoring offer (F08).
 Feedback has been decomposed to 4 types. To ensure efficiency and scalability,
 each type of feedback has its own table rather than trying to abstract
 commonalities, creating dependencies that could be problematic in the future.
-The difference between MeetingFeedback and EventFeedback is if it’s for a
+The difference between MeetingFeedback and EventFeedback is if it's for a
 meeting or event. General Feedback stores overall feedback to a mentor by
 mentee. These 3 will store an analysis of its sentiment, that will be used in
 the suggestion process. SystemFeedback has two types, error or feature that is
@@ -365,8 +455,22 @@ used by developers to improve their system.
 
 
 \subsubsection{Object Structure}
+We've decided to take an object oriented approach on the back-end side of the
+application. This allows us to separate the problem into multiple smaller
+subproblems which can be solved one at a time. It also allows for different team
+members to work on different sections of the back-end code simultaneously, thus
+improving our team's efficiency; each back-end developer will be assigned a set
+of classes which can be worked on independently. As shown in the class diagram,
+we've utilised inheritance wherever suitable. This reduces the complexity of the
+problem, and means that we'll have to write less code overall, therefore saving
+time for our backend developers—something that is especially important when
+considering the short timescale of the project. The object oriented approach is
+particularly useful when trying to model the problem as a whole. The use of
+techniques such as aggregation and composition, help model the relationships
+between objects in the system, giving us a greater understanding of how data
+will flow.
 
-% Believe I have updated this to the most recent one
+% TODO: CHECK ; Believe I have updated this to the most recent one
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Objects}
@@ -392,14 +496,234 @@ about potential consequences. As long as the specification is followed, a
 back-end modification should have no effect on how the front-end developers
 interact with the system. Overall, this will save time as unnecessary
 communication between developers will be eliminated.
-% Edmund do it, long table
+
+
+\begin{longtable}{|p{0.127\linewidth}|p{0.07\linewidth}|p{0.75\linewidth}|}
+    \hline \textbf{Resource} & \textbf{HTTP method} & \textbf{Description} \\ \hline\hline
+    register
+    &
+    POST
+    &
+    Registers the user. A newly created user ID is sent in the response payload. A session ID will be in the response header, to be stored as a cookie.
+    \\ \hline
+
+    login
+    &
+    POST
+    &
+    Logs the user into the application if the email and password match. The user ID is sent in the response payload. A session ID will be in the response header, to be stored as a cookie.
+    \\ \hline
+
+    resetPassword
+    &
+    PUT
+    &
+    Resets a user's password.
+    \\ \hline
+
+    getProfile
+    &
+    GET
+    &
+    Asks the server for a user's profile information (user ID will be specified). The profile information is then sent back in the response payload.
+    \\ \hline
+
+    getPotential- Mentors
+    &
+    GET
+    &
+    Gets a list of potential mentors for the mentee.
+    \\ \hline
+
+    selectMentor
+    &
+    POST
+    &
+    Indicates that the mentee wants to be mentored by a particular mentor from the list of potential mentors.
+    \\ \hline
+
+    getRequested- Mentees
+    &
+    GET
+    &
+    Gets a list of mentees which have requested to be paired with a particular mentor.
+    \\ \hline
+
+    acceptMentee
+    &
+    POST
+    &
+    Used by a mentor to indicate that they want to begin a relationship with a particular mentee.
+    \\ \hline
+
+    getMentor
+    &
+    GET
+    &
+    Gets the mentor of a particular mentee.
+    \\ \hline
+
+    getMentees
+    &
+    GET
+    &
+    Get a list of the mentor's mentees.
+    \\ \hline
+
+    terminateRel- ationship
+    &
+    DELETE
+    &
+    Terminates a mentoring relationship. Feedback for termination is provided in the request.
+    \\ \hline
+
+    proposeMeeting
+    &
+    POST
+    &
+    Allows the mentee to propose a meeting.
+    \\ \hline
+
+    proposeMeeting- Times
+    &
+    POST
+    &
+    Allows the mentor to send a list of potential meeting times back to the mentee.
+    \\ \hline
+
+    acceptMeeting
+    &
+    POST
+    &
+    Allows the mentee to accept one of the meeting times proposed by the mentor.
+    \\ \hline
+
+    reproposeMeet- ing
+    &
+    POST
+    &
+    Allows the mentee to ask for new meeting times.
+    \\ \hline
+
+    cancelMeeting
+    &
+    DELETE
+    &
+    Gives feedback for a particular meeting.
+    \\ \hline
+
+    getMeetings
+    &
+    GET
+    &
+    Get a list of scheduled meetings.
+    \\ \hline
+
+    giveMeeting- Feedback
+    &
+    POST
+    &
+    Gives feedback for a particular meeting.
+    \\ \hline
+
+    getPlanOfAction
+    &
+    GET
+    &
+    Get details of the plan of action.
+    \\ \hline
+
+    addMilestone
+    &
+    POST
+    &
+    Adds a milestone to the plan of action.
+    \\ \hline
+
+    setMilestone
+    &
+    PUT
+    &
+    Changes the content of a milestone.
+    \\ \hline
+
+    completeMile- stone
+    &
+    POST
+    &
+    Set a particular milestone to complete.
+    \\ \hline
+
+    getMilestone
+    &
+    GET
+    &
+    Get information about a particular milestone.
+    \\ \hline
+
+    setMentorFeed- back
+    &
+    PUT
+    &
+    Allows a mentee to update their current feedback on their mentor.
+    \\ \hline
+
+    createGroup- Event
+    &
+    POST
+    &
+    Allows a mentor to create group sessions or workshops. The type of event is specified in the request.
+    \\ \hline
+
+    getGroupEvent
+    &
+    GET
+    &
+    Get details about a particular group session or workshop.
+    \\ \hline
+
+    joinGroupEvent
+    &
+    POST
+    &
+    Allows a user to sign up for attending a group event.
+    \\ \hline
+
+    getNotifications
+    &
+    GET
+    &
+    Gets notifications for a users' inbox, with the date range being specified.
+    \\ \hline
+
+    submitSiteFeed- back
+    &
+    POST
+    &
+    Allows users to give feedback about the site.
+    \\ \hline
+
+
+
+\end{longtable}
+
+
+
 
 \section{UI/UX design}
 
 \subsection{Page Hierarchy}
 The page hierarchy below displays the sites that our webpage comprises of. Here
 is a brief outline of what each page will consist of:
-\begin{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Hierarchy}
+    \caption{A diagram of website page hierarchy.}
+    \label{fig:website_page_hierarchy}
+\end{figure}
+
+\begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
     \item Login Screen: The landing page of the website that allows the user to
     login to go to the dashboard or the sign up page to create an account.
     \item Sign Up: Allows the user to create an account.
@@ -421,18 +745,26 @@ is a brief outline of what each page will consist of:
     event) and allows the owner of an event to modify or delete the event.
 \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Hierarchy}
-    \caption{A diagram of website page hierarchy.}
-    \label{fig:website_page_hierarchy}
-\end{figure}
+
+
+
 
 
 \subsection{User-system interaction}
-The specification was also very vague about how to match up mentors and mentees,
-therefore this diagram clarifies all the ambiguities around this.
-\begin{itemize}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[\centering A diagram of the states required to match a mentor and a mentee.]{{\includegraphics[width=0.45\textwidth]{MentorMentee} }}
+    \qquad
+    \subfloat[\centering A diagram of the states required to schedule a meeting.]{{\includegraphics[width=0.45\textwidth]{Meeting} }}
+    \caption{State diagrams for some aspects of our design.}
+    \label{fig:state_diagrams}
+\end{figure}
+
+The specification was very vague about how to match up mentors and mentees. The
+left diagram provides a visual representation of how exactly we interpreted it
+in our requirements.
+\begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
     \item The user can only have 1 mentor at a time
     \item The system can give the user a list of potential other users who are currently looking for mentees
     \item The user then picks one of these users and a mentor mentee request is sent to the potential mentor
@@ -440,31 +772,28 @@ therefore this diagram clarifies all the ambiguities around this.
     \item Otherwise, the mentee needs to choose another mentor from the list
 \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{MentorMentee}
-    \caption{A diagram of the states required to match a mentor and a mentee.}
-    \label{fig:state_mentor_mentee_diagram}
-\end{figure}
-
-The diagram below displays what functions the Schedule page has. This handles a
+The right diagram displays what functions the Schedule page has. This handles a
 lot of ambiguities around how the meeting and feedback system will work within
-our system. The important points from this diagram is that:
-\begin{itemize}
-    \item Mentee's can cancel meetings, but mentors can only reschedule
-    \item Mentee's can request a meeting, but mentors cannot not
+our system.
+\begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
+    \item Mentees can cancel meetings, but mentors can only reschedule
+    \item Mentees can request a meeting, but mentors cannot not
     \item For a meeting to be officially approved, both parties need to agree on the time and date otherwise they go into this loop of suggesting times to each other
     \item The user will be prompted on the schedule page to give feedback to recent events they have gone to
 \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Meeting}
-    \caption{A diagram of the states required to schedule a meeting.}
-    \label{fig:state_meeting_diagram}
-\end{figure}
+
 
 \subsection{Page Design}
+\begin{figure}[H]
+    \centering
+    \subfloat[\centering The initial design of our system dashboard.]{{\includegraphics[width=0.45\textwidth]{Dashboard} }}
+    \qquad
+    \subfloat[\centering The initial design of our system schedule page.]{{\includegraphics[width=0.45\textwidth]{Schedule} }}
+    \caption{Pages from our initial UI designs}
+    \label{fig:ui_designs}
+\end{figure}
+
 The dashboard is the central page for users that displays all the useful
 information for the user, such as their upcoming meetings, their current plan of
 action and allows them to get a new mentee or mentor. The navigation bar at the
@@ -475,13 +804,6 @@ interested in such as giving feedback about a recent event or a mentee/mentor
 meeting coming up. The drop down button next to the notification bell will link
 to the user's profile page, the website feedback form and a sign out button.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Dashboard}
-    \caption{The initial design of our system dashboard.}
-    \label{fig:dashboard_design}
-\end{figure}
-
 The schedule page will have the users calender and all the requests the user has
 (meeting and feedback). This user is not a mentee so the request meeting button
 at the bottom is currently missing, but if the user was a mentee then there
@@ -489,16 +811,87 @@ would be a request meeting button at the bottom. Additionally, clicking on a
 meeting will take the user to the individual event page for the meeting which
 will have the feedback log for the meeting.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Schedule}
-    \caption{The initial design of our system schedule page.}
-    \label{fig:dashboard_design}
-\end{figure}
+
 
 \section{Testing}
 \subsection{Test cases}
-% Need to use a long table, Edmund
+
+
+\begin{longtable}{|p{0.45\linewidth}||p{0.45\linewidth}|}
+    \hline \textbf{Test cases} & \\ \hline\hline
+
+    C0. Verify that the user will be able to create an account by providing correct details; which would be added to the database.
+    &
+    C15. Verify that general feedback when given is stored into the database.
+    \\ \hline
+
+    C1. Verify that the user will be prompted to begin the tutorial for the website.
+    &
+    C16. Verify if there are sufficient users with common weaknesses, an expert will be prompted to create an event.
+    \\ \hline
+
+    C3. Verify that the user can change their password via email, after which it would update their details on the database.
+    &
+    C17. Verify that events can be viewed by users with relevant weaknesses on their home page.
+    \\ \hline
+
+    C4. Verify that users can access and make changes to their profile through their profile page.
+    &
+    C18. Verify that feedback can be provided at the end of an event.
+    \\ \hline
+
+    C5. Verify if making changes to the profile page that breaks a rule of mentoring will prompt a warning that if the change is made the termination of the user's 
+    &
+    C19. Verify that security issues are disclosed to the users.
+    \\ \hline
+
+    C6. Verify that users can request for a mentor by checking if an available mentor can see said mentee of their list of pairable mentees.
+    &
+    C20. Verify that the widgets on the home page's dashboard navigates the website as intended.
+    \\ \hline
+
+    C7. Verify if mentors can fully view the profile of the mentees that are available to pair.
+    &
+    C21. Verify that the system is intuitive to use and navigate.
+    \\ \hline
+
+    C8. Verify if the list is ordered according to the matching metric.
+    &
+    C22. Verify that it is simple for users with no prior technical experience to use the system.
+    \\ \hline
+
+    C9. Verify the mentor can likewise send an offer to a requesting mentee if they would like to establish a pairing.
+    &
+    C23. Verify that the system is responsive and has no notable or unnecessary waiting time.
+    \\ \hline
+
+    C10. Verify that a prompt should be visible when a mentor does not have a mentee.
+    &
+    C24. Verify that the system can cope with a large number of users.
+    \\ \hline
+
+    C11. Verify if mentees can propose a meeting to which a mentor can suggest possible meeting times or which mentees can accept or decline.
+    &
+    C25. Verify that system changes made by developers are visible within a reasonable time.
+    \\ \hline
+
+    C12. Verify if feedback is prompted at the end of the meeting and is stored in the database.
+    &
+    C26. Verify that the system clears all unit and integration tests.
+    \\ \hline
+
+    C13. Verify that mentees can create plans of actions which are then saved on the 'Plans of Action/Milestones' page.
+    &
+    C27. Verify that the system is secure and protects the users data.
+    \\ \hline
+
+    C14. Verify that mentors can access and view any of their mentees' plans of action.
+    & \\ \hline
+
+\end{longtable}
+
+
+
 \subsection{Unit and integration testing}
 Tests will form an integral part of our development cycle, as we plan to follow
 the agile test driven development ideologies. We will implement this by creating
@@ -507,7 +900,7 @@ required properties of the system are met. These can then be run throughout the
 development process. All of the tests will be automatically run on a pull
 request to the GitHub repository, and must pass in order for the code to be
 merged into the main branch, to ensure its validity. This is an implementation
-of “continuous integration” from CI/CD, and will be implemented using GitHub
+of ``continuous integration'' from CI/CD, and will be implemented using GitHub
 Actions.
 
 There are many tools for unit testing which can be used. Since we are using a
