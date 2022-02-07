@@ -47,7 +47,6 @@
 
 
 \section{Introduction}
-% \vspace{-6mm}\section{Introduction}\vspace{-2mm}
 Deutsche Bank requires a system prototype to support the mentoring process for
 employees. The principal purpose of this document is to broadly record the
 process documentation and design choices for said system prototype. For process
@@ -60,23 +59,24 @@ covered in depth to illustrate a fuller idea of the final product.
 
 \section{Process documentation and planning}
 \subsection{Development methodology}
-We opted for an agile development methodology based on the Scrum model. The
-development timeline will be broken down into a large initial planning phase and
-a series of week-long sprints. We chose to elect our project manager as scrum
-\cite{scrum} master, since this role is similar to that of the project manager
-in organising the team and improving workflow. We will use Trello \cite{trello}
-to create and manage a scrum board, which will allow for easy management of the
-product backlog. At the start of each sprint, we will meet to discuss the items
+We opted for an \textbf{agile development methodology} based on the
+\textbf{Scrum model} \cite{scrum}. The development timeline will be broken down
+into a large initial planning phase and a series of week-long sprints. We chose
+to elect our project manager as \textbf{scrum master}, since this role is
+similar to that of the project manager in organising the team and improving
+workflow. We will use \textbf{Trello} \cite{trello} to create and manage a
+\textbf{scrum board}, which will allow for easy management of the product
+backlog. At the start of each sprint, we will meet to discuss the items
 from the product backlog to be completed in that sprint - this will usually be
 decided according to the project timeline below, however some small adaptations
 may need to be made. Each day within the sprint, the team will discuss progress
 and bring to attention any challenges they are facing. At the end of the sprint,
 we will carry out a sprint review, and each developer can showcase parts of the
-system which have been completed. The sprint cycle is completed with a sprint
-retrospective, where improvements can be made to the development process before
-the next sprint.
+system which have been completed. The \textbf{sprint cycle} is completed with a
+sprint retrospective, where improvements can be made to the development process
+before the next sprint.
 
-An agile methodology is well suited for a short timeframe \cite{agileSpeed} as
+An agile methodology is well suited for a short time-frame \cite{agileSpeed} as
 it allows rapid product development with concurrent implementation and testing
 so we can make effective use of the time available. It also allows for more
 flexibility if we face unexpected delays during development, which is likely
@@ -88,13 +88,13 @@ not deviate much from the initial plan.
 
 
 \subsection{Project organisation and communication}
-We decided on a flat team hierarchy since we have similar levels of software
-development experience, self-managed but with well defined responsibilities. To
-communicate between meetings, we decided to use Discord, as it is already a
-popular choice within the team and is easy to learn for new users. It offers
-both text and voice chat as well as a number of features such as GitHub
-integration, so we are notified via Discord when pull requests are made, for
-example.
+We decided on a \textbf{flat team hierarchy} since we have similar levels of
+software development experience, self-managed but with well defined
+responsibilities. To communicate between meetings, we decided to use
+\textbf{Discord}, as it is already a popular choice within the team and is easy
+to learn for new users. It offers both text and voice chat as well as a number
+of features such as GitHub integration, so we are notified via Discord when pull
+requests are made, for example.
 
 Discord can be used for online meetings however we aim to convene in-person at
 least twice a week, as this enables us to share ideas much more easily and
@@ -128,12 +128,12 @@ will be completed by the deadline.
 \end{figure}
 
 The timeline outlines which features of the system will be implemented in each
-weekly sprint, divided according to the team which is working on them, with
-final product documentation separated as this is a collaborative effort by the
-whole team. As we are following a Scrum methodology, task order may be adjusted
-weekly, ie. in each sprint, so that the project remains on track, so which
-features are completed in each week will most likely change. It also acts as a
-reminder that the final report should be completed, when time is available,
+\textbf{weekly sprint}, divided according to the team which is working on them,
+with final product documentation separated as this is a collaborative effort by
+the whole team. As we are following a \textbf{Scrum methodology}, task order may
+be adjusted weekly, ie. in each sprint, so that the project remains on track, so
+which features are completed in each week will most likely change. It also acts
+as a reminder that the final report should be completed, when time is available,
 concurrently with the project itself, so it doesn't need to be written in its
 entirety in the few days before submission.
 
@@ -142,87 +142,90 @@ entirety in the few days before submission.
 
 \subsection{Scope}
 Our system must satisfy a complex specification, so its development must be
-carefully planned and executed. However, the goal is to create a prototype, not
-a finished product. This means that some features that would be required in
-production, which do not fit in the timescale for the prototype, e.g. , or would
-require integration from external systems, e.g. company calendar applications,
-should not be implemented. Our requirements analysis fully defines the scope of
-what we will implement.
+carefully planned and executed. However, the goal is to create a
+\textbf{prototype}, not a finished product. This means that some features that
+would be required in \textbf{production}, but which do not fit in the timescale
+for the prototype or would require integration from external systems should not
+be implemented. Our requirements analysis fully defines the scope of what we
+will implement.
 
 \subsection{System attributes}
-It is crucial that the system's usability is considered. Our goal is to ensure
-that the website is intuitive to use, has little ambiguity and can ideally be
-learnt without assistance even by non-technical users. Thorough acceptance
-testing will be carried out to ensure this is achieved. Along with this, our
-prototype aims to make our system accessible to people with disabilities, by
-including features such as enlarging text and higher contrast colours.
+It is crucial that the system's \textbf{usability} is considered. Our goal is to
+ensure that the website is intuitive to use, has little ambiguity and can
+ideally be learnt without assistance even by non-technical users. Thorough
+\textbf{acceptance testing} will be carried out to ensure this is achieved.
+Along with this, our prototype aims to make our system accessible to
+\textbf{people with disabilities}, by including features such as enlarging text
+and higher contrast colours.
 
-Both compatibility and portability are important aspects to consider when
-designing a system. As the system is a web app, it is inherently compatible
-since every user will have some access to a device able to run a browser.
-Furthermore, since websites use standardised languages such as HTML, they are by
-definition portable across devices running valid browsers. Extreme cases such as
-legacy browsers will not be prioritised since it is unlikely to be used. The
-prototype will not include desktop and mobile applications since it would be
-difficult to make portable across systems, and so is out of the scope of the
-prototype.
+Both \textbf{compatibility} and \textbf{portability} are important aspects to
+consider when designing a system. As the system is a web app, it is inherently
+compatible since every user will have some access to a device able to run a
+browser. Furthermore, since websites use standardised languages such as HTML,
+they are by definition portable across devices running valid browsers. Extreme
+cases such as legacy browsers will not be prioritised since it is unlikely to be
+used. The prototype will not include desktop and mobile applications since it
+would be difficult to make portable across systems, and so is out of the scope
+of the prototype.
 
-Security is also important to consider, especially due to the legal obligations
-on processing of user data that grow more stringent over time. It is impossible
-to have a system which is both functional and perfectly secure, however, the
-threat surface for any prototype system is very small, so it is sufficient to
-follow simple best practises, such as account access protection through hashing
-and salting stored passwords. Data will only be accessed through the REST API,
-allowing us to ensure only required data is sent, and adds a layer of security
-since our database is not directly interacted with. Furthermore, it also allows
-us to also validate any user information before storing it in the database.
+\textbf{Security} is also important to consider, especially due to the legal
+obligations on processing of user data that grow more stringent over time. It is
+impossible to have a system which is both functional and perfectly secure,
+however, the threat surface for any prototype system is very small, so it is
+sufficient to follow simple best practises, such as account access protection
+through \textbf{hashing and salting stored passwords}. Data will only be
+accessed through the REST API, allowing us to ensure only required data is sent,
+and adds a layer of security since our database is not directly interacted with.
+Furthermore, it also allows us to also validate any user information before
+storing it in the database.
 
-Robustness, reliability and fault tolerance must also be accounted for in the
-design. One of the benefits of containerisation in these categories, as if a
-fault occurs, the individual container containing the broken component can be
-restarted or fixed independently from the rest of the system. This means that
-the uptime of the system as a whole is less likely to be damaged, and if it is
-it will be down for a shorter period of time.
+\textbf{Robustness, reliability, and fault tolerance} must also
+be accounted for in the design. One of the benefits of \textbf{containerisation}
+in these categories, as if a fault occurs, the individual container containing
+the broken component can be restarted or fixed independently from the rest of
+the system. This means that the uptime of the system as a whole is less likely
+to be damaged, and if it is it will be down for a shorter period of time.
 
-Modularity and reuse, and extensibility are further important design components.
-Modularity is largely implemented by splitting the architecture up into two
-sections: the frontend and the backend. These can then be developed largely
-separately, relying on a predefined API to communicate with each other, then
-integrated together later. This also improves extensibility, for example as new
-frontend designs can be added without changing the backend by using pre-existing
-API calls.
+\textbf{Modularity and reuse, and extensibility} are further
+important design components. Modularity is largely implemented by splitting the
+architecture up into two sections: the front-end and the back-end. These can then
+be developed largely separately, relying on a predefined API to communicate with
+each other, then integrated together later. This also improves extensibility,
+for example as new front-end designs can be added without changing the back-end by
+using pre-existing API calls.
 
-Correctness is the final aspect which we consider in the design. Correctness of
-complex systems is much more arbitrary than of simple algorithms. For example,
-an algorithm could be formally proved to always give the correct output given
-any input, but a complex system can only be shown to satisfy its requirements.
-This is done by comprehensive testing of every component in the system, known as
-end-to-end testing - and is discussed in our testing section.
+\textbf{Correctness} is the final aspect which we consider in the design.
+Correctness of complex systems is much more arbitrary than of simple algorithms.
+For example, an algorithm could be formally proved to always give the correct
+output given any input, but a complex system can only be shown to satisfy its
+requirements. This is done by comprehensive testing of every component in the
+system, known as \textbf{end-to-end testing} - and is discussed in our testing
+section.
 
 
 \subsection{Technologies used}
 
 A fundamental decision in the project is deciding which technologies should be
-used to compose the so-called ``tech stack''. Since this is such an important set
-of decisions, we carefully considered a number of options with respect to a set
-of criteria which assess the quality of a component technology choice. These
-criteria include:
+used to compose the so-called \textbf{tech stack}. Since this is such an
+important set of decisions, we carefully considered a number of options with
+respect to a set of criteria which assess the quality of a component technology
+choice. These criteria include:
 \begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
     \item
-        Suitability, how well does the technology match the problem
+        \textbf{Suitability}, how well does the technology match the problem
         our system solves?
     \item
-        Documentation and popularity, does the choice have strong
+        \textbf{Documentation and popularity}, does the choice have strong
         documentation and an active community likely to have already answered problems
         we may encounter?
     \item
-        Consistency, how well the choice meshes with the other
+        \textbf{Consistency}, how well the choice meshes with the other
         component technologies?
     \item
-        Performance, will the technology run sufficiently fast,
+        \textbf{Performance}, will the technology run sufficiently fast,
         and can it be scaled later needing to switch to something else more performant?
     \item
-        Experience, how much prior knowledge does our team have of the technology?
+        \textbf{Experience}, how much prior knowledge does our team have of the technology?
 \end{itemize}
 
 \begin{longtable}{|p{0.085\linewidth}|p{0.09\linewidth}|p{0.75\linewidth}|}
@@ -239,7 +242,7 @@ criteria include:
     has experience with web design.
     \\ \hline
 
-    Backend framework
+    Back-end framework
     &
     Django \cite{Django}
     &
@@ -256,20 +259,20 @@ criteria include:
     &
     This is suitable as it serves static web content effectively, and is an
     industry standard. Furthermore, it is more performant than its competitor
-    Apache, and consistent with Django backend, as they are commonly used
+    Apache, and consistent with Django back-end, as they are commonly used
     together.
     \\ \hline
 
-    Frontend framework
+    Front-end framework
     &
     Vue.js \cite{Vue} and Bootstrap \cite{Bootstrap}
     &
     Since we are making a web application, we will use HTML/CSS/JS. We decided
-    to use the Vue.JS framework to develop the frontend, as it facilitates
+    to use the Vue.JS framework to develop the front-end, as it facilitates
     writing responsive websites, but has a much less steep learning curve than
     other frameworks, and is known to integrate well with Django. Using a
     framework, provides us with powerful tools that allow us to develop the
-    frontend quicker than if we did this project without it. Furthermore, we are
+    front-end quicker than if we did this project without it. Furthermore, we are
     going to use bootstrap as the CSS framework as it allows us to quickly
     develop a professional looking website with little hassle.
     \\ \hline
@@ -291,7 +294,7 @@ criteria include:
     &
     This is suitable as it facilitates the access of only the required data. It
     is incredibly ubiquitous, as it is a subset of Javascript, and hence is
-    consistent with our Vue.js framework. Both our backend and frontend team
+    consistent with our Vue.js framework. Both our back-end and front-end team
     members have experience with it, which is crucial as it will form the link
     between the two sides of the technology stack.
     \\ \hline
@@ -318,49 +321,52 @@ criteria include:
 
 \end{longtable}
 
-When deciding on our technologies, we considered using some form of machine
-learning in the project - specifically for the matching system for mentors and
-mentees. However, we decided against doing this for a number of reasons. We
-thought that an algorithmic solution would produce better solutions, given the
-varied type of metrics that are recorded, and the fact that not enough data
-points on what a good match entails would be recorded to adequately train a
-model, as mentoring relationships are likely to last years at a time. However,
-we did decide to use sentiment analysis on feedback, as more (helpful), data
-metrics almost always improves prediction quality of an algorithm. We plan to
-use the python library NLTK to implement this, as it is consistent with our
-python backend, and an industry standard for this type of application.
+When deciding on our technologies, we considered using some form of
+\textbf{machine learning} in the project - specifically for the matching system
+for mentors and mentees. However, we decided against doing this for a number of
+reasons. We thought that an \textbf{algorithmic solution} would produce better
+solutions, given the varied type of metrics that are recorded, and the fact that
+not enough data points on what a good match entails would be recorded to
+adequately train a model, as mentoring relationships are likely to last years at
+a time. However, we did decide to use sentiment analysis on feedback, as more
+(helpful), \textbf{data metrics} almost always improves prediction quality of an
+algorithm. We plan to use the python library \textbf{NLTK} \cite{NLTK} to
+implement this, as it is consistent with our python back-end, and an industry
+standard for this type of application.
 
 \subsection{System architecture}
-Our system architecture follows the MVC (Model View Controller) architecture
-which is a well-known model to be successful in creating a system that presents
-data obtained through a controller that interacts with the database. This is
-reflected in the Docker containerisation figure with our website being the view,
-the Django system being the controller, and PostgreSQL as the model. Being
-modularised to 3 separate components, allows easy distribution of development,
-with each focusing on a subset of skill sets. One downfall of this architecture
-is that the system is tightly connected in that if one system fails, the rest
-falls - however we believe that this is outweighed by the benefits of this
-architecture. Furthermore, the fact that it is a trusted design pattern suggests
-it is not an inherently problematic approach. A REST API will be used to serve
-data to the user, allowing both static site pages and dynamic JSON data to be
-served from the Django backend.
+Our system architecture follows the \textbf{MVC (Model View Controller)}
+architecture which is a well-known model to be successful in creating a system
+that presents data obtained through a controller that interacts with the
+database. This is reflected in the \textbf{Docker containerisation} figure with
+our website being the view, the \textbf{Django} system being the controller, and
+\textbf{PostgreSQL} as the model. Being \textbf{modularised} to 3 separate
+components, allows easy distribution of development, with each focusing on a
+subset of skill sets. One downfall of this architecture is that the system is
+tightly connected in that if one system fails, the rest falls - however we
+believe that this is outweighed by the benefits of this architecture.
+Furthermore, the fact that it is a trusted design pattern suggests it is not an
+inherently problematic approach. A \textbf{REST API} will be used to serve data
+to the user, allowing both \textbf{static site pages} and dynamic \textbf{JSON
+data} to be served from the Django back-end.
 
-We decided to containerise our model, as the specification stated that Deutsche
-Bank already uses containers for this type of application, so it will provide
-modularity within their existing systems. Furthermore, it gives the property of
-easy ``lift-and-shift'', meaning that all the dependencies can be handled within
-the containers, which themselves are portable and compatible across machines.
+We decided to \textbf{containerise} our model, as the specification stated that
+Deutsche Bank already uses containers for this type of application, so it will
+provide modularity within their existing systems. Furthermore, it gives the
+property of easy \textbf{``lift-and-shift''}, meaning that all the dependencies can be
+handled within the containers, which themselves are portable and compatible
+across machines.
 
-We decided against using microservices, instead opting for a monolithic
-architecture. This was predominantly for two reasons: Django has a higher
-overhead than other backend frameworks like Flask, so making multiple
-microservices can reduce performance; and there is not a clean way nor a good
-reason to split the internal logical model into separate microservices.
+We decided against using \textbf{microservices}, instead opting for a monolithic
+architecture. This was predominantly for two reasons: \textbf{Django} has a
+higher overhead than other back-end frameworks like \textbf{Flask}, so making
+multiple microservices can reduce performance; and there is not a clean way nor
+a good reason to split the internal logical model into separate microservices.
 
-When designing our system architecture, we took into account the twelve factor
-application principles \cite{twelveFactor}. For example using a workflow based
-around git to fulfil the codebase and release principles, or using docker to
-fulfil the dependencies, and port binding one.
+When designing our system architecture, we took into account the \textbf{twelve
+factor application principles} \cite{twelveFactor}. For example using a workflow
+based around \textbf{git} to fulfil the codebase and release principles, or
+using docker to fulfil the dependencies, and port binding one.
 
 \begin{figure}[H]
     \centering
@@ -369,13 +375,14 @@ fulfil the dependencies, and port binding one.
     \label{fig:system_architecture_diagram}
 \end{figure}
 
-The containerisation has two distinct parts. The first is the three containers
-dynamically interact with each other based on user requests, with the NginX
-container serving requests into the Django backend container, which runs the
-internal logic, and can look up data from the PostgreSQL database container. The
-second is the final container which generates the static site content from
-Vue.js to pure HTML, CSS, and Javascript. This is then stored in the container
-so it only needs to be generated once, not on a request-by-request basis.
+The \textbf{containerisation} has two distinct parts. The first is the three
+containers dynamically interact with each other based on user requests, with the
+\textbf{NginX container} serving requests into the \textbf{Django back-end
+container}, which runs the internal logic, and can look up data from the
+PostgreSQL database container. The second is the final container which generates
+the static site content from \textbf{Vue.js} to pure HTML, CSS, and Javascript.
+This is then stored in the container so it only needs to be generated once, not
+on a request-by-request basis.
 
 \subsubsection{Database Design}
 
@@ -398,11 +405,11 @@ rejects, it is reflected by a boolean and a note for the mentee.
 RejectMentoringOffer is expected to be used in suggestion lists, to temporarily
 hide a mentee in the case that mentee rejects a mentoring offer (F08).
 
-Feedback has been decomposed to 4 types. To ensure efficiency and scalability,
-each type of feedback has its own table rather than trying to abstract
-commonalities, creating dependencies that could be problematic in the future.
-The difference between MeetingFeedback and EventFeedback is if it's for a
-meeting or event. General Feedback stores overall feedback to a mentor by
+Feedback has been decomposed to 4 types. To ensure \textbf{efficiency
+and scalability}, each type of feedback has its own table rather than trying to
+abstract commonalities, creating dependencies that could be problematic in the
+future. The difference between MeetingFeedback and EventFeedback is if it's for
+a meeting or event. General Feedback stores overall feedback to a mentor by
 mentee. These 3 will store an analysis of its sentiment, that will be used in
 the suggestion process. SystemFeedback has two types, error or feature that is
 used by developers to improve their system.
@@ -431,20 +438,20 @@ easily parsable, whilst retaining detail.
 
 
 \subsubsection{Object Structure}
-We've decided to take an object oriented approach on the back-end side of the
-application. This allows us to separate the problem into multiple smaller
-subproblems which can be solved one at a time. It also allows for different team
-members to work on different sections of the back-end code simultaneously, thus
-improving our team's efficiency; each back-end developer will be assigned a set
-of classes which can be worked on independently. As shown in the class diagram,
-we've utilised inheritance wherever suitable. This reduces the complexity of the
-problem, and means that we'll have to write less code overall, therefore saving
-time for our backend developers—something that is especially important when
-considering the short timescale of the project. The object oriented approach is
-particularly useful when trying to model the problem as a whole. The use of
-techniques such as aggregation and composition, help model the relationships
-between objects in the system, giving us a greater understanding of how data
-will flow.
+We've decided to take an \textbf{object-oriented approach} on the back-end side
+of the application. This allows us to separate the problem into \textbf{multiple
+smaller sub-problems} which can be solved one at a time. It also allows for
+different team members to work on different sections of the back-end code
+simultaneously, thus improving our team's efficiency; each back-end developer
+will be assigned a set of classes which can be worked on independently. As shown
+in the class diagram, we've utilised \textbf{inheritance} wherever suitable.
+This reduces the complexity of the problem, and means that we'll have to write
+less code overall, therefore saving time for our back-end developers - something
+that is especially important when considering the short timescale of the
+project. The object-oriented approach is particularly useful when trying to
+model the problem as a whole. The use of techniques such as \textbf{aggregation}
+and \textbf{composition}, help model the relationships between objects in the
+system, giving us a greater understanding of how data will flow.
 
 % TODO: CHECK ; Believe I have updated this to the most recent one
 \begin{figure}[H]
@@ -458,20 +465,20 @@ will flow.
 \subsubsection{API design}
 We have planned to design an API which will be used by the front-end to
 interface with the core back-end components of the system. We've decided to
-settle on a REST API implementation \cite{restAPIs}, as it emphasises
+settle on a \textbf{REST API} implementation \cite{restAPIs}, as it emphasises
 client-server decoupling, which will make it easier to separate front-end and
-back-end tasks between our developers—something which is of the utmost
+back-end tasks between our developers - something which is of the utmost
 importance when working in a smaller, less experienced team. The REST API system
-will give the front-end developers access to fixed API endpoints, which will act
-as a bridge between the front-end and back-end of the application. The front-end
-developers won't need to know how these endpoints are implemented, they only
-need to know what functionality they provide. This will save development time as
-developers can now focus on their specialties. This modular way of designing the
-API allows for back-end code to be modified without having to consult the
-front-end developers about potential consequences. As long as the specification
-is followed, a back-end modification should have no effect on how the front-end
-developers interact with the system. Overall, this will save time as unnecessary
-communication between developers will be eliminated.
+will give the front-end developers access to fixed \textbf{API endpoints}, which
+will act as a bridge between the front-end and back-end of the application. The
+front-end developers won't need to know how these endpoints are implemented,
+they only need to know what functionality they provide. This will save
+development time as developers can now focus on their specialties. This modular
+way of designing the API allows for back-end code to be modified without having
+to consult the front-end developers about potential consequences. As long as the
+specification is followed, a back-end modification should have no effect on how
+the front-end developers interact with the system. Overall, this will save time
+as unnecessary communication between developers will be eliminated.
 
 
 \begin{longtable}{|p{0.2\linewidth}|p{0.08\linewidth}|p{0.65\linewidth}|}
@@ -690,12 +697,12 @@ communication between developers will be eliminated.
 
 Since our system must be intuitive for all users regardless of technical
 ability, to meet requirement NF00, we will design the system in accordance with
-Nielsen's 10 Usability Heuristics \cite{nielsen}. They will influence our design
-in a number of ways. The design will be consistent with other pages on the site
-as well as other sites on the Internet, the interface will be minimalistic to
-keep focus on the important features without sacrificing usability, and buttons
-will be labelled clearly to ensure first-time users can use the system without
-difficulty.
+\textbf{Nielsen's 10 Usability Heuristics} \cite{nielsen}. They will influence
+our design in a number of ways. The design will be consistent with other pages
+on the site as well as other sites on the Internet, the interface will be
+\textbf{minimalistic} to keep focus on the important features without sacrificing
+usability, and buttons will be \textbf{labelled clearly} to ensure first-time users can
+use the system without difficulty.
 
 \subsection{Page Hierarchy}
 The page hierarchy below displays the sites that our webpage comprises of. Here
@@ -746,7 +753,7 @@ is a brief outline of what each page will consist of:
     \label{fig:state_diagrams}
 \end{figure}
 
-The specification was very vague about how to match up mentors and mentees. The
+The specification was ambiguous about how to match up mentors and mentees. The
 left diagram provides a visual representation of how exactly we interpreted it
 in our requirements.
 \begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
@@ -763,7 +770,9 @@ our system.
 \begin{itemize}[leftmargin=1.2cm,noitemsep,align=left]
     \item Mentees can cancel meetings, but mentors can only reschedule
     \item Mentees can request a meeting, but mentors cannot not
-    \item For a meeting to be officially approved, both parties need to agree on the time and date otherwise they go into this loop of suggesting times to each other
+    \item For a meeting to be officially approved, both parties need to agree on
+    the time and date otherwise they go into this loop of suggesting times to
+    each other
     \item The user will be prompted on the schedule page to give feedback to recent events they have gone to
 \end{itemize}
 
@@ -891,42 +900,43 @@ will have the feedback log for the meeting.
 
 \subsection{Unit and integration testing}
 Tests will form an integral part of our development cycle, as we plan to follow
-the agile test driven development ideologies \cite{tdd}. We will implement this
-by creating unit tests for all of the above test cases, allowing us to ensure
-all the required properties of the system are met. These can then be run
-throughout the development process.
+the \textbf{agile test driven development ideologies} \cite{tdd}. We will
+implement this by creating \textbf{unit tests} for all of the above test cases,
+allowing us to ensure all the required properties of the system are met. These
+can then be run throughout the development process.
 
 All of the tests will be automatically run on a pull request to the GitHub
 repository, and must pass in order for the code to be merged into the main
 branch, to ensure its validity. This is an implementation of ``continuous
-integration'' from CI/CD \cite{CICD}, and will be implemented using GitHub
-Actions \cite{githubActions}.
+integration'' from \textbf{CI/CD} \cite{CICD}, and will be implemented using
+\textbf{GitHub Actions} \cite{githubActions}.
 
 In order to make create a testing suite which will fully covers our system, we
 have to select of combination of tools - as there is not a single one which
 covers all technologies used. The concept of testing the entire system is known
-as end-to-end testing, and is an important for ensuring a system works as
-expected.
+as \textbf{end-to-end testing}, and is an important for ensuring a system works
+as expected.
 
-\subsubsection{Backend testing}
+\subsubsection{Back-end testing}
 There are many tools for unit testing which can be used. Since we are using a
-python backend framework, we will use `PyTest' \cite{Pytest} for unit tests on
-the backend code, along with `codecov' \cite{Codecov} to assess the coverage of
-the tests, and `pylint' \cite{Pylint} to ensure that stylistic code is being
-written.
+python back-end framework, we will use \textbf{PyTest} \cite{Pytest} for unit
+tests on the back-end code, along with \textbf{codecov} \cite{Codecov} to assess
+the coverage of the tests, and `\textbf{pylint} \cite{Pylint} to ensure that
+stylistic code is being written.
 
-\subsubsection{Frontend testing}
-Since we are using a javascript frontend framework, we will use `Jest'
-\cite{Jest} for unit tests on the frontend code and UI, along with `ESLint'
-\cite{ESLint} to check that the Javascript is correct. Relatively few tools for
-integration testing, and it will likely mostly have to be done by hand. We will
-use the `Puppeteer' \cite{Puppeteer} tool to automate this task as far as
-possible.
+\subsubsection{Front-end testing}
+Since we are using a javascript front-end framework, we will use \textbf{Jest}
+\cite{Jest} for unit tests on the front-end code and UI, along with
+\textbf{ESLint} \cite{ESLint} to check that the Javascript is correct.
+Relatively few tools for integration testing, and it will likely mostly have to
+be done by hand. We will use the \textbf{Puppeteer} \cite{Puppeteer} tool to
+automate this task as far as possible.
 
 \subsubsection{API testing}
-Finally, we will use Postman \cite{Postman} to test that the API serves the
-correct data. This tool allows the design and transmission of custom packets,
-whose results we can inspect to check that the correct data is provided.
+Finally, we will use \textbf{Postman} \cite{Postman} to test that the API serves
+the correct data. This tool allows the design and transmission of custom
+packets, whose results we can inspect to check that the correct data is
+provided.
 
 \pagebreak
 
