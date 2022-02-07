@@ -63,27 +63,28 @@ covered in depth to illustrate a fuller idea of the final product.
 We opted for an agile development methodology based on the Scrum model. The
 development timeline will be broken down into a large initial planning phase and
 a series of week-long sprints. We chose to elect our project manager as scrum
-master, since this role is similar to that of the project manager in organising
-the team and improving workflow. We will use Trello to create and manage a scrum
-board, which will allow for easy management of the product backlog. At the start
-of each sprint, we will meet to discuss the items from the product backlog to be
-completed in that sprint - this will usually be decided according to the project
-timeline below, however some small adaptations may need to be made. Each day
-within the sprint, the team will discuss progress and bring to attention any
-challenges they are facing. At the end of the sprint, we will carry out a sprint
-review, and each developer can showcase parts of the system which have been
-completed. The sprint cycle is completed with a sprint retrospective, where
-improvements can be made to the development process before the next sprint.
+\cite{scrum} master, since this role is similar to that of the project manager
+in organising the team and improving workflow. We will use Trello \cite{trello}
+to create and manage a scrum board, which will allow for easy management of the
+product backlog. At the start of each sprint, we will meet to discuss the items
+from the product backlog to be completed in that sprint - this will usually be
+decided according to the project timeline below, however some small adaptations
+may need to be made. Each day within the sprint, the team will discuss progress
+and bring to attention any challenges they are facing. At the end of the sprint,
+we will carry out a sprint review, and each developer can showcase parts of the
+system which have been completed. The sprint cycle is completed with a sprint
+retrospective, where improvements can be made to the development process before
+the next sprint.
 
-An agile methodology is optimal for a short timeframe as it allows rapid product
-development with concurrent implementation and testing so we can make effective
-use of the time available. It also allows for more flexibility if we face
-unexpected delays during development, which is likely with an inexperienced
-team. Producing a thorough plan before beginning the agile development process
-is suitable since deliverable deadlines are fixed, so ensuring work is completed
-on time is critical. Additionally, contact with the client is limited so
-requirements are unlikely to change and the project will not deviate much from
-the initial plan.
+An agile methodology is well suited for a short timeframe \cite{agileSpeed} as
+it allows rapid product development with concurrent implementation and testing
+so we can make effective use of the time available. It also allows for more
+flexibility if we face unexpected delays during development, which is likely
+with an inexperienced team. Producing a thorough plan before beginning the agile
+development process is suitable since deliverable deadlines are fixed, so
+ensuring work is completed on time is critical. Additionally, contact with the
+client is limited so requirements are unlikely to change and the project will
+not deviate much from the initial plan.
 
 
 \subsection{Project organisation and communication}
@@ -139,7 +140,6 @@ entirety in the few days before submission.
 
 \section{Technical description}
 
-% TODO: Decide whether to drop
 \subsection{Scope}
 Our system must satisfy a complex specification, so its development must be
 carefully planned and executed. However, the goal is to create a prototype, not
@@ -202,7 +202,6 @@ end-to-end testing - and is discussed in our testing section.
 
 \subsection{Technologies used}
 
-% NEED TO UPDATE THIS TO USE TABLE
 A fundamental decision in the project is deciding which technologies should be
 used to compose the so-called ``tech stack''. Since this is such an important set
 of decisions, we carefully considered a number of options with respect to a set
@@ -234,34 +233,36 @@ criteria include:
     &
     Web app
     &
-    Suitable as it is portable and compatible
-    across devices, since it is run in-browser, and can be designed to support
-    differing view widths such as mobile. All of the team has experience with
-    web design.
+    This is suitable as it is portable and compatible across devices, since it
+    is run in-browser, and can be designed to support many platforms such as
+    mobile, for example by supporting different view widths. All of the team
+    has experience with web design.
     \\ \hline
 
     Backend framework
     &
-    Django
+    Django \cite{Django}
     &
-    Suitable as it facilitates fast development, needed for prototyping, and
-    inherently supports non-functional requirements of security and scalability,
-    and it is popular. Because of this, it has consistent integrations with
-    other categories. Based on python, which team has experience with.
+    This is suitable as it facilitates fast development, needed for prototyping,
+    and inherently supports our non-functional requirements of security and
+    scalability, and is popular. Because of its popularity, it has consistent
+    integrations with other categories. Finally, it is built in python, which
+    team has experience with.
     \\ \hline
 
     Web server
     &
-    NginX
+    NginX \cite{NginX}
     &
-    Suitable as it serves static web content effectively, and is an industry
-    standard. More performant than its competitor apache. Consistent with Django
-    backend in common technology stacks
+    This is suitable as it serves static web content effectively, and is an
+    industry standard. Furthermore, it is more performant than its competitor
+    Apache, and consistent with Django backend, as they are commonly used
+    together.
     \\ \hline
 
     Frontend framework
     &
-    Vue.js and Bootstrap
+    Vue.js \cite{Vue} and Bootstrap \cite{Bootstrap}
     &
     Since we are making a web application, we will use HTML/CSS/JS. We decided
     to use the Vue.JS framework to develop the frontend, as it facilitates
@@ -275,43 +276,44 @@ criteria include:
 
     Database
     &
-    PostgreSQL
+    PostgreSQL \cite{PostgreSQL}
     &
-    Suitable as it is a relational database, which fits the type of data we need
-    to store, e.g. user accounts, calendars, etc. and it is popular. It has very
-    strong documentation compared to other SQL flavours, It is consistent, as it
-    has a good integration with Django. All of the team has experience with it
-    from a previous module
+    This is suitable as it is a relational database, which fits the type of data
+    we need to store, e.g. user accounts, calendars, etc. and it is popular. It
+    has very strong documentation compared to other SQL flavours, It is
+    consistent, as it has a good integration with Django, and finally all of the
+    team has experience with it from a previous module.
     \\ \hline
 
     API
     &
     JSON REST
     &
-    Suitable as it facilitates the access of only the required data. It is
-    incredibly ubiquitous, as it is a subset of Javascript, and hence is
+    This is suitable as it facilitates the access of only the required data. It
+    is incredibly ubiquitous, as it is a subset of Javascript, and hence is
     consistent with our Vue.js framework. Both our backend and frontend team
     members have experience with it, which is crucial as it will form the link
-    between the two sides of the technology stack
+    between the two sides of the technology stack.
     \\ \hline
 
     Container- isation
     &
-    Docker
+    Docker \cite{Docker}
     &
-    % TODO: ADD REFERENCE https://www.techrepublic.com/article/the-10-most-popular-container-tools-for-businesses/
-    Suitable as it is the de-facto standard for containerisation (57\% share),
-    so strong documentation and an active community. Consistent with all of the
-    other technologies. \\ \hline
+    This is suitable as it is the de-facto standard for containerisation (57\% share \cite{containerTools}),
+    so has strong documentation and an active community. It is consistent with
+    all of the other technologies on the stack as that is what containerisation
+    entails. \\ \hline
 
     Version control
     &
     git with GitHub
     &
-    Suitable as it is full featured, supporting branching for collaboration,
-    remote backups, and CI/CD through GitHub actions. Industry standard, so
-    strong documentation and an active community. Consistent with all other
-    technologies. All of the team has experience with it from a previous module.
+    This is suitable as it is full featured, supporting branching for collaboration,
+    remote backups, and CI/CD through GitHub actions. It is the industry
+    standard, so has strong documentation and an active community. It is
+    consistent with all other technologies, and all of the team has experience
+    with it from a previous module.
     \\ \hline
 
 \end{longtable}
@@ -333,7 +335,7 @@ Our system architecture follows the MVC (Model View Controller) architecture
 which is a well-known model to be successful in creating a system that presents
 data obtained through a controller that interacts with the database. This is
 reflected in the Docker containerisation figure with our website being the view,
-the Django system being the controller, and Postgresql as the model. Being
+the Django system being the controller, and PostgreSQL as the model. Being
 modularised to 3 separate components, allows easy distribution of development,
 with each focusing on a subset of skill sets. One downfall of this architecture
 is that the system is tightly connected in that if one system fails, the rest
@@ -355,10 +357,10 @@ overhead than other backend frameworks like Flask, so making multiple
 microservices can reduce performance; and there is not a clean way nor a good
 reason to split the internal logical model into separate microservices.
 
-When designing our system architecture, we took into account the ``twelve factor
-application'' principles. For example using a workflow based around git to fulfil
-the codebase and release principles, or using docker to fulfil the dependencies,
-and port binding one.
+When designing our system architecture, we took into account the twelve factor
+application principles \cite{twelveFactor}. For example using a workflow based
+around git to fulfil the codebase and release principles, or using docker to
+fulfil the dependencies, and port binding one.
 
 \begin{figure}[H]
     \centering
@@ -370,11 +372,10 @@ and port binding one.
 The containerisation has two distinct parts. The first is the three containers
 dynamically interact with each other based on user requests, with the NginX
 container serving requests into the Django backend container, which runs the
-internal logic, and can look up data from the postgresql database container. The
+internal logic, and can look up data from the PostgreSQL database container. The
 second is the final container which generates the static site content from
-Vue.js to pure HTML, CSS, and Javascript. This is then copied into the Django
-container so it only needs to be generated once, not on a request-by-request
-basis.
+Vue.js to pure HTML, CSS, and Javascript. This is then stored in the container
+so it only needs to be generated once, not on a request-by-request basis.
 
 \subsubsection{Database Design}
 
@@ -417,23 +418,6 @@ used by developers to improve their system.
     \label{fig:db_entity_relationship}
 \end{figure}
 
-% \begin{figure}[H]
-%     \centering
-%     \subfloat[\centering The feedback tables schema.]{{\includegraphics[width=0.5\textwidth]{FeedbackDB} }}
-%     \qquad
-%     \subfloat[\centering The entity relationship for the database.]{{\includegraphics[width=0.75\textwidth]{ER} }}
-%     \caption{Table schemas and entity relationship diagrams for the tables in the database schema}
-%     \label{fig:db_entiry_relationship}
-% \end{figure}
-
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.55\textwidth]{FeedbackDB}
-%     \caption{The feedback tables schema.}
-%     \label{fig:Feedback_Schema}
-% \end{figure}
-
 The three subgroups shown in the above figures all relate to each other in the
 way shown in the final figure. This is done to make the complex schema more
 easily parsable, whilst retaining detail.
@@ -474,23 +458,23 @@ will flow.
 \subsubsection{API design}
 We have planned to design an API which will be used by the front-end to
 interface with the core back-end components of the system. We've decided to
-settle on a REST API implementation, as it emphasises client-server decoupling,
-which will make it easier to separate front-end and back-end tasks between our
-developers—something which is of the utmost importance when working in a
-smaller, less experienced team. The REST API system will give the front-end
-developers access to fixed API endpoints, which will act as a bridge between the
-front-end and back-end of the application. The front-end developers won't need
-to know how these endpoints are implemented, they only need to know what
-functionality they provide. This will save development time as developers can
-now focus on their specialties. This modular way of designing the API allows for
-back-end code to be modified without having to consult the front-end developers
-about potential consequences. As long as the specification is followed, a
-back-end modification should have no effect on how the front-end developers
-interact with the system. Overall, this will save time as unnecessary
+settle on a REST API implementation \cite{restAPIs}, as it emphasises
+client-server decoupling, which will make it easier to separate front-end and
+back-end tasks between our developers—something which is of the utmost
+importance when working in a smaller, less experienced team. The REST API system
+will give the front-end developers access to fixed API endpoints, which will act
+as a bridge between the front-end and back-end of the application. The front-end
+developers won't need to know how these endpoints are implemented, they only
+need to know what functionality they provide. This will save development time as
+developers can now focus on their specialties. This modular way of designing the
+API allows for back-end code to be modified without having to consult the
+front-end developers about potential consequences. As long as the specification
+is followed, a back-end modification should have no effect on how the front-end
+developers interact with the system. Overall, this will save time as unnecessary
 communication between developers will be eliminated.
 
 
-\begin{longtable}{|p{0.128\linewidth}|p{0.08\linewidth}|p{0.75\linewidth}|}
+\begin{longtable}{|p{0.2\linewidth}|p{0.08\linewidth}|p{0.65\linewidth}|}
     \hline \textbf{Resource} & \textbf{HTTP method} & \textbf{Description} \\ \hline\hline
     register
     &
@@ -520,7 +504,7 @@ communication between developers will be eliminated.
     Asks the server for a user's profile information (user ID will be specified). The profile information is then sent back in the response payload.
     \\ \hline
 
-    getPotential- Mentors
+    getPotentialMentors
     &
     GET
     &
@@ -534,7 +518,7 @@ communication between developers will be eliminated.
     Indicates that the mentee wants to be mentored by a particular mentor from the list of potential mentors.
     \\ \hline
 
-    getRequested- Mentees
+    getRequestedMentees
     &
     GET
     &
@@ -562,7 +546,7 @@ communication between developers will be eliminated.
     Get a list of the mentor's mentees.
     \\ \hline
 
-    terminateRel- ationship
+    terminateRelationship
     &
     DELETE
     &
@@ -576,7 +560,7 @@ communication between developers will be eliminated.
     Allows the mentee to propose a meeting.
     \\ \hline
 
-    proposeMeeting- Times
+    proposeMeetingTimes
     &
     POST
     &
@@ -590,7 +574,7 @@ communication between developers will be eliminated.
     Allows the mentee to accept one of the meeting times proposed by the mentor.
     \\ \hline
 
-    reproposeMeet- ing
+    reproposeMeeting
     &
     POST
     &
@@ -611,7 +595,7 @@ communication between developers will be eliminated.
     Get a list of scheduled meetings.
     \\ \hline
 
-    giveMeeting- Feedback
+    giveMeetingFeedback
     &
     POST
     &
@@ -639,7 +623,7 @@ communication between developers will be eliminated.
     Changes the content of a milestone.
     \\ \hline
 
-    completeMile- stone
+    completeMilestone
     &
     POST
     &
@@ -653,14 +637,14 @@ communication between developers will be eliminated.
     Get information about a particular milestone.
     \\ \hline
 
-    setMentorFeed- back
+    setMentorFeedback
     &
     PUT
     &
     Allows a mentee to update their current feedback on their mentor.
     \\ \hline
 
-    createGroup- Event
+    createGroupEvent
     &
     POST
     &
@@ -688,7 +672,7 @@ communication between developers will be eliminated.
     Gets notifications for a users' inbox, with the date range being specified.
     \\ \hline
 
-    submitSiteFeed- back
+    submitSiteFeedback
     &
     POST
     &
@@ -704,13 +688,22 @@ communication between developers will be eliminated.
 
 \section{UI/UX design}
 
+Since our system must be intuitive for all users regardless of technical
+ability, to meet requirement NF00, we will design the system in accordance with
+Nielsen's 10 Usability Heuristics \cite{nielsen}. They will influence our design
+in a number of ways. The design will be consistent with other pages on the site
+as well as other sites on the Internet, the interface will be minimalistic to
+keep focus on the important features without sacrificing usability, and buttons
+will be labelled clearly to ensure first-time users can use the system without
+difficulty.
+
 \subsection{Page Hierarchy}
 The page hierarchy below displays the sites that our webpage comprises of. Here
 is a brief outline of what each page will consist of:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.55\textwidth]{Hierarchy}
+    \includegraphics[width=0.55 \textwidth]{Hierarchy}
     \caption{A diagram of website page hierarchy.}
     \label{fig:website_page_hierarchy}
 \end{figure}
@@ -774,17 +767,17 @@ our system.
     \item The user will be prompted on the schedule page to give feedback to recent events they have gone to
 \end{itemize}
 
-
+\pagebreak
 
 \subsection{Page Design}
-\begin{figure}[H]
-    \centering
-    \subfloat[\centering The initial design of our system dashboard.]{{\includegraphics[width=0.45\textwidth]{Dashboard} }}
-    \qquad
-    \subfloat[\centering The initial design of our system schedule page.]{{\includegraphics[width=0.45\textwidth]{Schedule} }}
-    \caption{Pages from our initial UI designs}
-    \label{fig:ui_designs}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \subfloat[\centering The initial design of our system dashboard.]{{\includegraphics[width=0.45\textwidth]{Dashboard} }}
+%     \qquad
+%     \subfloat[\centering The initial design of our system schedule page.]{{\includegraphics[width=0.45\textwidth]{Schedule} }}
+%     \caption{Pages from our initial UI designs}
+%     \label{fig:ui_designs}
+% \end{figure}
 
 The dashboard is the central page for users that displays all the useful
 information for the user, such as their upcoming meetings, their current plan of
@@ -796,6 +789,13 @@ interested in such as giving feedback about a recent event or a mentee/mentor
 meeting coming up. The drop down button next to the notification bell will link
 to the user's profile page, the website feedback form and a sign out button.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48 \textwidth]{Dashboard}
+    \caption{The initial design of our system schedule page.}
+    \label{fig:dashboard}
+\end{figure}
+
 The schedule page will have the users calender and all the requests the user has
 (meeting and feedback). This user is not a mentee so the request meeting button
 at the bottom is currently missing, but if the user was a mentee then there
@@ -803,11 +803,16 @@ would be a request meeting button at the bottom. Additionally, clicking on a
 meeting will take the user to the individual event page for the meeting which
 will have the feedback log for the meeting.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48 \textwidth]{Schedule}
+    \caption{The initial design of our system schedule page.}
+    \label{fig:schedule}
+\end{figure}
 
 
 \section{Testing}
 \subsection{Test cases}
-
 
 \begin{longtable}{|p{0.45\linewidth}||p{0.45\linewidth}|}
     \hline \textbf{Test cases} & \\ \hline\hline
@@ -886,28 +891,46 @@ will have the feedback log for the meeting.
 
 \subsection{Unit and integration testing}
 Tests will form an integral part of our development cycle, as we plan to follow
-the agile test driven development ideologies. We will implement this by creating
-unit tests for all of the above test cases, allowing us to ensure all the
-required properties of the system are met. These can then be run throughout the
-development process. All of the tests will be automatically run on a pull
-request to the GitHub repository, and must pass in order for the code to be
-merged into the main branch, to ensure its validity. This is an implementation
-of ``continuous integration'' from CI/CD, and will be implemented using GitHub
-Actions.
+the agile test driven development ideologies \cite{tdd}. We will implement this
+by creating unit tests for all of the above test cases, allowing us to ensure
+all the required properties of the system are met. These can then be run
+throughout the development process.
 
+All of the tests will be automatically run on a pull request to the GitHub
+repository, and must pass in order for the code to be merged into the main
+branch, to ensure its validity. This is an implementation of ``continuous
+integration'' from CI/CD \cite{CICD}, and will be implemented using GitHub
+Actions \cite{githubActions}.
+
+In order to make create a testing suite which will fully covers our system, we
+have to select of combination of tools - as there is not a single one which
+covers all technologies used. The concept of testing the entire system is known
+as end-to-end testing, and is an important for ensuring a system works as
+expected.
+
+\subsubsection{Backend testing}
 There are many tools for unit testing which can be used. Since we are using a
-python backend framework, we will use `PyTest' for unit tests on the backend
-code, along with `codecov' to assess the coverage of the tests, and `pylint' to
-ensure that stylistic code is being written. Since we are using a javascript
-frontend framework, we will use `Jest' for unit tests on the frontend code and
-UI, along with `ESLint' to check that the Javascript is correct. Finally, we
-will use Postman to test that the API serves the correct data. There are
-relatively few tools for integration testing, and it will likely mostly have to
-be done by hand. We will use the `Puppeteer' tool to automate this task as far
-as possible. The combination of all of these tools allows us to create a testing
-suite which will fully cover our system.
+python backend framework, we will use `PyTest' \cite{Pytest} for unit tests on
+the backend code, along with `codecov' \cite{Codecov} to assess the coverage of
+the tests, and `pylint' \cite{Pylint} to ensure that stylistic code is being
+written.
 
+\subsubsection{Frontend testing}
+Since we are using a javascript frontend framework, we will use `Jest'
+\cite{Jest} for unit tests on the frontend code and UI, along with `ESLint'
+\cite{ESLint} to check that the Javascript is correct. Relatively few tools for
+integration testing, and it will likely mostly have to be done by hand. We will
+use the `Puppeteer' \cite{Puppeteer} tool to automate this task as far as
+possible.
 
+\subsubsection{API testing}
+Finally, we will use Postman \cite{Postman} to test that the API serves the
+correct data. This tool allows the design and transmission of custom packets,
+whose results we can inspect to check that the correct data is provided.
+
+\pagebreak
+
+\nocite{*}
 \bibliographystyle{ieeetr}
 \bibliography{designDocument.bib}
 
