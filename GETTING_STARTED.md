@@ -35,6 +35,7 @@ A template for setting up a docker container of the correct tech stack was used.
      - project_slug - `mentorprise`
      - domain - `domain.invalid`
      - description - `The implementation of group 17's software engineering project for the Warwick CS261 course`
+     - author - `CS261 2022 Group 17`
      - email - `null@domain.invalid`
      - api - `1` (REST)
      - backups - `n`
@@ -51,7 +52,12 @@ A template for setting up a docker container of the correct tech stack was used.
    cd frontend && npm i && npm run lint --fix
    ```
 
-4. To start up the system, run the command:
+4. Some of the python dependencies will be broken, so you will need to change the `mentorprise/backend/requirements.txt` file as follows:
+
+   1. Line 6 - `decorator==5.1.1` (was 4.0.7)
+   2. Line 17 - `idna==2.10` (was 3.1)
+   
+5. To start up the system, run the command (you may need to disable particularly aggressive firewalls):
 
    ```bash
    docker-compose up --build
@@ -59,13 +65,13 @@ A template for setting up a docker container of the correct tech stack was used.
 
    This will take some time when first run (many node modules to install), but should take tens of seconds every time after.
 
-5. Whilst the docker containers are running, the site can be accessed by the URL (http *not* https): [http://localhost:8000](http://localhost:8000)
+6. Whilst the docker containers are running, the site can be accessed by the URL (http *not* https): [http://localhost:8000](http://localhost:8000)
 
-6. To kill the containers, interrupt with `Ctrl+c`, and run (optionally?) run `docker compose down` after.
+7. To kill the containers, interrupt with `Ctrl+c`, and run (optionally?) run `docker compose down` after.
 
-7. Sometimes, problems come from cached images. To delete these, use `docker container prune` - and see if that fixes your problems
+8. Sometimes, problems come from cached images. To delete these, use `docker container prune` - and see if that fixes your problems
 
-8. For production, we need to generate a `.env` file and use the `docker-compose-prod.yml` file. This can be done with:
+9. For production, we need to generate a `.env` file and use the `docker-compose-prod.yml` file. This can be done with:
 
    ```bash
    docker-compose -f docker-compose-prod.yml up --build -d
@@ -73,4 +79,4 @@ A template for setting up a docker container of the correct tech stack was used.
 
 
 
-(If all works well, you should be able to create an admin account with `docker-compose run backend python manage.py createsuperuser` (not sure if this does anything?) )
+(One of the tutorials also notes: "If all works well, you should be able to create an admin account with `docker-compose run backend python manage.py createsuperuser`". I am not too sure what this does, but it might be helpful somewhere)

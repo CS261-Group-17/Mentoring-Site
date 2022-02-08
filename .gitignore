@@ -1,3 +1,6 @@
+# TESTING DOCKER REMOVAL
+mentorprise/*
+
 # LaTeX/BibTeX
 *.aux
 *.log
