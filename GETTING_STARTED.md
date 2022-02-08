@@ -4,6 +4,14 @@ Setting up containerised stuff is painful - I have Googled it and this is what y
 ## Frontend
 For frontend people, it is probably sufficient to just run the Vue.js cli on your machine and spoof the JSON api - then we can handle integration later :grimacing: .
 
+To run basic dev server:
+1. cd into frontend_dev
+2. npm run serve
+This will run a dev server for the website on localhost.
+
+Still need to set up JSON spoof.
+**All this may seem confusing, but please watch the Vue crash course video in the frontend discord that will literally explain everything.**
+
 ## Backend
 <a href="https://github.com/vchaptsev/cookiecutter-django-vue">
     <img src="https://img.shields.io/badge/built%20with-Cookiecutter%20Django%20Vue-blue.svg" />
