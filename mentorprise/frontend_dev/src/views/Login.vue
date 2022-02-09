@@ -1,6 +1,7 @@
 <template>
   <div class="login">
-    <img alt="MentorPrise logo" src="../assets/logo.png" />
+    <p>One day this will grow into a full login page</p>
+    <router-link to="/Dashboard">Dashboard</router-link>
   </div>
 </template>
 
