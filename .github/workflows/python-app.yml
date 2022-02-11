@@ -20,14 +20,15 @@ jobs:
         python-version: 3.9
     - name: Install dependencies
       run: |
-        cd mentorprise/
+        cd mentorprise/backend/
+        pwd
         python -m pip install --upgrade pip
         pip install flake8 pylint
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Error check all code with flake8
       run: |
         # Check the build for python syntax errors or undefined names
-        flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 ./ --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Lint main source file with pylint
       run: |
-        pylint backend/
+        pylint ./
