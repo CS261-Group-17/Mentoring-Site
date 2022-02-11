@@ -29,8 +29,9 @@ jobs:
     - name: Error check all code with flake8
       run: |
         # Check the build for python syntax errors or undefined names
+        cd mentorprise/backend
         flake8 ./ --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Lint main source file with pylint
       run: |
-        pwd
+        cd mentorprise/backend
         pylint ../backend/
