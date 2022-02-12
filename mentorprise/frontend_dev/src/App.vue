@@ -5,9 +5,9 @@
 </template>
 
 <style>
-  body {
+  body, html {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: large;
+    font-size: medium;
     background-color: #00001A;
     color: white;
   }
