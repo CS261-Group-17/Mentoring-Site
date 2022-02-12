@@ -8,8 +8,9 @@
                 <li class="nav-item"><router-link class="nav-link" to="/Schedule">Schedule</router-link></li>
                 <li class="nav-item"><router-link class="nav-link" to="/GroupEvents">Group Events</router-link></li>
             </ul>
+            <span class="endIcons"><fa icon="sort-down" size="2x"/></span>
+            <span class="endIcons"><fa icon="bell" size="2x"/></span>
         </span>
-        
     </div>
 </template>
 
@@ -38,7 +39,7 @@ export default {
         margin: 0;
         padding: 0;
         overflow: hidden;
-        display: block;
+        display: inline-block;
         width: auto;
     }
     li {
@@ -53,5 +54,11 @@ export default {
     }
     li a:hover {
         color: grey;
+    }
+    .endIcons {
+        display: inline;
+        float:right;
+        padding-top: 1.8rem;
+        padding-right: 0.4rem;
     }
 </style>
