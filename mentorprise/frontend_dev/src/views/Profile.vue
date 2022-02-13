@@ -7,28 +7,34 @@
         <hr>
         <p class="undertext">This information will be visible to your mentor/mentees.</p>
         <label for="fname">First Name</label><br>
-        <input type="text" id="fname" name="fname" size="40"><br>
+        <input type="text" id="fname" name="fname" size="40" :value="profile.first"><br>
         <label for="lname">Last Name</label><br>
-        <input type="text" id="lname" name="lname" size="40"><br>
+        <input type="text" id="lname" name="lname" size="40" :value="profile.last"><br>
         <label for="email">Email</label><br>
-        <input type="email" id="email" name="email" size="40"><br>
+        <input type="email" id="email" name="email" size="40" :value="profile.email"><br>
         <label for="jobTitle">Job Title</label><br>
-        <input type="text" id="jobTitle" name="jobTitle" size="40"><br>
-        <button>Save Changes</button>
+        <input type="text" id="jobTitle" name="jobTitle" size="40" :value="profile.jobTitle"><br>
+        <button class="saveChanges">Save Changes</button>
         <br>
 
         <h3>Mentorship Settings</h3>
         <hr>
         <p class="undertext">This information will be used to match you with potential mentors/mentees.</p>
         <label for="businessArea">Business Area</label><br>
-        <select name="businessArea" id="businessArea">
-            <option value="marketing">Marketing</option>
-            <option value="retail">Retail</option>
-            <option value="dev" selected>Software Dev</option>
-            <option value="manage">Management</option>
-        </select>
+        <select name="businessArea" id="businessArea" v-model="profile.businessArea_type">
+            <option disabled value="">Nothing Selected</option>
+            <option v-for="businessArea in options.businessArea" :key="businessArea.value" :value="businessArea.value">
+                {{ businessArea.text }}
+            </option>
+        </select><br><br>
         <p>Strengths</p>
-        <SWList :swlist="sws"/>
+        <SWList :swlist="profile.ss"/>
+        <button id="newStrength">+ New Strength</button>
+        <br><br><p>Weaknesses</p>
+        <SWList :swlist="profile.ws"/>
+        <button id="newWeakness">+ New Weakness</button>
+        <br>
+        <button class="saveChanges">Save Changes</button>
     </div>
 </template>
 
@@ -46,21 +52,50 @@
         },
         data() {
             return {
-                sws: []
+                profile : {},
+                options: {}
             }
         },
         created() {
             // ran when page loaded
-            this.sws = [{
-                id: 1,
-                swnum: 1,
-                swdesc: "Tennis"
-            }]
+            this.profile = {
+                first: "Ben",
+                last:  "Lewis",
+                email: "u2003284@warwick.live.ac.uk",
+                jobTitle: "Student",
+                businessArea_type: "dev",
+                ss: [{
+                        id: 1,
+                        val: "tennis",
+                    },
+                    {
+                        id: 2,
+                        val: "team"
+                    }
+                ],
+                ws: [{
+                        id: 1,
+                        val: "communication"
+                    },
+                    {
+                        id: 2,
+                        val: "friendly"   
+                    }                
+                ]
+            }
+            this.options = {
+                businessArea: [
+                    {value: "dev", text: "Software Dev"},
+                    {value: "marketing", text: "Marketing"},
+                    {value: "retail", text: "Retail"},
+                    {value: "manage", text: "Management"}
+                ]
+            }
         }
     }
 </script>
 
-<style scoped>
+<style>
     #profile {
         padding: 2rem;
         background-color: #00001A;
@@ -78,7 +113,7 @@
         color: #424E76;
         font-weight: bold;
     }
-    button {
+    .saveChanges {
         float: right;
         border: solid white 0.2rem;
         color: white;
@@ -86,5 +121,12 @@
         font-weight: bold;
         width: 7rem;
         height: 2.5rem;
+    }
+    #newStrength, #newWeakness {
+        color: #243B6F;
+        background-color: #00001A;
+        border: 0px;
+        font-weight: bold;
+        padding-left: 1rem;
     }
 </style>
