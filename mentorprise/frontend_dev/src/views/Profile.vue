@@ -20,6 +20,8 @@
         <h3>Mentorship Settings</h3>
         <hr>
         <p class="undertext">This information will be used to match you with potential mentors/mentees.</p>
+        <label for="mentorship">Would you like to be a mentor?</label>
+        &nbsp;<input type="checkbox" name="mentorship" id="mentorship"><br><br>
         <label for="businessArea">Business Area</label><br>
         <select name="businessArea" id="businessArea" v-model="profile.businessArea_type">
             <option disabled value="">Nothing Selected</option>
@@ -63,6 +65,7 @@
                 last:  "Lewis",
                 email: "u2003284@warwick.live.ac.uk",
                 jobTitle: "Student",
+                isMentor: true,
                 businessArea_type: "dev",
                 ss: [{
                         id: 1,
