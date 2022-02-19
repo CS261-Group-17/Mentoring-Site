@@ -40,18 +40,19 @@
         <button class="saveChanges">Save Changes</button>
         
         <br><br>
-        <h3>Danger Zone</h3><hr>
-        <p class="undertext">This area is for editing the important information about your account and will require you to enter your password to make changes.</p>
-        <div id="pChange">
-            <label for="password">Enter in password to make changes: </label>
-            <br><input type="password" id="password" name="password" size=40>
+        <h3 id="dangerZoneTitle">Danger Zone</h3><hr>
+        <p class="undertext">Warning: This section edits important parts of your account.</p>
+        <div id="dangerZone">
+            <label for="password">Password required to change this section:&nbsp;&nbsp;</label>
+            <input type="password" id="password" name="password" placeholder="Password" size=30>
+            <hr>
+            <label for="newEmail">Change your email:&nbsp;&nbsp;</label>
+            <input type="email" id="newEmail" name="newEmail" :value="profile.email" size=30>
+            &nbsp;&nbsp;&nbsp;<button @click="emailChange()" type="button" class="dangerButton">Confirm Email Change</button><br>
+            <br><button @click="passwordReset()" type="button" class="dangerButton">Request an password reset</button><br>
+            <br><button @click="deleteAccount()" type="button" class="dangerButton">Delete Account</button>
+            <span class="undertext">&nbsp;&nbsp;This cannot be undone!</span>
         </div>
-        <label for="newEmail">Change your email: </label>
-        <br><input type="email" id="newEmail" name="newEmail" :value="profile.email" size=40>
-        &nbsp;&nbsp;&nbsp;<button @click="emailChange()" type="button" class="btn btn-danger">Confirm Email Change</button><br><br>
-        <button @click="deleteAccount()" type="button" class="btn btn-danger">Delete Account</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button @click="passwordReset()" type="button" class="btn btn-danger">Request an password reset</button>
     </div>
 </template>
 
@@ -170,11 +171,16 @@
 </script>
 
 <style>
+    #dangerZoneTitle {
+        color: #FF4655;
+    }
     #profile {
         padding: 2rem;
         background-color: #00001A;
         color: white;
         font-size: small;
+        margin-left: 5%;
+        margin-right: 5%;
     }
     .undertext {
         color: #BDC9E3;
@@ -186,6 +192,9 @@
         border: #424E76 solid 0.2rem;
         color: #424E76;
         font-weight: bold;
+    }
+    ::placeholder {
+        color: #424E76;
     }
     .saveChanges {
         float: right;
@@ -203,10 +212,16 @@
         font-weight: bold;
         padding-left: 1rem;
     }
-    #pChange {
-        border: solid 3px white;
+    #dangerZone {
+        border: solid 2px #FF4655;
+        border-radius: 25px;
         padding: 1rem;
         margin-bottom: 1rem;
-        text-align: center;
+    }
+    .dangerButton {
+        background-color: #00001A;
+        color: #FF4655;
+        border: solid 2px #FF4655;
+        border-radius: 10px;
     }
 </style>
