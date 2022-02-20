@@ -14,5 +14,8 @@
     background-color: #00001A;
     color: white;
   }
+  #app {
+    background-color: #00001A;
+  }
 </style>
 
