@@ -129,6 +129,8 @@
         background-color: #00001A;
         color: white;
         font-size: small;
+        margin-left: 5%;
+        margin-right: 5%;
     }
     #newMilestone {
         color: #243B6F;
