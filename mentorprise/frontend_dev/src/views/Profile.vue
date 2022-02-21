@@ -3,7 +3,7 @@
     <div id="profile">
         <h1>Profile</h1>
 
-        <h3>Personal Settings 123</h3>
+        <h3>Personal Settings</h3>
         <hr>
         <p class="undertext">This information will be visible to your mentor/mentees.</p>
         <label for="fname">First Name</label><br>
