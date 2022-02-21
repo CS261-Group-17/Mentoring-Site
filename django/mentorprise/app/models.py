@@ -9,7 +9,7 @@ class User(models.Model):
     email = models.TextField()
     business_area = models.TextField()
     job_title = models.TextField()
-    expert = modles.TextField(null=True, blank=True)
+    expert = models.ForeignKey(StrengthWeakness, models.SET_NULL, null=True, blank=True) #if null the user is not an expert.
     mentor = models.BooleanField()
 
 class StrengthWeakness(models.Model):
@@ -39,19 +39,16 @@ class Event(models.Models):
     class Meta:
         abstract = True
 
-#weakness an event is targeted to improving
+#weaknesses an event is targeted to improving
 class EventWeaknesses(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE) #this could be a problem, as it's referencing an abstract class
     weakness_type = models.ForeignKey(StengthWeakness, on_delete=models.CASCADE) 
 
 class Meeting(Event):
     mentee = models.ForeignKey(User, on_delete=models.CASCADE)
 
-class EventType(Event):
-    event_type = modles.TextField()
-
 class GroupEvent(Event):
-    event_type = models.ForeignKey(EventType, on_delete=models.CASCADE)
+    event_type = models.TextField() #group session or workshop
     capacity = model.IntegerField()
 
 class Attendance(models.Models):
@@ -123,5 +120,5 @@ class MeetingProposal(models.Models):
 
 class Authenticator(models.Models):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    auth_token = models.IntegerField()
+    auth_token = models.IntegerField() #might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
 
