@@ -6,6 +6,7 @@ import Register from "../views/Register.vue"
 import IndPOA from "../views/IndPOA.vue"
 import GroupEvents from "../views/GroupEvent.vue"
 import POA from "../views/POA.vue"
+import Schedule from "../views/Schedule.vue"
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path:"/POA",
     name:"POA",
     component: POA
+  },
+  {
+    path: "/Schedule",
+    name: "Schedule",
+    component: Schedule
   }
 ];
 
