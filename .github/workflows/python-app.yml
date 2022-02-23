@@ -26,10 +26,7 @@ jobs:
         pip install flake8 pylint
     - name: Error check all code with flake8
       run: |
-        # Check the build for python syntax errors or undefined names
-        cd mentorprise/backend_dev/
-        flake8 ./ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 mentorprise/backend_dev/ --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Lint main source file with pylint
       run: |
-        cd mentorprise/backend_dev/
-        pylint ../backend/ --fail-under=0
+        pylint mentorprise/backend_dev/ --fail-under=0 --rcfile=mentorprise/backend_dev/.pylintrc
