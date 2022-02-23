@@ -108,7 +108,7 @@
         background-color: #0A102C;
         padding: 1rem;
         float: left;
-        width: 40%;
+        width: 45%;
     }
     .eventsm, .eventsg, .eventsw {
         list-style-type: none;
