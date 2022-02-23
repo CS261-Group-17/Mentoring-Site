@@ -23,6 +23,14 @@ First, we create a virtual environment with all the required installs:
 Then, whenever we want to develop, we enter the virtual environment:
 1. `source env/bin/activate`
 
+You will also need to set up postgresql on your system. If you are running Ubuntu, follow this tutorial [https://help.ubuntu.com/community/PostgreSQL](https://help.ubuntu.com/community/PostgreSQL), otherwise find a relevant one for your distro:
+1. `sudo apt-get install postgresql postgresql-contrib`
+2. `sudo -u postgres createuser --superuser mentorprise`
+3. `sudo -u postgres psql`
+    1. postgres=# `\password mentorprise` - set this to 12345 for development purposes only
+    2. postgres=# `CREATE DATABASE mentorprise;`
+4. `python manage.py migrate`, which should come up with a bunch of OKs
+
 ## Integration with Docker
 For integration of frontend and backend, we now enter Docker hell.
 
