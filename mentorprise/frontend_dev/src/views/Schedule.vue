@@ -26,7 +26,7 @@
                             </div>
                             <div v-if="request.requestType == 'M'" class="feedbackForm">
                                 <label for="chooseDate">Select a date:</label> &nbsp;
-                                <input name="chooseDate" id="meetingDateTime" type="datetime-local"/>
+                                <input name="chooseDate" id="meetingDateTime" type="datetime-local" :min="setMin()"/>
                             </div>
                             <button class="btn btn-primary" type="button" @click="submitFeedback(request)">
                                 Submit Form
@@ -132,6 +132,15 @@
                 //mentee wants a meeting
                 this.onDelete(request.requestID)
             }
+        },
+        setMin() {
+            // need it in YYYY-MM-DDThh:mm:ss
+            let now = new Date()
+            let currentMonth = now.getMonth()+1
+            if(currentMonth < 10) {
+                currentMonth = "0" + currentMonth
+            }
+            return now.getFullYear()+"-"+currentMonth+"-"+now.getDate()+"T"+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
         }
     },
     created() {
