@@ -34,7 +34,7 @@ jobs:
       run: |
         cd mentorprise/backend_dev/
         pylint . --fail-under=0
-    - name: Run Django test cases
-      run: |
-        cd mentorprise/backend_dev/mentorprise
-        python manage.py test
+    # - name: Run Django test cases
+    #   run: |
+    #     cd mentorprise/backend_dev/mentorprise
+    #     python manage.py test
