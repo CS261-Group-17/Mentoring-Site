@@ -158,7 +158,7 @@ class MeetingProposal(models.Model):
     duration3 = models.IntegerField()
 
 
-class Authenticator(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
-    auth_token = models.IntegerField()
+# class Authenticator(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     # might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
+#     auth_token = models.IntegerField()
