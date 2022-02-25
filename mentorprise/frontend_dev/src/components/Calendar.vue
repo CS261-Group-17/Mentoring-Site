@@ -95,7 +95,7 @@
                     return "Tomorrow"
                 }
                 return dateDate.toString().substring(4, 15)
-            }
+            },
         },
         created() {
             this.calendar = this.sortEventsByDate();
@@ -113,17 +113,18 @@
     .eventsm, .eventsg, .eventsw {
         list-style-type: none;
         padding-left: 0.5rem;
+        background-color: #0A102C;
     }
     .eventsm {
-        background-color: #F9B59C;
+        border-color: #F9B59C;
         border-left: 8px solid #F15A24;
     }
     .eventsg {
-        background-color: #9196FF;
+        border-color: #9196FF;
         border-left: 8px solid #101AFF;
     }
     .eventsw {
-        background-color: #F798C1;
+        border: #F798C1;
         border-left: 8px solid #ED1E79;
     }
     .dayEvents {
