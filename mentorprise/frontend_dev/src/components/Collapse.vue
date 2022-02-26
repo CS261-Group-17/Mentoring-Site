@@ -6,7 +6,7 @@
       :data-bs-target="'#collapse_' + random + i"
       aria-expanded="false"
     >
-      <div>
+      <div :style="!v.comoplete_by ? 'width:auto' : 'width:33%'">
         <svg
           viewBox="64 64 896 896"
           focusable="false"
@@ -16,7 +16,6 @@
           height="1em"
           fill="#2b3d75"
           aria-hidden="true"
-          style=""
         >
           <path
             d="M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.4z"
@@ -24,8 +23,12 @@
         </svg>
         &nbsp; {{ v.upcoming_milestones }}
       </div>
-      <div style="color: #bdc9e3">{{ v.comoplete_by }}</div>
-      <div style="color: #bdc9e3">{{ v.time_remaining }}</div>
+      <div v-if="v.comoplete_by" style="color: #bdc9e3; width: 33%">
+        {{ v.comoplete_by }}
+      </div>
+      <div v-if="v.time_remaining" style="color: #bdc9e3; width: 33%">
+        {{ v.time_remaining }}
+      </div>
     </div>
     <div class="collapse collapse-content" :id="'collapse_' + random + i">
       {{ v.content }}
@@ -54,9 +57,6 @@ export default {
 .collapse-list {
   display: flex;
   justify-content: space-between;
-}
-.collapse-list > div {
-  width: 33%;
 }
 .collapse-list[aria-expanded="true"] .arrow {
   transition: transform 0.24s;
