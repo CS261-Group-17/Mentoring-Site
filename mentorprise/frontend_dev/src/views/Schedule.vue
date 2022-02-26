@@ -2,7 +2,7 @@
     <NavBar />
     <div id="schedule">
         <h1>Schedule</h1>
-        <Calendar :events="this.schedule"/>
+        <Calendar :events="this.upcoming(this.schedule)"/>
         <div id="requests">
             <h3>Requests</h3>
             <ul> 
@@ -43,6 +43,16 @@
         <div id="requestMeetingDiv">
             <button type="button" class="btn btn-primary" id="requestAMeeting" @click="requestAMeeting()">Request a Meeting</button>
             <br><br><p id="requestStatus"></p>
+        </div>
+        <div id="pastEvents">
+            <h3>Past Events</h3>
+            <ul>
+                <li v-for="event in pastEvents(schedule)" :key="event.eventID" :class="'past' + event.type">
+                    <b>{{event.eventName}}</b>
+                    <button :class="'seeFeedback'+event.type">See Feedback</button><br>
+                    {{event.date}}, {{event.location}}
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -141,6 +151,31 @@
                 currentMonth = "0" + currentMonth
             }
             return now.getFullYear()+"-"+currentMonth+"-"+now.getDate()+"T"+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
+        },
+        upcoming(events) {
+            let now = Date.now();
+            let upcomingEvents  = [];
+            for(let i =0;i<events.length;i++) {
+                //alert(now)
+                //alert(events[i].date + "T" + events[i].startTime)
+                let other = Date.parse(events[i].date.replaceAll(" ", "-") + "T" + events[i].startTime)
+                //alert(events[i].date.replaceAll(" ", "-") + "T" + events[i].startTime)
+                if(now <= other) {
+                    upcomingEvents.push(events[i])
+                }
+            }
+            return upcomingEvents
+        },
+        pastEvents(events) {
+            let now = Date.now();
+            let prevEvents  = [];
+            for(let i =0;i<events.length;i++) {
+                let other = Date.parse(events[i].date.replaceAll(" ", "-") + "T" + events[i].startTime)
+                if(now > other) {
+                    prevEvents.push(events[i])
+                }
+            }
+            return prevEvents
         }
     },
     created() {
@@ -209,7 +244,7 @@
             {
                 eventID: 1,
                 eventName: "Meeting with Bill",
-                date: "2022 02 22",
+                date: "2022 02 25",
                 startTime: "11:00",
                 endTime: "13:00",
                 location: "CS35.1",
@@ -218,7 +253,7 @@
             {
                 eventID: 2,
                 eventName: "Meeting with Harry",
-                date: "2022 02 22",
+                date: "2022 02 25",
                 startTime: "16:00",
                 endTime: "17:00",
                 location: "CS36.2",
@@ -227,7 +262,7 @@
             {
                 eventID: 3,
                 eventName: "Python Workshop for Beginners",
-                date: "2022 02 23",
+                date: "2022 02 26",
                 startTime: "10:00",
                 endTime: "12:00",
                 location: "T35",
@@ -236,7 +271,7 @@
             {
                 eventID: 4,
                 eventName: "Group Session - Mentoring Support",
-                date: "2022 02 24",
+                date: "2022 02 27",
                 startTime: "14:00",
                 endTime: "15:00",
                 location: "MS Teams",
@@ -251,6 +286,24 @@
                 location: "CS36.2",
                 type: "m"
             },
+            {
+                eventID: 6,
+                eventName: "Meeting with Barry",
+                date: "2022 02 15",
+                startTime: "13:00",
+                endTime: "15:00",
+                location: "CS242",
+                type: "m"
+            },
+            {
+                eventID: 7,
+                eventName: "Learning JS",
+                date: "2022 02 15",
+                startTime: "13:00",
+                endTime: "15:00",
+                location: "CS262",
+                type: "w"
+            }
         ]
     }
     };
@@ -268,18 +321,57 @@
         float: left;
         width: 47%;
     }
-    #requestMeetingDiv {
+    #requestMeetingDiv, #pastEvents {
         text-align: center;
         justify-content: center;
         width: 47%;
         padding: 1rem;
         margin: 1rem;
-        display: inline-block
+        margin-bottom: 0;
+        border-bottom:0;
+        display: inline-block;
     }
     #meetingDateTime {
         background-color: white;
         color: black;
         border: solid 2px black;
+    }
+    #pastEvents ul {
+        padding-left: 0;
+    }
+    .pastm, .pastw, .pastg {
+        text-align: left;
+        padding: 8px;
+        list-style-type: none;
+        margin: 10px;
+        color: #5F71A0;
+    }
+    .pastm {
+        border: 1px solid #F15A24;
+    }
+    .pastw {
+        border: 1px solid #ED1E79;
+    }
+    .pastg {
+        border: 1px solid #101AFF;
+    }
+    .seeFeedbackm, .seeFeedbackg, .seeFeedbackw {
+        background-color: #00001A;
+        padding: 1rem;
+        float:right;
+        display: inline-block;
+    }
+    .seeFeedbackm {
+        border: 1px solid #F15A24;
+        color: #F15A24;
+    }
+    .seeFeedbackg {
+        border: 1px solid #101AFF;
+        color: #101AFF;
+    }
+    .seeFeedbackw {
+        border: 1px solid #ED1E79;
+        color: #ED1E79
     }
     .feedbackForm {
         margin-bottom: 10px;
