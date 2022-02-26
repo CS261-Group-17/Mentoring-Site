@@ -2,7 +2,7 @@
     <div id="calendar">
         <ul> 
             <li v-for="dayEvent in intoDays(calendar)" :key="dayEvent[0].date" class="dayEvents">
-                <h3>{{dateToString(dayEvent[0].date)}}</h3>
+                <h3 class="date">{{dateToString(dayEvent[0].date)}}</h3>
                 <ul>
                     <li v-for="event in dayEvent" :key="event.eventID" :class="'events'+event.type">
                         <p>
@@ -109,6 +109,9 @@
         padding: 1rem;
         float: left;
         width: 45%;
+    }
+    .date {
+        border-bottom: 2px solid #8FAAE3;
     }
     .eventsm, .eventsg, .eventsw {
         list-style-type: none;
