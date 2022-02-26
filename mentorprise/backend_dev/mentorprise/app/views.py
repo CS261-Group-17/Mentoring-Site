@@ -1,99 +1,72 @@
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-from app.serializers import *
-from app.models import *
+from app.models import User
+from app.serializers import UserSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
+
+# curl -X POST -F "first_name=Edmund" -F "last_name=Goodman" -F "biography=I am a student" -F "email=egoodman3141@gmail.com" -F "business_area=Computer Science" -F "job_title=Student" -F "mentor=False" http://127.0.0.1:8000/users/
+
+@api_view(['GET', 'POST'])
+def user_list(request):
     """
-    API endpoint that allows users to be viewed or edited.
+    List all users, or create a new user
     """
-    queryset = User.objects.all().order_by('-first_name')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    if request.method == 'GET':
+        user = User.objects.all()
+        serializer = UserSerializer(user, many=True)
+        return Response(serializer.data)
 
-class StrengthWeaknessViewSet(viewsets.ModelViewSet):
-    queryset = StrengthWeakness.objects.all()
-    serializer_class = StrengthWeaknessSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    elif request.method == 'POST':
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
 
-class StrengthWeaknessListViewSet(viewsets.ModelViewSet):
-    queryset = StrengthWeaknessList.objects.all()
-    serializer_class = StrengthWeaknessListSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+def user_detail(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-class MeetingViewSet(viewsets.ModelViewSet):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
-class GroupEventViewSet(viewsets.ModelViewSet):
-    queryset = GroupEvent.objects.all()
-    serializer_class = GroupEventSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    elif request.method == 'PUT':
+        serializer = UserSerializer(user, data=request.data)
 
-class GroupEventWeaknessesViewSet(viewsets.ModelViewSet):
-    queryset = GroupEventWeaknesses.objects.all()
-    serializer_class = GroupEventWeaknessesSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PATCH':
+        serializer = UserSerializer(user,
+                                           data=request.data,
+                                           partial=True)
 
-class MeetingWeaknessesViewSet(viewsets.ModelViewSet):
-    queryset = MeetingWeaknesses.objects.all()
-    serializer_class = MeetingWeaknessesSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
 
-class AttendanceViewSet(viewsets.ModelViewSet):
-    queryset = Attendance.objects.all()
-    serializer_class = AttendanceSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-class MeetingFeedbackViewSet(viewsets.ModelViewSet):
-    queryset = MeetingFeedback.objects.all()
-    serializer_class = MeetingFeedbackSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class GroupEventFeedbackViewSet(viewsets.ModelViewSet):
-    queryset = GroupEventFeedback.objects.all()
-    serializer_class = GroupEventFeedbackSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class GeneralFeedbackViewSet(viewsets.ModelViewSet):
-    queryset = GeneralFeedback.objects.all()
-    serializer_class = GeneralFeedbackSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class ImprovedWeaknessesViewSet(viewsets.ModelViewSet):
-    queryset = ImprovedWeaknesses.objects.all()
-    serializer_class = ImprovedWeaknessesSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class SystemFeedbackViewSet(viewsets.ModelViewSet):
-    queryset = SystemFeedback.objects.all()
-    serializer_class = SystemFeedbackSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class MilestoneViewSet(viewsets.ModelViewSet):
-    queryset = Milestone.objects.all()
-    serializer_class = MilestoneSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class PasswordResetViewSet(viewsets.ModelViewSet):
-    queryset = PasswordReset.objects.all()
-    serializer_class = PasswordResetSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class PairingViewSet(viewsets.ModelViewSet):
-    queryset = Pairing.objects.all()
-    serializer_class = PairingSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-class MeetingProposalViewSet(viewsets.ModelViewSet):
-    queryset = MeetingProposal.objects.all()
-    serializer_class = MeetingProposalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class UserViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#     queryset = User.objects.all().order_by('-first_name')
+#     serializer_class = UserSerializer
+#     permission_classes = [permissions.IsAuthenticated]
