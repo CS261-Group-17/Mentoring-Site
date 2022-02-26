@@ -6,20 +6,22 @@ from app.models import User
 from app.serializers import UserSerializer
 
 
-
-# curl -X POST -F "first_name=Edmund" -F "last_name=Goodman" -F "biography=I am a student" -F "email=egoodman3141@gmail.com" -F "business_area=Computer Science" -F "job_title=Student" -F "mentor=False" http://127.0.0.1:8000/users/
-
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def user_list(request):
     """
     List all users, or create a new user
     """
     if request.method == 'GET':
-        user = User.objects.all()
+        user = User.objects.all().order_by('-first_name')
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def register(request):
+    """
+    Register a new user
+    """
+    if request.method == 'POST':
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -28,40 +30,15 @@ def user_list(request):
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def user_detail(request, pk):
-    try:
-        user = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+@api_view(['GET'])
+def get_profile(request, email):
     if request.method == 'GET':
+        try:
+            user = User.objects.get(email__exact=email)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user)
         return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = UserSerializer(user, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'PATCH':
-        serializer = UserSerializer(user,
-                                           data=request.data,
-                                           partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors,
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # class UserViewSet(viewsets.ModelViewSet):
 #     """
