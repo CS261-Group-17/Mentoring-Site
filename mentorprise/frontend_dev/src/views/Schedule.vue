@@ -2,7 +2,7 @@
     <NavBar />
     <div id="schedule">
         <h1>Schedule</h1>
-        <Calendar :events="this.upcoming(this.schedule)"/>
+        <Calendar :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
         <div id="requests">
             <h3>Requests</h3>
             <ul> 
@@ -124,8 +124,10 @@
             <h3>Past Events</h3>
             <ul>
                 <li v-for="event in pastEvents(schedule)" :key="event.eventID" :class="'past' + event.type">
-                    <b>{{event.eventName}}</b><br>
-                    {{event.date}}, {{event.location}}
+                    <p class="innerPast">
+                        <span class="pastTitle">{{event.eventName}}</span><br>
+                        {{event.date}}, {{event.location}}
+                    </p>
                     <button :class="'seeFeedback'+event.type">See Feedback</button>
                 </li>
             </ul>
@@ -153,7 +155,8 @@
             showModal: [],
             profile: {},
             requests: [],
-            schedule: []
+            schedule: [],
+            renderCalendar:true
         }
     },
     methods: {
@@ -271,6 +274,22 @@
                 }
             }
             return ""
+        }, 
+        cancelEvent(id){
+            // for now just remove event
+            for(let i=0;i<this.schedule.length;i++) {
+                if(this.schedule[i].eventID == id) {
+                    this.schedule.splice(i, 1)
+                    i = this.schedule.length
+
+                    // the whole point of render calendar is to give us
+                    // a dirty way to render things
+                    this.renderCalendar= false
+                    this.$nextTick(() => {
+                        this.renderCalendar = true
+                    })
+                }
+            }
         }
     },
     created() {
@@ -485,6 +504,7 @@
         padding: 1rem;
         float: left;
         width: 47%;
+        margin-bottom: 2rem;
     }
     #requests h3, 
     #pastEvents h3 {
@@ -493,7 +513,7 @@
     #requestMeetingDiv {
         display: block;
         float:left;
-        width: 47%;
+        width: 30%;
     }
     #requestMeetingDiv p {
         word-break: break-all;
@@ -506,10 +526,12 @@
         border-bottom:0;
     }
     #pastEvents {
-        overflow-y: scroll;
+        overflow-y: auto;
+        overflow-x:hidden;
         max-height: 30rem;
-        width: 47%;
+        width: 64%;
         float:right;
+        margin-right: 6%; 
         display: block;
     }
     .meetingDateTime {
@@ -528,6 +550,24 @@
         color: #5F71A0;
         height: auto;
     }
+    .innerPast {
+        text-align: left;
+        display: inline-block;
+        margin-right: 7%;
+        width: 20rem;
+        word-wrap: break-word !important;
+        word-break: break-all !important;
+        white-space: normal !important;
+        font-size:small;
+    }
+    .pastTitle {
+        font-weight: bold;
+        word-wrap: break-word !important;
+        word-break: break-all !important;
+        white-space: normal !important;
+        color: #8FAAE3;
+        font-size: 1rem;
+    }
     .pastm {
         border: 1px solid #F15A24;
     }
@@ -540,19 +580,30 @@
     .seeFeedbackm, .seeFeedbackg, .seeFeedbackw {
         background-color: #00001A;
         padding: 1rem;
-        display: block;
     }
     .seeFeedbackm {
         border: 1px solid #F15A24;
         color: #F15A24;
     }
+    .seeFeedbackm:hover {
+        color: white;
+        background-color: #F15A24;
+    }
     .seeFeedbackg {
         border: 1px solid #101AFF;
         color: #101AFF;
     }
+    .seeFeedbackg:hover {
+        color: white;
+        background-color: #101AFF;
+    }
     .seeFeedbackw {
         border: 1px solid #ED1E79;
-        color: #ED1E79
+        color: #ED1E79;
+    }
+    .seeFeedbackw:hover {
+        color: white;
+        background-color: #ED1E79;
     }
     .feedbackForm {
         margin-bottom: 10px;
@@ -568,6 +619,9 @@
         color: #243B6F;
         border: 0px;
         font-weight: bold;
+    }
+    .requestGone:hover, .respondToRequest:hover {
+        color: white;
     }
     .respondToRequest {
         padding-top: 5px;
