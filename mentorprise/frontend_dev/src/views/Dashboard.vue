@@ -11,26 +11,167 @@
         </div>
         <div class="part_content">
           <div class="part_connections_item">
-            <div
-              class="part_connections_item_title"
-              style="display: flex; justify-content: space-between"
-            >
-              <span>Mentor</span>
-              <router-link to="/">
-                <button class="mentor_button">Request meeting</button>
-              </router-link>
-            </div>
-            <Collapse :list="mentor_data" random="mentor" />
+            <template v-if="mentor_data.length != 0">
+              <div
+                class="part_connections_item_title"
+                style="display: flex; justify-content: space-between"
+              >
+                <span>Mentor</span>
+                <router-link to="/">
+                  <button class="mentor_button">Request meeting</button>
+                </router-link>
+              </div>
+              <Collapse :list="mentor_data" random="mentor" />
+            </template>
+            <template v-else>
+              <template v-if="!wait_request_mentor_choose">
+                <template v-if="!request_mentor_choose">
+                  <div class="part_connections_item_select">
+                    <div class="title">You don't have a mentor yet!</div>
+                    <div style="display: flex">
+                      <div style="padding-right: 30px; color: #8faae3">
+                        Benefits of having a mentor here,maybe say if you click
+                        on the button then you will be paired with a mentor
+                      </div>
+                      <div>
+                        <button
+                          class="part_title_button"
+                          style="width: 140px; transform: translateY(5px)"
+                          @click="request_mentor_choose = true"
+                        >
+                          Request mentor
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div v-else>
+                  <div style="background-color: #0a102c; padding: 8px 6px">
+                    Choose a mentor:
+                  </div>
+                  <div
+                    style="
+                      border: 1px solid #0a102c;
+                      border-top: none;
+                      padding: 4px 6px;
+                    "
+                    v-for="(v, i) in request_mentor_choose_data"
+                    :key="i"
+                  >
+                    <div>
+                      {{ v.name }}
+                      <span
+                        style="
+                          font-size: 12px;
+                          color: #2b3e75;
+                          margin-left: 10px;
+                        "
+                        v-if="v.recommend"
+                        >Recommended</span
+                      >
+                    </div>
+                    <div
+                      style="
+                        display: flex;
+                        margin-top: 5px;
+                        font-size: 14px;
+                        justify-content: space-between;
+                        color: #8faae3;
+                      "
+                    >
+                      <div style="width: 30%">{{ v.info }}</div>
+                      <div>{{ v.status }}</div>
+                      <div>
+                        <button
+                          @click="request(v.name)"
+                          style="
+                            border-radius: 4px;
+                            color: #2b3e75;
+                            border: 1px #213260 solid;
+                            background-color: transparent;
+                            margin-right: 8px;
+                            padding: 4px 10px;
+                            font-size: 12px;
+                            transform: translateY(-10px);
+                          "
+                        >
+                          Choose mentor
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <div style="background-color: #09102c; padding: 10px" v-else>
+                <div style="margin-bottom: 15px">
+                  You have requested {{ wait_request_mentor_choose_data }} as
+                  your mentor
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-right: 8px;
+                  "
+                >
+                  <div style="color: #93a8dd">
+                    Awaiting a response from
+                    {{ wait_request_mentor_choose_data }}
+                  </div>
+                  <div>
+                    <button
+                      @click="
+                        wait_request_mentor_choose = false;
+                        request_mentor_choose = true;
+                      "
+                      style="
+                        background-color: transparent;
+                        border: 1px solid #2b3f73;
+                        color: #2b3f73;
+                        font-size: 12px;
+                        padding: 4px 14px;
+                        border-radius: 4px;
+                      "
+                    >
+                      Change request
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
           </div>
           <div class="part_connections_item">
-            <div class="part_connections_item_title">Mentees</div>
-            <Collapse :list="mentees_data" random="mentees" />
+            <template v-if="mentees_data.length != 0">
+              <div class="part_connections_item_title">Mentees</div>
+              <Collapse :list="mentees_data" random="mentees" />
+            </template>
+            <template v-else>
+              <div class="part_connections_item_select">
+                <div class="title">You don't have any mentees</div>
+                <div style="display: flex">
+                  <div style="padding-right: 40px; color: #8faae3">
+                    Something about whether or not you are currently visibile to
+                    prospective mentees,go to profile to change
+                  </div>
+                  <div>
+                    <router-link to="/Profile">
+                      <button
+                        class="part_title_button"
+                        style="width: 140px; transform: translateY(5px)"
+                      >
+                        Change on profile
+                      </button>
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
       <div>
         <div class="part_title">
-          <!-- pro icon can't use  https://fontawesome.com/icons/message-lines?s=thin-->
+          <!-- pro icon can't use  https://fontawesome.com/icons/message-lines?s=thin -->
           <fa icon="message-lines" />
           Requests
         </div>
@@ -132,21 +273,10 @@ export default {
           type: "gf",
         },
       ],
-      mentor_data: [
-        {
-          upcoming_milestones: "James Archbold",
-          content: "content...",
-        },
-      ],
+      mentor_data: [],
       mentees_data: [
-        {
-          upcoming_milestones: "Bill",
-          content: "content...",
-        },
-        {
-          upcoming_milestones: "Harry",
-          content: "content...",
-        },
+        { upcoming_milestones: "Bill", content: "content..." },
+        { upcoming_milestones: "Harry", content: "content..." },
       ],
       today_data: [
         {
@@ -178,7 +308,40 @@ export default {
           warning: false,
         },
       ],
+      request_mentor_choose: false,
+      request_mentor_choose_data: [
+        {
+          name: "James Archbold",
+          recommend: true,
+          info: "Software Engineering",
+          status: "Rating",
+        },
+        {
+          name: "Nathan Griffiths",
+          recommend: false,
+          info: "Business area",
+          status: "Rating",
+        },
+      ],
+      wait_request_mentor_choose: false,
+      wait_request_mentor_choose_data: "",
     };
+  },
+  methods: {
+    request(name) {
+      this.request_mentor_choose = false;
+      this.wait_request_mentor_choose = true;
+      this.wait_request_mentor_choose_data = name;
+
+      setTimeout(() => {
+        this.mentor_data = [
+          {
+            upcoming_milestones: "James Archbold",
+            content: "content...",
+          },
+        ];
+      }, 2000);
+    },
   },
 };
 </script>
@@ -192,11 +355,11 @@ export default {
   margin-bottom: 1.5rem;
 }
 .content {
-  height: 70vh;
+  height: 67vh;
   color: #fff;
   display: grid;
   grid-template-columns: 49% 49%;
-  grid-template-rows: 50% 50%;
+  grid-template-rows: 360px auto;
   gap: 2%;
 }
 .part_title {
@@ -222,7 +385,7 @@ export default {
   padding: 8px 0 8px 10px;
 }
 .part_connections_item {
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 .part_connections_item :last-child {
   border-width: 1px;
@@ -323,5 +486,13 @@ export default {
   cursor: pointer;
   background-color: #00001a;
   border-radius: 0 6px 6px 0;
+}
+.part_connections_item_select {
+  background-color: #0a102c;
+  padding: 10px;
+  font-size: 14px;
+}
+.part_connections_item_select > .title {
+  margin-bottom: 20px;
 }
 </style>
