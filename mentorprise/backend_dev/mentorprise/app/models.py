@@ -1,7 +1,9 @@
 from django.db import models
 
+
 class StrengthWeakness(models.Model):
-    sw_type = models.TextField()  
+    sw_type = models.TextField()
+
 
 class User(models.Model):
     first_name = models.TextField()
@@ -12,13 +14,17 @@ class User(models.Model):
     email = models.TextField()
     business_area = models.TextField()
     job_title = models.TextField()
-    expert_at = models.ForeignKey(StrengthWeakness, models.SET_NULL, null=True, blank=True) #if null the user is not an expert.
+    # if null the user is not an expert.
+    expert_at = models.ForeignKey(
+        StrengthWeakness, models.SET_NULL, null=True, blank=True)
     mentor = models.BooleanField()
+
 
 class StrengthWeaknessList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_strength = models.BooleanField()
-    sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE) 
+    sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE)
+
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -28,8 +34,10 @@ class Notification(models.Model):
     is_read = models.BooleanField()
     link = models.TextField()
 
+
 class Event(models.Model):
-    instructor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(class)s_instructor_meeting")
+    instructor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="%(class)s_instructor_meeting")
     title = models.TextField()
     description = models.TextField()
     start_datetime = models.DateTimeField()
@@ -41,54 +49,73 @@ class Event(models.Model):
 
 
 class Meeting(Event):
-    mentee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(class)s_mentee_meeting")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="%(class)s_mentee_meeting")
+
 
 class GroupEvent(Event):
-    event_type = models.TextField() #group session or workshop
+    event_type = models.TextField()  # group session or workshop
     capacity = models.IntegerField()
 
-#weaknesses a group event is targeted to improving
-class GroupEventWeaknesses(models.Model):
-    event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE) 
-    weakness_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE) 
+# weaknesses a group event is targeted to improving
 
-#weaknesses a meeting is targeted to improving
+
+class GroupEventWeaknesses(models.Model):
+    event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE)
+    weakness_type = models.ForeignKey(
+        StrengthWeakness, on_delete=models.CASCADE)
+
+# weaknesses a meeting is targeted to improving
+
+
 class MeetingWeaknesses(models.Model):
-    event = models.ForeignKey(Meeting, on_delete=models.CASCADE) 
-    weakness_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE) 
+    event = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    weakness_type = models.ForeignKey(
+        StrengthWeakness, on_delete=models.CASCADE)
+
 
 class Attendance(models.Model):
     group_event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE)
     attendee_id = models.ForeignKey(User, on_delete=models.CASCADE)
     attended = models.BooleanField()
 
+
 class Feedback(models.Model):
     rating = models.IntegerField()
     positives = models.TextField()
     negatives = models.TextField()
-    giver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(class)s_given_feedback")
+    giver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="%(class)s_given_feedback")
 
     class Meta:
         abstract = True
 
+
 class MeetingFeedback(Feedback):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+
 
 class GroupEventFeedback(Feedback):
     group_event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE)
 
+
 class GeneralFeedback(Feedback):
     creation_datetime = models.DateTimeField()
-    mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(class)s_received_feedback")
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="%(class)s_received_feedback")
+
 
 class ImprovedWeaknesses(models.Model):
     feedback = models.ForeignKey(GeneralFeedback, on_delete=models.CASCADE)
-    weakness_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE) 
+    weakness_type = models.ForeignKey(
+        StrengthWeakness, on_delete=models.CASCADE)
+
 
 class SystemFeedback(models.Model):
     category = models.TextField()
     title = models.TextField()
     description = models.TextField()
+
 
 class Milestone(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -105,15 +132,21 @@ class PasswordReset(models.Model):
     start_datetime = models.DateTimeField()
     code = models.IntegerField()
 
+
 class Pairing(models.Model):
-    mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mentor_pairing")
-    mentee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mentee_pairing")
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_pairing")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_pairing")
     in_proposal = models.BooleanField()
     terminated = models.BooleanField()
 
+
 class MeetingProposal(models.Model):
-    mentor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mentor_meeting")
-    mentee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mentee_meeting")
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_meeting")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_meeting")
     description = models.TextField()
     is_rejected = models.BooleanField()
     rejection_note = models.TextField()
@@ -124,7 +157,8 @@ class MeetingProposal(models.Model):
     time3 = models.DateTimeField()
     duration3 = models.IntegerField()
 
-class Authenticator(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    auth_token = models.IntegerField() #might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
 
+# class Authenticator(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     # might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
+#     auth_token = models.IntegerField()

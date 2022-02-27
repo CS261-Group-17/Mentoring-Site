@@ -1,3 +1,9 @@
 from django.test import TestCase
+from app.models import User
 
-# Create your tests here.
+class UserTestCase(TestCase):
+    def setUp(self):
+        pass
+
+    def test_simple(self):
+        self.assertEqual(True, True)
