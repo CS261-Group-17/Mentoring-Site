@@ -11,7 +11,7 @@ class User(models.Model):
     password_salt = models.TextField()
     password_hash = models.TextField()
     biography = models.TextField()
-    email = models.TextField()
+    email = models.TextField()                  # TODO: Force this field to be the unique primary key?
     business_area = models.TextField()
     job_title = models.TextField()
     # if null the user is not an expert.
