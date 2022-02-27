@@ -2,11 +2,12 @@
     <div id="calendar">
         <ul> 
             <li v-for="dayEvent in intoDays(calendar)" :key="dayEvent[0].date" class="dayEvents">
-                <h3>{{dateToString(dayEvent[0].date)}}</h3>
+                <h3 class="date">{{dateToString(dayEvent[0].date)}}</h3>
                 <ul>
                     <li v-for="event in dayEvent" :key="event.eventID" :class="'events'+event.type">
-                        <p>
-                            {{event.eventName}}<br>
+                        <button class="cancelEvent" @click="this.$emit('cancel-event', event.eventID);"><fa icon="xmark" size="2x"/></button>
+                        <p class="eventDesc">
+                            <span class="eventName">{{event.eventName}}</span><br>
                             {{event.startTime + " - " + event.endTime + ", " + event.location}}
                         </p>
                     </li>
@@ -22,6 +23,7 @@
         props: {
             events: Array
         },
+        emits: ['cancel-event'],
         data() {
             return {
                 calender: []
@@ -110,6 +112,9 @@
         float: left;
         width: 45%;
     }
+    .date {
+        border-bottom: 2px solid #8FAAE3;
+    }
     .eventsm, .eventsg, .eventsw {
         list-style-type: none;
         padding-left: 0.5rem;
@@ -132,5 +137,21 @@
     }
     ul {
         padding: 0rem;
+    }
+    .eventDesc {
+        font-size:small;
+    }
+    .eventName {
+        font-size: 1rem;
+    }
+    .cancelEvent {
+        float: right;
+        background-color: #0A102C;
+        color: #243B6F;
+        border: 0px;
+        font-weight: bold;
+    }
+    .cancelEvent:hover {
+        color: white;
     }
 </style>

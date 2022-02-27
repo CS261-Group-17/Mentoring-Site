@@ -2,7 +2,7 @@
     <NavBar />
     <div id="schedule">
         <h1>Schedule</h1>
-        <Calendar :events="this.upcoming(this.schedule)"/>
+        <Calendar :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
         <div id="requests">
             <h3>Requests</h3>
             <ul> 
@@ -17,16 +17,96 @@
                         <div class="modal" v-if="showModal[request.indexID]">
                             <h1>{{feedbackTitle(request)}}</h1>
                             <div v-if="request.requestType == 'FE'" class="feedbackForm">
+                                <div class="starRating">
+                                    <label>
+                                        <input type="radio" name="stars" value="1" />
+                                        <span class="icon">★</span>
+                                    </label> 
+                                    <label>
+                                        <input type="radio" name="stars" value="2" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="stars" value="3" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>   
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="stars" value="4" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="stars" value="5" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                </div>
+                                <br>
                                 <label for="feedback">Event Feedback:</label>
                                 <textarea name="feedback" id="eventFeedback" rows="3" cols="60"></textarea>
                             </div>
                             <div v-if="request.requestType == 'FM'" class="feedbackForm">
-                                <label for="feedback">Mentor-Mentee Feedback:</label>
-                                <textarea name="feedback" id="mentorFeedback" rows="3" cols="60"></textarea>
+                                <!-- Current implementation of stars does not allow 0 -->
+                                <div class="starRating">
+                                    <label>
+                                        <input type="radio" name="stars" value="1" />
+                                        <span class="icon">★</span>
+                                    </label> 
+                                    <label>
+                                        <input type="radio" name="stars" value="2" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="stars" value="3" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>   
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="stars" value="4" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="stars" value="5" />
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                        <span class="icon">★</span>
+                                    </label>
+                                </div>
+                                <br>
+                                <label for="www">What Went Well:</label>
+                                <textarea name="www" id="www" rows="3" cols="60"></textarea>
+                                <label for="www">What could the mentor have improved:</label>
+                                <textarea name="www" id="www" rows="3" cols="60"></textarea>
+                                <br>
+                                <label>Biggest Improvement Area:&nbsp;</label>
+                                <select name="improvement" id="improvement">
+                                    <option>None</option>
+                                    <option v-for="w in profile.ws" :key="w.id">{{capitalise(w.val)}}</option>
+                                </select>
                             </div>
                             <div v-if="request.requestType == 'M'" class="feedbackForm">
-                                <label for="chooseDate">Select a date:</label> &nbsp;
-                                <input name="chooseDate" id="meetingDateTime" type="datetime-local" :min="setMin()"/>
+                                <p>Choose 3 dates for the mentee to choose from.</p>
+                                <label for="chooseDate">Date 1:</label> &nbsp;
+                                <input name="chooseDate" class="meetingDateTime" type="datetime-local" :min="setMin()"/>
+                                <br><br><label for="chooseDate">Date 2:</label> &nbsp;
+                                <input name="chooseDate" class="meetingDateTime" type="datetime-local" :min="setMin()"/>
+                                <br><br><label for="chooseDate">Date 3:</label> &nbsp;
+                                <input name="chooseDate" class="meetingDateTime" type="datetime-local" :min="setMin()"/>
                             </div>
                             <button class="btn btn-primary" type="button" @click="submitFeedback(request)">
                                 Submit Form
@@ -40,19 +120,21 @@
                 </li>
             </ul>
         </div>
-        <div id="requestMeetingDiv">
-            <button type="button" class="btn btn-primary" id="requestAMeeting" @click="requestAMeeting()">Request a Meeting</button>
-            <br><br><p id="requestStatus"></p>
-        </div>
         <div id="pastEvents">
             <h3>Past Events</h3>
             <ul>
                 <li v-for="event in pastEvents(schedule)" :key="event.eventID" :class="'past' + event.type">
-                    <b>{{event.eventName}}</b>
-                    <button :class="'seeFeedback'+event.type">See Feedback</button><br>
-                    {{event.date}}, {{event.location}}
+                    <p class="innerPast">
+                        <span class="pastTitle">{{event.eventName}}</span><br>
+                        {{event.date}}, {{event.location}}
+                    </p>
+                    <button :class="'seeFeedback'+event.type">See Feedback</button>
                 </li>
             </ul>
+        </div>
+        <div id="requestMeetingDiv">
+            <button type="button" class="btn btn-primary" id="requestAMeeting" @click="requestAMeeting()">Request a Meeting</button>
+            <br><br><p id="requestStatus"></p>
         </div>
     </div>
 
@@ -73,7 +155,8 @@
             showModal: [],
             profile: {},
             requests: [],
-            schedule: []
+            schedule: [],
+            renderCalendar:true
         }
     },
     methods: {
@@ -128,6 +211,7 @@
             
             //defo could improve here
             alert("Thanks for the feedback")
+            //when we get the star rating we have to find the selected one
 
             // would send feedback off and then delete here
             if(request.requestType == "FE") {
@@ -176,6 +260,36 @@
                 }
             }
             return prevEvents
+        },
+        capitalise(word) {
+            let options= [
+                { value:"tennis", text: "Tennis"},
+                { value:"team", text: "Teamwork"},
+                { value:"communication", text: "Communication"},
+                { value:"friendly", text: "Friendly"}
+            ]
+            for(let i =0;i<options.length;i++) {
+                if(options[i].value == word) {
+                    return options[i].text
+                }
+            }
+            return ""
+        }, 
+        cancelEvent(id){
+            // for now just remove event
+            for(let i=0;i<this.schedule.length;i++) {
+                if(this.schedule[i].eventID == id) {
+                    this.schedule.splice(i, 1)
+                    i = this.schedule.length
+
+                    // the whole point of render calendar is to give us
+                    // a dirty way to render things
+                    this.renderCalendar= false
+                    this.$nextTick(() => {
+                        this.renderCalendar = true
+                    })
+                }
+            }
         }
     },
     created() {
@@ -310,8 +424,78 @@
 </script>
 
 <style scoped>
+    select {
+        border: solid 2px black;
+    }
+    .starRating {
+        display: inline-block;
+        position: relative;
+        height: 50px;
+        line-height: 50px;
+        font-size: 50px;
+    }
+
+    .starRating label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .starRating label:last-child {
+        position: static;
+    }
+
+    .starRating label:nth-child(1) {
+        z-index: 5;
+    }
+
+    .starRating label:nth-child(2) {
+        z-index: 4;
+    }
+
+    .starRating label:nth-child(3) {
+        z-index: 3;
+    }
+
+    .starRating label:nth-child(4) {
+        z-index: 2;
+    }
+
+    .starRating label:nth-child(5) {
+        z-index: 1;
+    }
+
+    .starRating label input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    .starRating label .icon {
+        float: left;
+        color: transparent;
+    }
+
+    .starRating label:last-child .icon {
+        color: #000;
+    }
+
+    .starRating:not(:hover) label input:checked ~ .icon,
+    .starRating:hover label:hover input ~ .icon {
+        color: gold;
+    }
+
+    .starRating label input:focus:not(:checked) ~ .icon:last-child {
+        color: #000;
+        text-shadow: 0 0 5px gold;
+    }
+
     #schedule {
         padding: 2rem;
+        margin-bottom: 5rem;
         color: white;
     }
     #requests {
@@ -320,18 +504,37 @@
         padding: 1rem;
         float: left;
         width: 47%;
+        margin-bottom: 2rem;
+    }
+    #requests h3, 
+    #pastEvents h3 {
+        border-bottom: 2px solid #8FAAE3;
+    }
+    #requestMeetingDiv {
+        display: block;
+        float:left;
+        width: 30%;
+    }
+    #requestMeetingDiv p {
+        word-break: break-all;
+        white-space: normal;
     }
     #requestMeetingDiv, #pastEvents {
-        text-align: center;
         justify-content: center;
-        width: 47%;
         padding: 1rem;
-        margin: 1rem;
         margin-bottom: 0;
         border-bottom:0;
-        display: inline-block;
     }
-    #meetingDateTime {
+    #pastEvents {
+        overflow-y: auto;
+        overflow-x:hidden;
+        max-height: 30rem;
+        width: 64%;
+        float:right;
+        margin-right: 6%; 
+        display: block;
+    }
+    .meetingDateTime {
         background-color: white;
         color: black;
         border: solid 2px black;
@@ -345,6 +548,25 @@
         list-style-type: none;
         margin: 10px;
         color: #5F71A0;
+        height: auto;
+    }
+    .innerPast {
+        text-align: left;
+        display: inline-block;
+        margin-right: 7%;
+        width: 20rem;
+        word-wrap: break-word !important;
+        word-break: break-all !important;
+        white-space: normal !important;
+        font-size:small;
+    }
+    .pastTitle {
+        font-weight: bold;
+        word-wrap: break-word !important;
+        word-break: break-all !important;
+        white-space: normal !important;
+        color: #8FAAE3;
+        font-size: 1rem;
     }
     .pastm {
         border: 1px solid #F15A24;
@@ -358,20 +580,30 @@
     .seeFeedbackm, .seeFeedbackg, .seeFeedbackw {
         background-color: #00001A;
         padding: 1rem;
-        float:right;
-        display: inline-block;
     }
     .seeFeedbackm {
         border: 1px solid #F15A24;
         color: #F15A24;
     }
+    .seeFeedbackm:hover {
+        color: white;
+        background-color: #F15A24;
+    }
     .seeFeedbackg {
         border: 1px solid #101AFF;
         color: #101AFF;
     }
+    .seeFeedbackg:hover {
+        color: white;
+        background-color: #101AFF;
+    }
     .seeFeedbackw {
         border: 1px solid #ED1E79;
-        color: #ED1E79
+        color: #ED1E79;
+    }
+    .seeFeedbackw:hover {
+        color: white;
+        background-color: #ED1E79;
     }
     .feedbackForm {
         margin-bottom: 10px;
@@ -388,6 +620,9 @@
         border: 0px;
         font-weight: bold;
     }
+    .requestGone:hover, .respondToRequest:hover {
+        color: white;
+    }
     .respondToRequest {
         padding-top: 5px;
     }
@@ -403,7 +638,7 @@
     .modal {
         position: fixed;
         display: block;
-        max-height: 40%;
+        max-height: 80%;
         height: auto;
         top: 50%;
         left: 50%;
