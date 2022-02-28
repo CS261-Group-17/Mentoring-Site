@@ -37,7 +37,7 @@ def user_profile(request, user_id):
         - GET:      Get the contents of the user's profile
         - PATCH:    Update the contents of the user's profile
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def user_register(request):
@@ -45,7 +45,7 @@ def user_register(request):
     An API endpoint to register a user account
         - POST:     Register a user
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def user_login(request):
@@ -53,7 +53,7 @@ def user_login(request):
     An API endpoint to log in a user
         - POST:     Log in a user
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def user_delete(request, user_id):
@@ -61,7 +61,7 @@ def user_delete(request, user_id):
     An API endpoint to delete a specific user's account
         - POST:     Delete a user account
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'PUT'])
 def user_email(request, user_id):
@@ -70,7 +70,7 @@ def user_email(request, user_id):
         - GET:      Get the user's email
         - PUT:      Update the user's email
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def user_password(request, user_id):
@@ -78,7 +78,7 @@ def user_password(request, user_id):
     An API endpoint for a specific user's password
         - PUT:      Update the user's password
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 ##############
 ### Topics ###
@@ -92,7 +92,7 @@ def topics_list(request):
         - POST:     Add a topic of strengths/weaknesses
         - DELETE:   Delete a topic of strengths/weaknesses
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 #####################
 ### Notifications ###
@@ -104,7 +104,7 @@ def notifications_list(request, user_id):
     An API endpoint for a specific user's notifications
         - GET:      Get the list of all the user's notifications
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 ################
 ### Feedback ###
@@ -119,7 +119,7 @@ def feedback_meeting(request, user_id, meeting_id):
         - PATCH:    Modify the meeting feedback from a user
         - DELETE:   Delete a the user's meeting feedback
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'PATCH'])
 def feedback_mentor(request, user_id):
@@ -128,7 +128,7 @@ def feedback_mentor(request, user_id):
         - GET:      Get the contents of the mentor feedback
         - PATCH:    Modify the mentor feedback from a user
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def feedback_system(request, user_id):
@@ -138,7 +138,7 @@ def feedback_system(request, user_id):
         - POST:     Add a new system feedback from a user
         - DELETE:   Delete a the user's system feedback
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 ####################
 ### Group events ###
@@ -151,7 +151,7 @@ def group_events_list(request, user_id):
     could attend
         - GET:      Get the list of group events the user could attend
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def group_events_make(request, user_id):
@@ -161,7 +161,7 @@ def group_events_make(request, user_id):
         - POST:     Add a new group event the user is running
         - DELETE:   Cancel a group event the user is running
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def group_events_join(request, used_id):
@@ -171,7 +171,7 @@ def group_events_join(request, used_id):
         - POST:     Add a new group event the user is attending
         - DELETE:   Cancel a user's intention to attend a group event
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 #######################
 ### Plans of action ###
@@ -184,7 +184,7 @@ def plan_of_action_list(request, user_id):
         - GET:      Get the contents of the user's plan of action; a list of all
                     their milestones
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 def plan_of_action_milestone(request, user_id, milestone_id):
@@ -195,7 +195,7 @@ def plan_of_action_milestone(request, user_id, milestone_id):
         - PATCH:    Modify a user's milestone, including marking it as complete
         - DELETE:   Delete a user's milestone
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 ################
 ### Meetings ###
@@ -207,7 +207,7 @@ def meetings_list(request, user_id):
     An API endpoint for a specific user's scheduled meetings
         - GET:      Get the list of all the user's scheduled meetings
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def meetings_request(request, user_id):
@@ -217,7 +217,7 @@ def meetings_request(request, user_id):
         - POST:     Add a new meeting request from a specific user
         - DELETE:   Cancel a user's meeting request
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST'])
 def meetings_propose(request, user_id):
@@ -227,7 +227,7 @@ def meetings_propose(request, user_id):
         - GET:      Get the list of meeting requests from all the users mentees
         - POST:     Add a new set of proposed times for a meeting request
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def meetings_accept(request, user_id):
@@ -239,7 +239,7 @@ def meetings_accept(request, user_id):
         - DELETE:   Indicate none of the times work, and throw the proposal back
                     to the mentor to find more times
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 #################
 ### Mentoring ###
@@ -251,7 +251,7 @@ def mentoring_mentees_list(request, user_id):
     An API endpoint for a specific user's mentees
         - GET:      Get the list of all the user's mentees
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'DELETE'])
 def mentoring_mentee(request, user_id, mentee_id):
@@ -260,7 +260,7 @@ def mentoring_mentee(request, user_id, mentee_id):
         - GET:      Get the profile of the mentee
         - DELETE:   Terminate the relationship with the mentee
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'DELETE'])
 def mentoring_mentor(request, user_id):
@@ -269,7 +269,7 @@ def mentoring_mentor(request, user_id):
         - GET:      Get the profile of the mentor
         - DELETE:   Terminate the relationship with the mentor
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def mentoring_proposed_mentors(request, user_id):
@@ -279,7 +279,7 @@ def mentoring_proposed_mentors(request, user_id):
         - POST:     Accept a mentor's offer of mentoring
         - DELETE:   Decline a mentor's offer of mentoring
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def mentoring_potential_mentees_list(request, user_id):
@@ -288,4 +288,4 @@ def mentoring_potential_mentees_list(request, user_id):
     mentor
         - GET:      Get the ordered list of possible mentees
     """
-    pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
