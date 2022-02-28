@@ -15,11 +15,11 @@ from app.serializers import *
 #####################
 ### USER ACCOUNTS ###
 #####################
-# register - done
-# login
-# resetPassword
-# getProfile - done
-# (updateProfile) - done
+# (DEBUG: user_profile_list)
+# register
+# user_profile -> get_user_profile, update_user_profile, (TODO: delete_user_profile)
+# TODO: login
+# TODO: reset_password
 #####################
 
 @api_view(['GET'])
@@ -55,7 +55,7 @@ def user_profile(request, email):
     User single profile api endpoint
         - GET:  Return the user profile for a specific email
         - POST: Update the user profile data for a specific email
-                TODO: Could be a PATCH type, need old email selector if email is what is being updated!
+                TODO: Could be a PATCH type, need old email selector if email is what is being updated! Need to authenticate *again* for danger zone things - short token?
     """
     try:
         user = User.objects.get(email__exact=email) # TODO: This should probably be done over post? and needs auth token permissions
@@ -74,8 +74,7 @@ def user_profile(request, email):
 ############################
 ### STRENGTHS WEAKNESSES ###
 ############################
-# (getStrengthsWeaknesses) - done
-# (updateStrengthsWeaknesses) - done
+# strength_weaknesses -> get_strength_weaknesses, add_strength_weaknesses, (TODO: delete_strength_weaknesses)
 ############################
 
 @api_view(['GET', 'POST'])
@@ -101,9 +100,10 @@ def strength_weaknesses(request):
 #######################
 ###    MENTORING    ###
 #######################
-# mentor -> (selectMentor, getMentor, terminateRelationship)
-# mentee -> (getMentees, acceptMentee, terminateRelationship)
-# proposed_mentees -> (getRequestedMentees, accept_mentee (, withdrawRequest))
+# TODO: CHECK THIS!!!
+# mentor -> get_mentor, delete_mentor
+# mentees -> get_mentees, pick_mentee, delete_mentee
+# proposed_mentees -> get_mentee_requests, accept_mentor, (delete_mentee_request)
 # potential_mentors
 #######################
 
@@ -112,8 +112,6 @@ def mentor(request):
     """
     Mentor api endpoint
         - GET:  Return the mentor of a specific user
-        - POST: Accept the offer of mentoring from a mentor for a specific user
-                TODO: Could be a CREATE type
         - DELETE: Terminate the relationship with a mentor of a specific user
     """
     if request.method == 'GET':
@@ -170,50 +168,122 @@ def potential_mentees(request):
     if request.method == 'GET':
         return Response("API not yet implemented", status=status.HTTP_200_OK)
 
-
-
-
-
-
-################################################################################
-################################################################################
-################################################################################
-
-
-
-
-
-# register
-# login
-# resetPassword
-# resetPassword
-# getProfile
-# getPotentialMentors
-# selectMentor
-# getRequestedMentees
-# acceptMentee
-# getMentor
-# getMentees
-# terminateRelationship
-# proposeMeeting
-# proposeMeetingTimes
+########################
+###     MEETINGS     ###
+########################
+# proposeMeeting ->
+# proposed_meetings -> get_meeting_requests, accept_meeting_request
 # acceptMeeting
 # reproposeMeeting
 # cancelMeeting
 # getMeetings
-# giveMeetingFeedback
+########################
+
+@api_view(['POST'])
+def request_meeting(request):
+    """
+    Meeting request api endpoint
+        
+        - POST: Request a meeting from the mentor
+        - DELETE: Withdraw a meeting request
+    """
+    if request.method == 'POST':
+        pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+def requested_meetings(request):
+    """
+    Requested meetings api endpoint
+        - GET:  Get all the current meeting requests for a specific mentor
+        - POST: Accept a meeting request
+    """
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST', 'DELETE'])
+def meetings(request):
+    """
+    Proposed meetings api endpoint
+        - GET:  Return
+        - POST: Accept
+                TODO: Could be a CREATE type
+        - DELETE:
+    """
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        pass
+    elif request.method == 'DELETE':
+        pass
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
+
+#######################
+### PLANS OF ACTION ###
+#######################
 # getPlanOfAction
 # addMilestone
 # setMilestone
 # completeMilestone
 # getMilestone
+#######################
+
+#######################
+### PLANS OF ACTION ###
+#######################
+# giveMeetingFeedback
 # setMentorFeedback
+# submitSiteFeedback
+#####################
+
+####################
+### GROUP EVENTS ###
+####################
 # createGroupEvent
-# specified
 # getGroupEvent
 # joinGroupEvent
+####################
+
+#####################
+### NOTIFICATIONS ###
+#####################
 # getNotifications
-# submitSiteFeedback
+####################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+
+
 
 #####################
 ### USER ACCOUNTS ###
@@ -265,9 +335,9 @@ def potential_mentees(request):
 # getMilestone
 #######################
 
-#######################
-### PLANS OF ACTION ###
-#######################
+######################
+###    FEEDBACK    ###
+######################
 # giveMeetingFeedback
 # setMentorFeedback
 # submitSiteFeedback
@@ -286,3 +356,36 @@ def potential_mentees(request):
 #####################
 # getNotifications
 ####################
+
+
+# register
+# login
+# resetPassword
+# resetPassword
+# getProfile
+# getPotentialMentors
+# selectMentor
+# getRequestedMentees
+# acceptMentee
+# getMentor
+# getMentees
+# terminateRelationship
+# proposeMeeting
+# proposeMeetingTimes
+# acceptMeeting
+# reproposeMeeting
+# cancelMeeting
+# getMeetings
+# giveMeetingFeedback
+# getPlanOfAction
+# addMilestone
+# setMilestone
+# completeMilestone
+# getMilestone
+# setMentorFeedback
+# createGroupEvent
+# specified
+# getGroupEvent
+# joinGroupEvent
+# getNotifications
+# submitSiteFeedback
