@@ -1,17 +1,13 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class StrengthWeakness(models.Model):
     sw_type = models.TextField()
 
 
-class User(models.Model):
-    first_name = models.TextField()
-    last_name = models.TextField()
-    password_salt = models.TextField()
-    password_hash = models.TextField()
+class Profile(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     biography = models.TextField()
-    email = models.TextField()                  # TODO: Force this field to be the unique primary key?
     business_area = models.TextField()
     job_title = models.TextField()
     # if null the user is not an expert.

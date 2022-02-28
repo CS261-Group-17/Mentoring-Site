@@ -14,7 +14,6 @@ from app.serializers import *
 # https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/
 
 
-
 ############
 ### User ###
 ############
