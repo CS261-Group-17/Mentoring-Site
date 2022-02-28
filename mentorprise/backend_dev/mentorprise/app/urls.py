@@ -19,6 +19,7 @@ urlpatterns = [
     ### Topics ###
     ##############
     path('topics/', views.topics_list, name='topics-list'),
+    path('topics/<str:sw_type>', views.topic_delete, name='topic-delete'),
 
     #####################
     ### Notifications ###

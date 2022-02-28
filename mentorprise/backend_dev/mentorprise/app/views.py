@@ -37,7 +37,20 @@ def user_profile(request, user_id):
         - GET:      Get the contents of the user's profile
         - PATCH:    Update the contents of the user's profile
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    try:
+        user = User.objects.get(email__exact=user_id) # TODO: Should this be done over post? and needs auth token permissions
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    elif request.method == 'PATCH':
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def user_register(request):
@@ -45,7 +58,13 @@ def user_register(request):
     An API endpoint to register a user account
         - POST:     Register a user
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    if request.method == 'POST':
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # When we do authentication, this should also return an auth token
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def user_login(request):
@@ -55,13 +74,20 @@ def user_login(request):
     """
     return Response("API not yet implemented", status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 def user_delete(request, user_id):
     """
     An API endpoint to delete a specific user's account
-        - POST:     Delete a user account
+        - DELETE:     Delete a user account
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    try:
+        user = User.objects.get(email__exact=user_id) # TODO: Should this be done over post? and needs auth token permissions
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'DELETE':
+        serializer = UserSerializer(user)
+        user.delete()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
 @api_view(['GET', 'PUT'])
 def user_email(request, user_id):
@@ -92,7 +118,33 @@ def topics_list(request):
         - POST:     Add a topic of strengths/weaknesses
         - DELETE:   Delete a topic of strengths/weaknesses
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    if request.method == 'GET':
+        strength_weaknesses = StrengthWeakness.objects.all()
+        serializer = StrengthWeaknessSerializer(strength_weaknesses, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = StrengthWeaknessSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            # When we do authentication, this should also return an auth token
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def topic_delete(request, sw_type):
+    """
+    An API endpoint to delete a specific user's account
+        - DELETE:     Delete a user account
+    """
+    try:
+        user = StrengthWeakness.objects.get(sw_type__exact=sw_type) # TODO: Should this be done over post?
+        # user = StrengthWeakness.objects.filter(sw_type__exact=sw_type)[0] # TODO: Should this be done over post?
+    except StrengthWeakness.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'DELETE':
+        serializer = StrengthWeaknessSerializer(user)
+        user.delete()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
 #####################
 ### Notifications ###
