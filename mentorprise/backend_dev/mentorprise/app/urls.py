@@ -2,9 +2,44 @@ from django.urls import path
 from app import views
 
 urlpatterns = [
-    path('profiles/',
-         views.user_profile_list,
-         name = 'user-list'),
+    ############
+    ### User ###
+    ############
+    path('users/profiles/', views.user_profile_list, name='user-profiles-list'),
+    path('users/profile/<str:user_id>/', views.user_profile, name='user-profile'),
+    path('users/register/', views.user_register, name='user-register'),
+    path('users/login/', views.user_login, name='user-login'),
+    path('users/delete/<str:user_id>/', views.user_delete, name='user-delete'),
+    path('users/email/<str:user_id>/', views.user_email, name='user-email'),
+    path('users/password/<str:user_id>/', views.user_password, name='user-password'),
+
+    ##############
+    ### Topics ###
+    ##############
+
+    #####################
+    ### Notifications ###
+    #####################
+
+    ################
+    ### Feedback ###
+    ################
+
+    ####################
+    ### Group events ###
+    ####################
+
+    #######################
+    ### Plans of action ###
+    #######################
+
+    ################
+    ### Meetings ###
+    ################
+
+    #################
+    ### Mentoring ###
+    #################
 
 ]
 
