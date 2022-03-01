@@ -29,10 +29,11 @@
 
 export default {
   methods: {
-    submit(e) {
+    onSubmit(e) {
       e.preventDefault();
       let data = e.target.jsondata;
       console.log(data);
+      this.$router.push("Dashboard")
     },
   },
 };
