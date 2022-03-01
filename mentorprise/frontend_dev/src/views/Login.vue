@@ -72,7 +72,7 @@ export default {
 .form > input {
   margin-top: 30px;
   width: 300px;
-  color: #fff;
+  color: black;
 }
 .form-check {
   margin-top: 30px;
