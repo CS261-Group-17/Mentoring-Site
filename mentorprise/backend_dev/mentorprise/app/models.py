@@ -153,6 +153,13 @@ class MeetingProposal(models.Model):
     time3 = models.DateTimeField()
     duration3 = models.IntegerField()
 
+class MeetingRequest(models.Model):
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_meeting_request")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_meeting_request")
+    proposal = models.OneToOneField(MeetingProposal, null=True, blank=True, on_delete=models.SET_NULL)
+
 
 # class Authenticator(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
