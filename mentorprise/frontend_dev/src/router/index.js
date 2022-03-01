@@ -9,6 +9,7 @@ import POA from "../views/POA.vue"
 import Schedule from "../views/Schedule.vue"
 import IndEvent from "../views/IndEvent.vue"
 import Feedback from "../views/Feedback.vue"
+import Reset from "../views/Reset.vue"
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
     path: "/Feedback",
     name: "Feedback",
     component: Feedback
+  },
+  {
+    path: "/Reset",
+    name: "Reset",
+    component: Reset
   }
 ];
 
