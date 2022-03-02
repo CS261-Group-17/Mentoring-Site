@@ -6,6 +6,10 @@ import Register from "../views/Register.vue"
 import IndPOA from "../views/IndPOA.vue"
 import GroupEvents from "../views/GroupEvent.vue"
 import POA from "../views/POA.vue"
+import Schedule from "../views/Schedule.vue"
+import IndEvent from "../views/IndEvent.vue"
+import Feedback from "../views/Feedback.vue"
+import Reset from "../views/Reset.vue"
 
 const routes = [
   {
@@ -42,6 +46,26 @@ const routes = [
     path:"/POA",
     name:"POA",
     component: POA
+  },
+  {
+    path: "/Schedule",
+    name: "Schedule",
+    component: Schedule
+  },
+  {
+    path: "/IndEvent",
+    name: "IndEvent",
+    component: IndEvent
+  },
+  {
+    path: "/Feedback",
+    name: "Feedback",
+    component: Feedback
+  },
+  {
+    path: "/Reset",
+    name: "Reset",
+    component: Reset
   }
 ];
 
