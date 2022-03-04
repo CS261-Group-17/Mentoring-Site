@@ -8,7 +8,7 @@
     <div class="your-poa">
       <div class="list-tips">
         <div>Upcoming milestones:</div>
-        <div>Comoplete by:</div>
+        <div>Complete by:</div>
         <div>Time remaining:</div>
       </div>
       <Collapse :list="yourPOA" random="your-poa" />
@@ -24,7 +24,7 @@
     <div class="your-mentees-poa" v-for="(v, i) in yourMenteesPOA" :key="i">
       <div class="list-tips">
         <div>{{ v.name }}</div>
-        <div>Comoplete by:</div>
+        <div>Complete by:</div>
         <div>Time remaining:</div>
         <div class="view-full-poa">
           <router-link :to="v.jump">

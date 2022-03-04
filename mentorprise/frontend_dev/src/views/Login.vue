@@ -29,10 +29,11 @@
 
 export default {
   methods: {
-    submit(e) {
+    onSubmit(e) {
       e.preventDefault();
       let data = e.target.jsondata;
       console.log(data);
+      this.$router.push("Dashboard")
     },
   },
 };
@@ -72,7 +73,7 @@ export default {
 .form > input {
   margin-top: 30px;
   width: 300px;
-  color: #fff;
+  color: black;
 }
 .form-check {
   margin-top: 30px;

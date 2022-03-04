@@ -18,7 +18,7 @@
                 </ul>
             </div>
             <!-- <span class="endIcons"><fa icon="sort-down" size="2x"/></span> -->
-            <span class="endIcons"><fa icon="bell" size="2x"/></span>
+            <span class="endIcons" id="bell"><fa icon="bell" size="2x"/></span>
             <!-- <div class="dropdown">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     <fa icon="bell" size="2x"/>
@@ -49,6 +49,9 @@ export default {
         width: 7rem;
         float: left;
         display: inline;
+    }
+    #bell:hover {
+        color: grey;
     }
     .nav-link {
         color: whitesmoke;

@@ -4,8 +4,12 @@ import Dashboard from "../views/Dashboard.vue";
 import Profile from "../views/Profile.vue";
 import Register from "../views/Register.vue"
 import IndPOA from "../views/IndPOA.vue"
-import GroupEvents from "../views/GroupEvent.vue"
+import GroupEvents from "../views/GroupEvents.vue"
 import POA from "../views/POA.vue"
+import Schedule from "../views/Schedule.vue"
+import IndEvent from "../views/IndEvent.vue"
+import Feedback from "../views/Feedback.vue"
+import Reset from "../views/Reset.vue"
 
 const routes = [
   {
@@ -34,14 +38,34 @@ const routes = [
     component: IndPOA
   },
   {
-    path: "/GroupEvent",
-    name: "GroupEvent",
+    path: "/GroupEvents",
+    name: "GroupEvents",
     component: GroupEvents
   },
   {
     path:"/POA",
     name:"POA",
     component: POA
+  },
+  {
+    path: "/Schedule",
+    name: "Schedule",
+    component: Schedule
+  },
+  {
+    path: "/IndEvent",
+    name: "IndEvent",
+    component: IndEvent
+  },
+  {
+    path: "/Feedback",
+    name: "Feedback",
+    component: Feedback
+  },
+  {
+    path: "/Reset",
+    name: "Reset",
+    component: Reset
   }
 ];
 

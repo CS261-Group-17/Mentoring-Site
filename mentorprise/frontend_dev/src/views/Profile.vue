@@ -170,7 +170,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     #dangerZoneTitle {
         color: #FF4655;
     }
