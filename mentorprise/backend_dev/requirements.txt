@@ -1,0 +1,5 @@
+django
+djangorestframework
+flake8
+psycopg2-binary #psycopg2 cannot be successfully built
+pylint
