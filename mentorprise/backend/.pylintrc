@@ -1,7 +1,0 @@
-[MASTER]
-exclude =
-    __pycache__
-    static/
-    staticfiles/
-    media/
-    env/
