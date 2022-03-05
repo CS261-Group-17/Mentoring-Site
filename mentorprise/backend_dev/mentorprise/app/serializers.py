@@ -1,4 +1,3 @@
-from dataclasses import field
 from rest_framework import serializers
 from app.models import *
 
@@ -127,4 +126,3 @@ class MeetingRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingRequest
         fields = '__all__'
-
