@@ -16,13 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'profile']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'profile']
 
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
         user = User.objects.create(**validated_data)
         Profile.objects.create(user=user, **profile_data)
         return user
+
 
 # class MeetingWeaknessesSerializer(serializers.ModelSerializer):
 #     class Meta:
