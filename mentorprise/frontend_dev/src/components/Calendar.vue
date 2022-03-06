@@ -111,6 +111,7 @@
         padding: 1rem;
         float: left;
         width: 45%;
+        border-bottom: solid 20px #00001A;
     }
     .date {
         border-bottom: 2px solid #8FAAE3;

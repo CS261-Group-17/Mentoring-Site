@@ -14,6 +14,8 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li><router-link class="dropdown-item" to="/Profile">Profile</router-link></li>
                     <li><router-link class="dropdown-item" to="/Feedback">Feedback</router-link></li>
+                    <li><router-link class="dropdown-item" to="/tos">Terms of Service</router-link></li>
+                    <li><router-link class="dropdown-item" to="/privacy">Privacy</router-link></li>
                     <li><router-link class="dropdown-item" to="/">Sign out</router-link></li>
                 </ul>
             </div>
