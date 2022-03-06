@@ -106,12 +106,47 @@ def user_delete(request):
     user.delete()
     return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
     """
     An API endpoint to log out a user
-        - POST:     Log out a user
+        - GET:      Log out a user
     """
     request.user.auth_token.delete()
     return Response(status=status.HTTP_200_OK)
+
+
+
+##############
+### Topics ###
+##############
+
+@api_view(['GET', 'POST', 'DELETE'])
+def topics(request):
+    """
+    An API endpoint for topics of strengths/weaknesses
+        - GET:      Get the list of all topics of strengths/weaknesses
+        - POST:     Add a topic of strengths/weaknesses
+        - DELETE:   Delete a topic of strengths/weaknesses
+    """
+    if request.method == 'GET':
+        strength_weaknesses = StrengthWeakness.objects.all()
+        serializer = StrengthWeaknessSerializer(strength_weaknesses, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        # TODO: Add a note of who added it
+        serializer = StrengthWeaknessSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'sw_type' in request.data:
+        topics = StrengthWeakness.objects.filter(sw_type__exact=request.data.get('sw_type'))
+        serialized = None
+        for topic in topics:
+            serialized = StrengthWeaknessSerializer(topic)
+            topic.delete()
+        if serialized is not None:
+            return Response(serialized.data, status=status.HTTP_202_ACCEPTED)
+        return Response("Cannot delete non-existent topic", status=status.HTTP_400_BAD_REQUEST)

@@ -11,6 +11,11 @@ urlpatterns = [
     path('users/email/', views.user_email),
     path('users/password/', views.user_password),
     path('users/delete/', views.user_delete),
+
+    ##############
+    ### Topics ###
+    ##############
+    path('topics/', views.topics),
 ]
 
 
