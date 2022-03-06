@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import permission_classes
 
 from app.models import *
@@ -13,7 +13,8 @@ from app.serializers import *
 ### User ###
 ############
 
-@api_view(['GET'])                  # TODO: THIS SHOULD NOT BE IN PRODUCTION!
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
 def user_profile_list(request):
     """
     An API endpoint over all user profiles
@@ -38,7 +39,6 @@ def user_register(request):
         return Response(serialized.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
