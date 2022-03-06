@@ -1,12 +1,14 @@
+from rest_framework.authtoken.views import obtain_auth_token
 from django.urls import path
 from app import views
 
 urlpatterns = [
     path('users/profiles/', views.user_profile_list),
     path('users/register/', views.user_register),
-    path('users/login/', views.user_login),
+    path('users/login/', obtain_auth_token),
     path('users/logout/', views.user_logout),
     path('users/profile/', views.user_profile),
+    path('users/delete/', views.user_delete),
 ]
 
 
