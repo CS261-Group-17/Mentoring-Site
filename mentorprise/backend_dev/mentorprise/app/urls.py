@@ -8,6 +8,8 @@ urlpatterns = [
     path('users/login/', obtain_auth_token),
     path('users/logout/', views.user_logout),
     path('users/profile/', views.user_profile),
+    path('users/email/', views.user_email),
+    path('users/password/', views.user_password),
     path('users/delete/', views.user_delete),
 ]
 
