@@ -10,6 +10,8 @@ import Schedule from "../views/Schedule.vue"
 import IndEvent from "../views/IndEvent.vue"
 import Feedback from "../views/Feedback.vue"
 import Reset from "../views/Reset.vue"
+import Tos from "../views/TOS.vue"
+import Privacy from "../views/Privacy.vue"
 
 const routes = [
   {
@@ -66,7 +68,18 @@ const routes = [
     path: "/Reset",
     name: "Reset",
     component: Reset
+  },
+  {
+    path: "/tos",
+    name: "TOS",
+    component: Tos
+  },
+  {
+    path: "/privacy",
+    name: "Privacy",
+    component: Privacy
   }
+
 ];
 
 const router = createRouter({
