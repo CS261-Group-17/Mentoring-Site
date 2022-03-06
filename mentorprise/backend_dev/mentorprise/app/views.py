@@ -1,9 +1,7 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.decorators import permission_classes
+from rest_framework.response import Response
 
 from app.models import *
 from app.serializers import *
@@ -17,8 +15,8 @@ from app.serializers import *
 @permission_classes([IsAdminUser])
 def user_profile_list(request):
     """
-    An API endpoint over all user profiles
-        - GET:      Get the list of all user profiles
+    get:
+        Get the list of all user profiles.
     """
     if request.method == 'GET':
         user = User.objects.all().order_by('-first_name')
@@ -28,8 +26,8 @@ def user_profile_list(request):
 @api_view(['POST'])
 def user_register(request):
     """
-    An API endpoint to register a user account
-        - POST:     Register a user
+    post:
+        Register a user.
     """
     serialized = UserSerializer(data=request.data)
     if serialized.is_valid() and 'password' in request.data:
@@ -44,9 +42,11 @@ def user_register(request):
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     """
-    An API endpoint for a specific user's profile
-        - GET:      Get the contents of the user's profile
-        - PATCH:    Update the contents of the user's profile
+    get:
+        Get the contents of the user's profile.
+
+    patch:
+        Update the contents of the user's profile.
     """
     if request.method == 'GET':
         serializer = UserProfileSerializer(request.user)
@@ -62,9 +62,11 @@ def user_profile(request):
 @permission_classes([IsAuthenticated])
 def user_email(request):
     """
-    An API endpoint for a user's email.
-        - GET:      Return the user's email
-        - PATCH:    Update the user's email
+    get:
+        Return the user's email.
+
+    patch:
+        Update the user's email.
     """
     if request.method == 'GET':
         serializer = EmailSerializer(request.user)
@@ -80,8 +82,8 @@ def user_email(request):
 @permission_classes([IsAuthenticated])
 def user_password(request):
     """
-    An API endpoint for a user's password.
-        - PATCH:    Update the user's password
+    patch:
+        Update the user's password.
     """
     if 'password' in request.data:
         serialized = UserSerializer(data=request.user)
@@ -95,8 +97,8 @@ def user_password(request):
 @permission_classes([IsAuthenticated])
 def user_delete(request):
     """
-    An API endpoint to delete a specific user's account
-        - DELETE:   Delete a user account
+    delete:
+        Delete a user account.
     """
     try:
         user = User.objects.get(username__exact=request.user)
@@ -110,8 +112,8 @@ def user_delete(request):
 @permission_classes([IsAuthenticated])
 def user_logout(request):
     """
-    An API endpoint to log out a user
-        - GET:      Log out a user
+    get:
+        Log out a user.
     """
     request.user.auth_token.delete()
     return Response(status=status.HTTP_200_OK)
@@ -125,10 +127,14 @@ def user_logout(request):
 @api_view(['GET', 'POST', 'DELETE'])
 def topics(request):
     """
-    An API endpoint for topics of strengths/weaknesses
-        - GET:      Get the list of all topics of strengths/weaknesses
-        - POST:     Add a topic of strengths/weaknesses
-        - DELETE:   Delete a topic of strengths/weaknesses
+    get:
+        Get the list of all topics of strengths/weaknesses.
+
+    post:
+        Add a topic of strengths/weaknesses.
+
+    delete:
+        Delete a topic of strengths/weaknesses.
     """
     if request.method == 'GET':
         strength_weaknesses = StrengthWeakness.objects.all()
