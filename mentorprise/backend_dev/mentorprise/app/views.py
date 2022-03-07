@@ -137,14 +137,10 @@ def mentoring_mentees_list(request):
     get:
         Get the list of all the user's mentees.
     """
-    pairings = Pairing.objects.filter(mentor=request.user.id)
-    print(type(pairings), pairings)
+    pairings = Pairing.objects.filter(mentor=request.user.id).filter(
+                terminated=False).filter(in_proposal=False)
     mentee_ids = pairings.values_list('mentee', flat=True)
-    print(type(mentee_ids), mentee_ids)
     mentees = User.objects.filter(id__in=mentee_ids)
-    print(type(mentees), mentees)
-    for mentee in mentees:
-        print(mentee)
     serializer = UserSerializer(mentees, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -162,17 +158,14 @@ def mentoring_mentee(request):
         try:
             pairings = Pairing.objects.filter(mentor=request.user).filter(
                 terminated=False).filter(in_proposal=False)
-            pairing = pairings.get(mentee=request.data.get('mentee'))
+            mentee = User.objects.get(username__exact=request.data.get('mentee'))
+            pairing = pairings.get(mentee=mentee.id)
             if request.method == 'GET':
                 serializer = UserSerializer(pairing.mentee)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             elif request.method == 'DELETE':
                 # TODO: I do not know how to do this :kekw:
-                serializer = PairingSerializer(data={
-                    "mentee": pairing.mentee,
-                    "mentor": request.user,
-                    "terminated": True
-                }, partial=True)
+                serializer = PairingSerializer(pairing, data={"terminated": True}, partial=True)
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -191,28 +184,21 @@ def mentoring_mentor(request):
     delete:
         Terminate the relationship with the mentor
     """
-    if 'mentor' in request.data:
-        try:
-            pairings = Pairing.objects.filter(mentee=request.user).filter(
-                terminated=False).filter(in_proposal=False)
-            pairing = pairings.get(mentor=request.data.get('mentor'))
-            if request.method == 'GET':
-                serializer = UserSerializer(pairing.mentor)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            elif request.method == 'DELETE':
-                # TODO: I do not know how to do this :kekw:
-                serializer = PairingSerializer(data={
-                    "mentee": request.user,
-                    "mentor": pairing.mentor,
-                    "terminated": True
-                }, partial=True)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Pairing.DoesNotExist:
-            return Response("Pairing does not exist", status=status.HTTP_404_NOT_FOUND)
-    return Response("No mentor provided", status=status.HTTP_400_BAD_REQUEST)
+    try:
+        pairing = Pairing.objects.filter(mentee=request.user).filter(
+            terminated=False).filter(in_proposal=False).first()
+        if request.method == 'GET':
+            serializer = UserSerializer(pairing.mentor)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'DELETE':
+            # TODO: I do not know how to do this :kekw:
+            serializer = PairingSerializer(pairing, data={"terminated": True}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return Response("No mentor exists", status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -227,34 +213,29 @@ def mentoring_proposed_mentors(request):
         Decline a mentor's offer of mentoring
     """
     if request.method == 'GET':
-        return Response("API not yet implemented", status=status.HTTP_200_OK)
-
+        pairings = Pairing.objects.filter(mentee=request.user.id).filter(
+                    terminated=False).filter(in_proposal=True)
+        mentor_ids = pairings.values_list('mentor', flat=True)
+        mentors = User.objects.filter(id__in=mentor_ids)
+        serializer = UserSerializer(mentors, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     elif 'mentor' in request.data:
         pairings = Pairing.objects.filter(mentee=request.user).filter(
-            terminated=False).filter(in_proposal=False)
-        pairing = pairings.get(mentor=request.data.get('mentor'))
+            terminated=False).filter(in_proposal=True)
+        mentor = User.objects.get(username=request.data.get('mentor'))
+        pairing = pairings.get(mentor=mentor)                                   # TODO: Add error handling on all .gets()
         if request.method == 'POST':
-            # TODO: I do not know how to do this :kekw:
-            serializer = PairingSerializer(data={
-                "mentee": request.user,
-                "mentor": pairing.mentor,
-                "in_proposal": True
-            }, partial=True)
+            serializer = PairingSerializer(pairing, data={"in_proposal": False}, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif request.method == 'DELETE':
             # TODO: I do not know how to do this :kekw:
-            serializer = PairingSerializer(data={
-                "mentee": request.user,
-                "mentor": pairing.mentor,
-                "terminated": True
-            }, partial=True)
+            serializer = PairingSerializer(data={"terminated": True}, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
