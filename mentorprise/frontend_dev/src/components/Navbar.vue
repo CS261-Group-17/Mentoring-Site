@@ -14,11 +14,13 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li><router-link class="dropdown-item" to="/Profile">Profile</router-link></li>
                     <li><router-link class="dropdown-item" to="/Feedback">Feedback</router-link></li>
+                    <li><router-link class="dropdown-item" to="/tos">Terms of Service</router-link></li>
+                    <li><router-link class="dropdown-item" to="/privacy">Privacy</router-link></li>
                     <li><router-link class="dropdown-item" to="/">Sign out</router-link></li>
                 </ul>
             </div>
             <!-- <span class="endIcons"><fa icon="sort-down" size="2x"/></span> -->
-            <span class="endIcons"><fa icon="bell" size="2x"/></span>
+            <span class="endIcons" id="bell"><fa icon="bell" size="2x"/></span>
             <!-- <div class="dropdown">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     <fa icon="bell" size="2x"/>
@@ -49,6 +51,9 @@ export default {
         width: 7rem;
         float: left;
         display: inline;
+    }
+    #bell:hover {
+        color: grey;
     }
     .nav-link {
         color: whitesmoke;
