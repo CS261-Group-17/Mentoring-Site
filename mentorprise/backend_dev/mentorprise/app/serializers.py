@@ -1,10 +1,10 @@
+from rest_framework.fields import CurrentUserDefault
 from rest_framework import serializers
 from app.models import *
 
-class StrengthWeaknessSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StrengthWeakness
-        fields = '__all__'
+############
+### User ###
+############
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,6 +35,38 @@ class EmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email']
+
+##############
+### Topics ###
+##############
+
+class StrengthWeaknessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StrengthWeakness
+        fields = '__all__'
+
+#####################
+### Notifications ###
+#####################
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        exclude =['user']
+
+    def create(self, validated_data):
+        print(type(CurrentUserDefault()))
+        validated_data["user"] = self.context["request"].user
+        return super().create(validated_data)
+
+    # def create(self, user, validated_data):
+    #     return Notification.objects.create(user=user, **validated_data)
+
+# class NotificationReadSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Notification
+#         fields = 'is_read'
+
 
 # class MeetingWeaknessesSerializer(serializers.ModelSerializer):
 #     class Meta:
