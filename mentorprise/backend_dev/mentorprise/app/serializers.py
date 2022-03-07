@@ -1,4 +1,3 @@
-from rest_framework.fields import CurrentUserDefault
 from rest_framework import serializers
 from app.models import *
 
@@ -36,86 +35,40 @@ class EmailSerializer(serializers.ModelSerializer):
         model = User
         fields = ['email']
 
-##############
-### Topics ###
-##############
+# class PasswordResetSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PasswordRest
+#         fields = '__all__'
 
-class StrengthWeaknessSerializer(serializers.ModelSerializer):
+
+#################
+### Mentoring ###
+#################
+
+class PairingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StrengthWeakness
+        model = Pairing
         fields = '__all__'
 
-#####################
-### Notifications ###
-#####################
 
-class NotificationSerializer(serializers.ModelSerializer):
+################
+### Feedback ###
+################
+
+class SystemFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Notification
-        exclude =['user']
-
-    def create(self, validated_data):
-        print(type(CurrentUserDefault()))
-        validated_data["user"] = self.context["request"].user
-        return super().create(validated_data)
-
-    # def create(self, user, validated_data):
-    #     return Notification.objects.create(user=user, **validated_data)
-
-# class NotificationReadSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Notification
-#         fields = 'is_read'
-
-
-# class MeetingWeaknessesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MeetingWeaknesses
-#         fields = ['weakness_type']
-
-# class MeetingSerializer(serializers.ModelSerializer):
-#     weaknesses = MeetingWeaknessesSerializer(many=True)
-
-#     class Meta:
-#         model = Meeting
-#         fields = ['instructor', 'title', 'description', 'start_datetime', 'duration', 'cancelled', 'mentee', 'weaknesses']
-
-#     def create(self, validated_data):
-#         weakness_data = validated_data.pop('weaknesses')
-#         meeting = Meeting.objects.create(**validated_data)
-#         weakness_list = [MeetingWeaknesses(weakness_type=item['weakness_type'], event=meeting) for item in weakness_data]
-#         MeetingWeaknesses.objects.bulk_create(weakness_list)
-#         return meeting
-
-
-# class GroupEventWeaknessesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = GroupEventWeaknesses
-#         fields = ['weakness_type']
-
-# class GroupEventSerializer(serializers.ModelSerializer):
-#     weaknesses = GroupEventWeaknessesSerializer(many=True)
-
-#     class Meta:
-#         model = GroupEvent
-#         fields = ['instructor', 'title', 'description', 'start_datetime', 'duration', 'cancelled', 'event_type', 'capacity', 'weaknesses']
-
-#     def create(self, validated_data):
-#         weakness_data = validated_data.pop('weaknesses')
-#         group_event = GroupEvent.objects.create(**validated_data)
-#         weakness_list = [GroupEventWeaknesses(weakness_type=item['weakness_type'], event=group_event) for item in weakness_data]
-#         GroupEventWeaknesses.objects.bulk_create(weakness_list)
-#         return group_event
-
-# class AttendanceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Attendance
-#         fields = '__all__'
+        model = SystemFeedback
+        fields = '__all__'
 
 # class MeetingFeedbackSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = MeetingFeedback
-#         fields = '__all__'
+#         exclude = ['giver', 'meeting'] # fields = '__all__'
+
+#     def create(self, validated_data):
+#         validated_data["giver"] = self.context["request"].user
+#         validated_data["meeting"] = self.context["meeting"]
+#         return super().create(validated_data)
 
 # class GroupEventFeedbackSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -141,25 +94,29 @@ class NotificationSerializer(serializers.ModelSerializer):
 #         ImprovedWeaknesses.objects.bulk_create(weakness_list)
 #         return feedback
 
-# class SystemFeedbackSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = SystemFeedback
-#         fields = '__all__'
 
-# class MilestoneSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Milestone
-#         fields = '__all__'
+################
+### Meetings ###
+################
 
-# class PasswordResetSerializer(serializers.ModelSerializer):
+# class MeetingWeaknessesSerializer(serializers.ModelSerializer):
 #     class Meta:
-#         model = PasswordRest
-#         fields = '__all__'
+#         model = MeetingWeaknesses
+#         fields = ['weakness_type']
 
-# class PairingSerializer(serializers.ModelSerializer):
+# class MeetingSerializer(serializers.ModelSerializer):
+#     weaknesses = MeetingWeaknessesSerializer(many=True)
+
 #     class Meta:
-#         model = Pairing
-#         fields = '__all__'
+#         model = Meeting
+#         fields = ['instructor', 'title', 'description', 'start_datetime', 'duration', 'cancelled', 'mentee', 'weaknesses']
+
+#     def create(self, validated_data):
+#         weakness_data = validated_data.pop('weaknesses')
+#         meeting = Meeting.objects.create(**validated_data)
+#         weakness_list = [MeetingWeaknesses(weakness_type=item['weakness_type'], event=meeting) for item in weakness_data]
+#         MeetingWeaknesses.objects.bulk_create(weakness_list)
+#         return meeting
 
 # class MeetingProposalSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -170,3 +127,71 @@ class NotificationSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = MeetingRequest
 #         fields = '__all__'
+
+
+####################
+### Group events ###
+####################
+
+# class GroupEventWeaknessesSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = GroupEventWeaknesses
+#         fields = ['weakness_type']
+
+# class GroupEventSerializer(serializers.ModelSerializer):
+#     weaknesses = GroupEventWeaknessesSerializer(many=True)
+
+#     class Meta:
+#         model = GroupEvent
+#         fields = ['instructor', 'title', 'description', 'start_datetime', 'duration', 'cancelled', 'event_type', 'capacity', 'weaknesses']
+
+#     def create(self, validated_data):
+#         weakness_data = validated_data.pop('weaknesses')
+#         group_event = GroupEvent.objects.create(**validated_data)
+#         weakness_list = [GroupEventWeaknesses(weakness_type=item['weakness_type'], event=group_event) for item in weakness_data]
+#         GroupEventWeaknesses.objects.bulk_create(weakness_list)
+#         return group_event
+
+# class AttendanceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Attendance
+#         fields = '__all__'
+
+
+#######################
+### Plans of action ###
+#######################
+
+# class MilestoneSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Milestone
+#         fields = '__all__'
+
+
+##############
+### Topics ###
+##############
+
+class StrengthWeaknessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StrengthWeakness
+        fields = '__all__'
+
+
+#####################
+### Notifications ###
+#####################
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        exclude = ['user']
+
+    def create(self, validated_data):
+        validated_data["user"] = self.context["request"].user
+        return super().create(validated_data)
+
+# class NotificationReadSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Notification
+#         fields = 'is_read'

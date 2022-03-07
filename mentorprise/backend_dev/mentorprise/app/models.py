@@ -1,8 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+##############
+### Topics ###
+##############
+
+
 class StrengthWeakness(models.Model):
     sw_type = models.TextField()
+
+############
+### User ###
+############
 
 
 class Profile(models.Model):
@@ -22,6 +31,16 @@ class StrengthWeaknessList(models.Model):
     sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE)
 
 
+class PasswordReset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_datetime = models.DateTimeField()
+    code = models.IntegerField()
+
+#####################
+### Notifications ###
+#####################
+
+
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     creation_datetime = models.DateTimeField()
@@ -29,6 +48,10 @@ class Notification(models.Model):
     description = models.TextField()
     is_read = models.BooleanField()
     link = models.TextField()
+
+##############
+### Events ###
+##############
 
 
 class Event(models.Model):
@@ -76,6 +99,35 @@ class Attendance(models.Model):
     attended = models.BooleanField()
 
 
+class MeetingProposal(models.Model):
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_meeting")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_meeting")
+    description = models.TextField()
+    is_rejected = models.BooleanField()
+    rejection_note = models.TextField()
+    time1 = models.DateTimeField()
+    duration1 = models.IntegerField()
+    time2 = models.DateTimeField()
+    duration2 = models.IntegerField()
+    time3 = models.DateTimeField()
+    duration3 = models.IntegerField()
+
+
+class MeetingRequest(models.Model):
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_meeting_request")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_meeting_request")
+    proposal = models.OneToOneField(
+        MeetingProposal, null=True, blank=True, on_delete=models.SET_NULL)
+
+
+################
+### Feedback ###
+################
+
 class Feedback(models.Model):
     rating = models.IntegerField()
     positives = models.TextField()
@@ -112,6 +164,10 @@ class SystemFeedback(models.Model):
     title = models.TextField()
     description = models.TextField()
 
+#######################
+### Plans of action ###
+#######################
+
 
 class Milestone(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -122,11 +178,9 @@ class Milestone(models.Model):
     deadline = models.DateTimeField()
     urgency = models.SmallIntegerField()
 
-
-class PasswordReset(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    start_datetime = models.DateTimeField()
-    code = models.IntegerField()
+#################
+### Mentoring ###
+#################
 
 
 class Pairing(models.Model):
@@ -136,32 +190,3 @@ class Pairing(models.Model):
         User, on_delete=models.CASCADE, related_name="mentee_pairing")
     in_proposal = models.BooleanField()
     terminated = models.BooleanField()
-
-
-class MeetingProposal(models.Model):
-    mentor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="mentor_meeting")
-    mentee = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="mentee_meeting")
-    description = models.TextField()
-    is_rejected = models.BooleanField()
-    rejection_note = models.TextField()
-    time1 = models.DateTimeField()
-    duration1 = models.IntegerField()
-    time2 = models.DateTimeField()
-    duration2 = models.IntegerField()
-    time3 = models.DateTimeField()
-    duration3 = models.IntegerField()
-
-class MeetingRequest(models.Model):
-    mentor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="mentor_meeting_request")
-    mentee = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="mentee_meeting_request")
-    proposal = models.OneToOneField(MeetingProposal, null=True, blank=True, on_delete=models.SET_NULL)
-
-
-# class Authenticator(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     # might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
-#     auth_token = models.IntegerField()
