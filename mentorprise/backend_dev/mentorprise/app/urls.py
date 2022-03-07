@@ -18,11 +18,11 @@ urlpatterns = [
     #################
     ### Mentoring ###
     #################
-    # path('mentoring/mentees/', views.mentoring_mentees_list),
-    # path('mentoring/mentee/', views.mentoring_mentee),
-    # path('mentoring/mentor/', views.mentoring_mentor),
-    # path('mentoring/proposed_mentors/', views.mentoring_proposed_mentors),
-    # path('mentoring/potential_mentees/', views.mentoring_potential_mentees_list),
+    path('mentoring/mentees/', views.mentoring_mentees_list),
+    path('mentoring/mentee/', views.mentoring_mentee),
+    path('mentoring/mentor/', views.mentoring_mentor),
+    path('mentoring/proposed_mentors/', views.mentoring_proposed_mentors),
+    path('mentoring/potential_mentees/', views.mentoring_potential_mentees_list),
 
     ################
     ### Feedback ###

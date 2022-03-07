@@ -1,3 +1,4 @@
+from curses import meta
 from functools import partial
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -13,16 +14,16 @@ from app.serializers import *
 ############
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated]) # @permission_classes([IsAdminUser])
 def user_profile_list(request):
     """
     get:
         Get the list of all user profiles.
     """
-    if request.method == 'GET':
-        user = User.objects.all().order_by('-first_name')
-        serializer = UserSerializer(user, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    user = User.objects.all().order_by('-first_name')
+    serializer = UserSerializer(user, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 def user_register(request):
@@ -36,7 +37,8 @@ def user_register(request):
         user.set_password(request.data.get('password'))
         user.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer._errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
@@ -51,11 +53,13 @@ def user_profile(request):
         serializer = UserProfileSerializer(request.user)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
     elif request.method == 'PATCH':
-        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        serializer = UserProfileSerializer(
+            request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
@@ -76,6 +80,7 @@ def user_email(request):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def user_password(request):
@@ -85,11 +90,14 @@ def user_password(request):
     """
     if 'password' in request.data:
         serializer = UserSerializer(data=request.user)
-        user = serializer.save() # TODO: This might need an is_valid() check?
-        user.set_password(request.data.get('password'))
-        user.save()
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        if serializer.is_valid():
+            user = serializer.save()
+            user.set_password(request.data.get('password'))
+            user.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response("No new password provided", status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
@@ -101,10 +109,11 @@ def user_delete(request):
     try:
         user = User.objects.get(username__exact=request.user)
     except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response("User does not exist", status=status.HTTP_404_NOT_FOUND)
     serializer = UserSerializer(user)
     user.delete()
     return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -120,57 +129,186 @@ def user_logout(request):
 ### Mentoring ###
 #################
 
+
 @api_view(['GET'])
-def mentoring_mentees_list(request, user_id):
+@permission_classes([IsAuthenticated])
+def mentoring_mentees_list(request):
     """
     get:
         Get the list of all the user's mentees.
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    pairings = Pairing.objects.filter(mentor=request.user.id)
+    print(type(pairings), pairings)
+    mentee_ids = pairings.values_list('mentee', flat=True)
+    print(type(mentee_ids), mentee_ids)
+    mentees = User.objects.filter(id__in=mentee_ids)
+    print(type(mentees), mentees)
+    for mentee in mentees:
+        print(mentee)
+    serializer = UserSerializer(mentees, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['GET', 'DELETE'])
-def mentoring_mentee(request, user_id, mentee_id):
+@permission_classes([IsAuthenticated])
+def mentoring_mentee(request):
     """
-    An API endpoint for a specific user's mentee
-        - GET:      Get the profile of the mentee
-        - DELETE:   Terminate the relationship with the mentee
+    get:
+        Get the profile of the mentee.
+    delete:
+        Terminate the relationship with the mentee.
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    if 'mentee' in request.data:
+        try:
+            pairings = Pairing.objects.filter(mentor=request.user).filter(
+                terminated=False).filter(in_proposal=False)
+            pairing = pairings.get(mentee=request.data.get('mentee'))
+            if request.method == 'GET':
+                serializer = UserSerializer(pairing.mentee)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            elif request.method == 'DELETE':
+                # TODO: I do not know how to do this :kekw:
+                serializer = PairingSerializer(data={
+                    "mentee": pairing.mentee,
+                    "mentor": request.user,
+                    "terminated": True
+                }, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Pairing.DoesNotExist:
+            return Response("Pairing does not exist", status=status.HTTP_404_NOT_FOUND)
+    return Response("No mentee provided", status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'DELETE'])
-def mentoring_mentor(request, user_id):
+@permission_classes([IsAuthenticated])
+def mentoring_mentor(request):
     """
-    An API endpoint for a specific user's mentor
-        - GET:      Get the profile of the mentor
-        - DELETE:   Terminate the relationship with the mentor
+    get:
+        Get the profile of the mentor
+    delete:
+        Terminate the relationship with the mentor
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    if 'mentor' in request.data:
+        try:
+            pairings = Pairing.objects.filter(mentee=request.user).filter(
+                terminated=False).filter(in_proposal=False)
+            pairing = pairings.get(mentor=request.data.get('mentor'))
+            if request.method == 'GET':
+                serializer = UserSerializer(pairing.mentor)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            elif request.method == 'DELETE':
+                # TODO: I do not know how to do this :kekw:
+                serializer = PairingSerializer(data={
+                    "mentee": request.user,
+                    "mentor": pairing.mentor,
+                    "terminated": True
+                }, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Pairing.DoesNotExist:
+            return Response("Pairing does not exist", status=status.HTTP_404_NOT_FOUND)
+    return Response("No mentor provided", status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'POST', 'DELETE'])
-def mentoring_proposed_mentors(request, user_id):
+@permission_classes([IsAuthenticated])
+def mentoring_proposed_mentors(request):
     """
-    An API endpoint for a specific user's mentor
-        - GET:      Get the list of mentors offering mentorship
-        - POST:     Accept a mentor's offer of mentoring
-        - DELETE:   Decline a mentor's offer of mentoring
+    get:
+        Get the list of mentors offering mentorship
+    post:
+        Accept a mentor's offer of mentoring
+    delete:
+        Decline a mentor's offer of mentoring
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    if request.method == 'GET':
+        return Response("API not yet implemented", status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-def mentoring_potential_mentees_list(request, user_id):
+    elif 'mentor' in request.data:
+        pairings = Pairing.objects.filter(mentee=request.user).filter(
+            terminated=False).filter(in_proposal=False)
+        pairing = pairings.get(mentor=request.data.get('mentor'))
+        if request.method == 'POST':
+            # TODO: I do not know how to do this :kekw:
+            serializer = PairingSerializer(data={
+                "mentee": request.user,
+                "mentor": pairing.mentor,
+                "in_proposal": True
+            }, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'DELETE':
+            # TODO: I do not know how to do this :kekw:
+            serializer = PairingSerializer(data={
+                "mentee": request.user,
+                "mentor": pairing.mentor,
+                "terminated": True
+            }, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def mentoring_potential_mentees_list(request):
     """
-    An API endpoint for an ordered list of the users a specific user might
-    mentor
-        - GET:      Get the ordered list of possible mentees
+    get:
+        Get the ordered list of possible mentees
+    post:
+        Offer mentorship to a mentee
     """
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    if request.method == 'GET':
+        # TODO: This is our mentor matching bit
+        possible_mentees = User.objects.order_by('-first_name')
+        serializer = UserSerializer(possible_mentees, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        if 'mentee' in request.data:
+            try:
+                mentee = User.objects.get(username__exact=request.data.get('mentee'))
+                serializer = PairingSerializer(data={
+                    "mentee": mentee.id,
+                    "mentor": request.user.id,
+                    "in_proposal": True,
+                    "terminated": False
+                })
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except User.DoesNotExist:
+                return Response("User does not exist", status=status.HTTP_404_NOT_FOUND)
+        return Response("No mentee provided", status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ##############
 ### Topics ###
 ##############
 
-@api_view(['GET', 'POST', 'DELETE']) # TODO: Add a note of who added it
+@api_view(['GET', 'POST', 'DELETE'])  # TODO: Add a note of who added it
 @permission_classes([IsAuthenticated])
 def topics(request):
     """
@@ -192,7 +330,8 @@ def topics(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE' and 'sw_type' in request.data:
-        topics = StrengthWeakness.objects.filter(sw_type__exact=request.data.get('sw_type'))
+        topics = StrengthWeakness.objects.filter(
+            sw_type__exact=request.data.get('sw_type'))
         serializer = None
         for topic in topics:
             serializer = StrengthWeaknessSerializer(topic)
@@ -205,7 +344,8 @@ def topics(request):
 ### Notifications ###
 #####################
 
-@api_view(['GET', 'PATCH', 'POST']) # TODO: REMOVE POST, ONLY FOR DEBUGGING!
+
+@api_view(['GET', 'PATCH', 'POST'])  # TODO: REMOVE POST, ONLY FOR DEBUGGING!
 @permission_classes([IsAuthenticated])
 def notifications_list(request):
     """
@@ -221,7 +361,8 @@ def notifications_list(request):
     elif request.method == 'PATCH':
         return Response("API not yet implemented", status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        serializer = NotificationSerializer(data=request.data, context={'request': request})
+        serializer = NotificationSerializer(
+            data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -232,7 +373,7 @@ def notifications_list(request):
 ### Feedback ###
 ################
 
-@api_view(['GET', 'POST']) # TODO: Make get viewable only by an admin
+@api_view(['GET', 'POST'])  # TODO: Make get viewable only by an admin
 def feedback_system(request):
     """
     get:
@@ -291,7 +432,7 @@ def feedback_system(request):
 #                     return Response(serializer.data, status=status.HTTP_201_CREATED)
 #                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 #         except Meeting.DoesNotExist:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+#             return Response("Meeting does not exist", status=status.HTTP_404_NOT_FOUND)
 #     return Response("No meeting provided", status=status.HTTP_400_BAD_REQUEST)
 
 
