@@ -171,8 +171,7 @@
       </div>
       <div>
         <div class="part_title">
-          <!-- pro icon can't use  https://fontawesome.com/icons/message-lines?s=thin -->
-          <fa icon="message-lines" />
+          <fa icon="fa-solid fa-bars-progress" />
           Requests
         </div>
 
@@ -254,7 +253,6 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import Collapse from "../components/Collapse.vue";
-
 export default {
   name: "Dashboard",
   components: {
@@ -332,7 +330,6 @@ export default {
       this.request_mentor_choose = false;
       this.wait_request_mentor_choose = true;
       this.wait_request_mentor_choose_data = name;
-
       setTimeout(() => {
         this.mentor_data = [
           {

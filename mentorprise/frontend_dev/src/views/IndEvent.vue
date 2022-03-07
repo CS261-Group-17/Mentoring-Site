@@ -193,7 +193,7 @@
             class="input_blue"
             type="text"
             style="border-radius: 6px; margin-top: 10px"
-            placeholder="Give yout feedback here"
+            placeholder="Give your feedback here"
           />
           <button style="float: left" class="white_btn">Submit feedback</button>
         </div>
