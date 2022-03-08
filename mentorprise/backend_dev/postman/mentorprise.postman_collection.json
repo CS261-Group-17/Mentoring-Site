@@ -6,35 +6,25 @@
 	},
 	"item": [
 		{
-			"name": "users",
+			"name": "topics",
 			"item": [
 				{
-					"name": "Get all profiles",
+					"name": "Add topic #1",
 					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
 								{
-									"key": "value",
-									"value": "{{Auth token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
-									"type": "string"
+									"key": "sw_type",
+									"value": "Django",
+									"type": "text"
 								}
 							]
 						},
-						"method": "GET",
-						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/users/profiles/",
+							"raw": "http://127.0.0.1:8000/api/topics/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -45,23 +35,120 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"users",
-								"profiles",
+								"topics",
 								""
 							]
 						},
-						"description": "Get the profiles of all users"
+						"description": "Add a strength/weakness topic"
 					},
 					"response": []
 				},
 				{
-					"name": "Register new user",
+					"name": "Add topic #2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sw_type",
+									"value": "VueJS",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/topics/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"topics",
+								""
+							]
+						},
+						"description": "Add a strength/weakness topic"
+					},
+					"response": []
+				},
+				{
+					"name": "Get topics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/topics/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"topics",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete topic",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sw_type",
+									"value": "Django",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/topics/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"topics",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Register user #1",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"egoodman3141@gmail.com\",\r\n    \"username\":\"EdmundGoodman\",\r\n    \"first_name\":\"Edmund\",\r\n    \"last_name\":\"Goodman\",\r\n    \"password\":\"ThereOnceWasAShip\",\r\n    \"profile\":{\r\n        \"biography\":\"I am a student\",\r\n        \"business_area\":\"Computer Science\",\r\n        \"job_title\":\"Student\",\r\n        \"mentor\":false\r\n    }\r\n}",
+							"raw": "{\r\n    \"email\":\"egoodman3141@gmail.com\",\r\n    \"username\":\"EdmundGoodman\",\r\n    \"first_name\":\"Edmund\",\r\n    \"last_name\":\"Goodman\",\r\n    \"password\":\"12345\",\r\n    \"profile\":{\r\n        \"biography\":\"I am a student who wants to mentor\",\r\n        \"business_area\":\"Computer Science\",\r\n        \"job_title\":\"Student\",\r\n        \"mentor\":true,\r\n        \"time_available\":1.0\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,33 +177,13 @@
 					"response": []
 				},
 				{
-					"name": "Register another new user",
+					"name": "Register user #2",
 					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{Auth token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"foobar@gmail.com\",\r\n    \"username\":\"FooBar\",\r\n    \"first_name\":\"Foo\",\r\n    \"last_name\":\"Bar\",\r\n    \"password\":\"ThisIsATest\",\r\n    \"profile\":{\r\n        \"biography\":\"I am a student\",\r\n        \"business_area\":\"Computer Science\",\r\n        \"job_title\":\"Student\",\r\n        \"mentor\":false\r\n    }\r\n}",
+							"raw": "{\r\n    \"email\":\"foobar@gmail.com\",\r\n    \"username\":\"FooBar\",\r\n    \"first_name\":\"Foo\",\r\n    \"last_name\":\"Bar\",\r\n    \"password\":\"12345\",\r\n    \"profile\":{\r\n        \"biography\":\"I am a student who wants to be mentored\",\r\n        \"business_area\":\"Computer Science\",\r\n        \"job_title\":\"Student\",\r\n        \"mentor\":false,\r\n        \"time_available\":1.0\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -139,12 +206,42 @@
 								"register",
 								""
 							]
-						}
+						},
+						"description": "Register a new user"
 					},
 					"response": []
 				},
 				{
-					"name": "Log in (get token)",
+					"name": "Get all users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/profiles/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"profiles",
+								""
+							]
+						},
+						"description": "Get the profiles of all users"
+					},
+					"response": []
+				},
+				{
+					"name": "Log in user #1 (get token)",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -158,7 +255,47 @@
 								},
 								{
 									"key": "password",
-									"value": "ThereOnceWasAShip",
+									"value": "12345",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Log in user #2 (get token)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Foobar",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
 									"type": "text"
 								}
 							]
@@ -425,113 +562,13 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "topics",
-			"item": [
-				{
-					"name": "Add new topic",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "sw_type",
-									"value": "Django",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/topics/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"topics",
-								""
-							]
-						},
-						"description": "Add a strength/weakness topic"
-					},
-					"response": []
-				},
-				{
-					"name": "Get topics",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/topics/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"topics",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete topic",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "sw_type",
-									"value": "Django",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/topics/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"topics",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "notifications",
 			"item": [
 				{
-					"name": "http://127.0.0.1:8000/api/users/notifications/",
+					"name": "Get user notifications",
 					"request": {
 						"auth": {
 							"type": "apikey",
@@ -575,7 +612,7 @@
 					"response": []
 				},
 				{
-					"name": "http://127.0.0.1:8000/api/notifications/",
+					"name": "Add notification",
 					"request": {
 						"auth": {
 							"type": "apikey",
@@ -652,9 +689,403 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update user notification",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is an updated description",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/notifications/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
+		},
+		{
+			"name": "mentoring",
+			"item": [
+				{
+					"name": "Get possible user mentees",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/potential_mentees",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"potential_mentees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Propose mentorship",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentee",
+									"value": "FooBar",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/potential_mentees/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"potential_mentees",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get proposed mentors",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/proposed_mentors/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"proposed_mentors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept mentorship",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentor",
+									"value": "EdmundGoodman",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/proposed_mentors/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"proposed_mentors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get mentor",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/mentor/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"mentor",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user mentees",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/mentees/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"mentees",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Terminate mentee",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentee",
+									"value": "FooBar",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/mentoring/mentee/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"mentoring",
+								"mentee",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "feedback",
@@ -732,164 +1163,33 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "mentoring",
-			"item": [
-				{
-					"name": "http://127.0.0.1:8000/api/mentees",
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{Auth token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/mentoring/mentees",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"mentoring",
-								"mentees"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "http://127.0.0.1:8000/api/mentoring/proposed_mentors",
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{Auth token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/mentoring/potential_mentees",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"mentoring",
-								"potential_mentees"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "http://127.0.0.1:8000/api/mentoring/potential_mentees",
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{Auth token}}",
-									"type": "string"
-								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								},
-								{
-									"key": "in",
-									"value": "header",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "mentee",
-									"value": "FooBar",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/mentoring/potential_mentees/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"mentoring",
-								"potential_mentees",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{Auth token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "d0391621-ccb1-4871-addc-1ed2d9abf66d",
 				"type": "text/javascript",
 				"exec": [
 					"const moment = require('moment');",
@@ -900,7 +1200,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "7035fc76-62c4-4b01-8206-10a65fefe2f8",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -910,10 +1209,13 @@
 	],
 	"variable": [
 		{
-			"id": "e0989cb3-2cea-4182-ae87-bf242bc6c2db",
 			"key": "Auth token",
-			"value": ""
+			"value": "FooBar",
+			"disabled": true
+		},
+		{
+			"key": "Auth token",
+			"value": "EdmundGoodman"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

@@ -60,15 +60,15 @@ class SystemFeedbackSerializer(serializers.ModelSerializer):
         model = SystemFeedback
         fields = '__all__'
 
-# class MeetingFeedbackSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MeetingFeedback
-#         exclude = ['giver', 'meeting'] # fields = '__all__'
+class MeetingFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MeetingFeedback
+        exclude = ['giver', 'meeting'] # fields = '__all__'
 
-#     def create(self, validated_data):
-#         validated_data["giver"] = self.context["request"].user
-#         validated_data["meeting"] = self.context["meeting"]
-#         return super().create(validated_data)
+    def create(self, validated_data):
+        validated_data["giver"] = self.context["request"].user
+        validated_data["meeting"] = self.context["meeting"]
+        return super().create(validated_data)
 
 # class GroupEventFeedbackSerializer(serializers.ModelSerializer):
 #     class Meta:

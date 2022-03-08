@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 
 class StrengthWeakness(models.Model):
-    sw_type = models.TextField()
+    sw_type = models.TextField(unique=True)
 
 ############
 ### User ###
@@ -22,7 +22,9 @@ class Profile(models.Model):
     # if null the user is not an expert.
     expert_at = models.ForeignKey(
         StrengthWeakness, models.SET_NULL, null=True, blank=True)
-    mentor = models.BooleanField()
+    mentor = models.BooleanField(default=False)
+    mentee = models.BooleanField(default=True)
+    time_available = models.FloatField()
 
 
 class StrengthWeaknessList(models.Model):
@@ -46,7 +48,7 @@ class Notification(models.Model):
     creation_datetime = models.DateTimeField()
     title = models.TextField()
     description = models.TextField()
-    is_read = models.BooleanField()
+    is_read = models.BooleanField(default=False)
     link = models.TextField()
 
 ##############
@@ -148,7 +150,7 @@ class GroupEventFeedback(Feedback):
 
 
 class GeneralFeedback(Feedback):
-    creation_datetime = models.DateTimeField()
+    creation_datetime = models.DateTimeField() # TODO: What is this?
     mentor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_received_feedback")
 
