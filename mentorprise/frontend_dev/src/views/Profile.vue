@@ -79,7 +79,7 @@
                 options: {}
             }
         },
-        created() {
+        async created() {
             // ran when page loaded
             let splitURL = document.URL.split("?")
             let failed = true
@@ -98,13 +98,13 @@
                 method: "GET",
                 headers: {
                     "Content-type": "application/json",
-                    "authorisation": "token "+this.token
+                    "Authorization": "Token "+this.token
                 }
             })
 
             const status = await res.json()
             if(status.profile != undefined) {
-                
+                alert("pain you are here")
             }  
             else {
                 this.$router.push("/")

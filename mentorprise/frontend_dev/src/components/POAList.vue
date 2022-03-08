@@ -4,10 +4,33 @@
             <p class="poaTitle">{{poa.title}}</p>
             <p class="poaDate">{{dateToString(poa.deadline)}}</p>
             <p class="poaTimeLeft">{{calculateTimeLeft(poa.deadline)}}</p>
-            <button class="poaEdit"><fa icon="pencil" size="1x"/>&nbsp;Edit</button>
+            <button class="poaEdit" @click="editMileStone(poa.id, true)"><fa icon="pencil" size="1x"/>&nbsp;Edit</button>
+            <transition name="fade" appear>
+                <div class="modal-overlay" v-if="checkToShow(poa.id)" @click="editMileStone(poa.id, false)"></div>
+            </transition>
+            <transition name="slide" appear>
+                <div class="modal" v-if="checkToShow(poa.id)">
+                    <h1>Edit Milestone</h1>
+                    <label for="title">Title:&nbsp;</label>
+                    <input :id="'title' + poa.id" name="title" :value="poa.title"/>
+                    <p id="descLabel">Description: </p>
+                    <textarea :id="'desc' + poa.id" name="desc" rows=3 cols= 40 v-model="poa.description"></textarea>
+                    <br>
+                    <label for="chooseDate">Deadline:&nbsp;</label>
+                    <input :id="'chooseDate' + poa.id" name="chooseDate" type="datetime-local" :min="setMin()" :value="poa.deadline" />
+                    <br><br>
+                    <button class="btn btn-primary" type="button" @click="submitEdits(poa.id)">
+                        Submit Form
+                    </button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-danger" type="button" @click="editMileStone(poa.id, false)">
+                        Close Form
+                    </button>
+                </div>
+            </transition>
             <button @click="this.$emit('complete-milestone', poa.id)" class="poaComplete">Complete</button>
             <br>
-            <p class="poaUndertext">{{poa.desc}}</p>
+            <p class="poaUndertext">{{poa.description}}</p>
         </li>
     </ul>
 </template>
@@ -18,35 +41,97 @@ export default {
   props: {
       poaList: Array
   },
-  components: {},
-  methods: {
-      calculateTimeLeft(deadline) {
-          let today = new Date();
-          let ourDate = new Date(deadline);
-          if(today > ourDate) {
-              let diff = today.getTime() - ourDate.getTime();
-              let days = Math.ceil(diff / (1000*3600*24))
-              return days + " days late"
-          }
-          else if(today == ourDate) {
-              return "Due today"
-          }
-          else {
-              let diff = ourDate.getTime() - today.getTime();
-              let days = Math.ceil(diff / (1000*3600*24))
-              return days + " days left"
-          }
-      },
-      dateToString(ourDate) {
-          let dateDate = new Date(ourDate);
-          return dateDate.toString().substring(4, 15)
+  data() {
+      return {
+          showModal: []
       }
   },
-  emits: ['complete-milestone'],
+  created() {
+      for(let i=0;i<this.poaList.length;i++) {
+          this.showModal.push(false)
+      }
+  },
+  components: {},
+  methods: {
+        setMin() {
+            // need it in YYYY-MM-DDThh:mm:ss
+            let now = new Date()
+            let currentMonth = now.getMonth()+1
+            if(currentMonth < 10) {
+                currentMonth = "0" + currentMonth
+            }
+            return now.getFullYear()+"-"+currentMonth+"-"+now.getDate()+"T"+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
+        },
+        // setCurrent(currentDate) {
+        //     let currentMonth = currentDate.getMonth()+1
+        //     if(currentMonth < 10) {
+        //         currentMonth = "0" + currentMonth
+        //     }
+        //     return currentDate.getFullYear()+"-"+currentMonth+"-"+currentDate.getDate()+"T"+currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds()
+        // },
+        calculateTimeLeft(deadline) {
+            let today = new Date();
+            let ourDate = new Date(deadline);
+            if(today > ourDate) {
+                let diff = today.getTime() - ourDate.getTime();
+                let days = Math.ceil(diff / (1000*3600*24))
+                return days + " days late"
+            }
+            else if(today == ourDate) {
+                return "Due today"
+            }
+            else {
+                let diff = ourDate.getTime() - today.getTime();
+                let days = Math.ceil(diff / (1000*3600*24))
+                return days + " days left"
+            }
+        },
+        dateToString(ourDate) {
+            let dateDate = new Date(ourDate);
+            return dateDate.toString().substring(4, 15)
+        },
+        checkToShow(id) {
+            for(let i=0;i<this.showModal.length;i++) {
+                if(this.poaList[i].id == id) {
+                    return this.showModal[i]
+                }
+            }
+            return false
+        },
+        editMileStone(id, newVal) {
+            this.showModal = []
+            for(let i=0;i<this.poaList.length;i++) {
+                    this.showModal.push(false)
+            }
+            for(let i=0;i<this.showModal.length;i++) {
+                    if(this.poaList[i].id == id) {
+                    this.showModal[i] = newVal
+                    //alert(this.showModal[i])
+                }
+            }
+        },
+        submitEdits(id) {
+            this.$emit("edit-milestone", id, document.getElementById("title"+id).value, document.getElementById("desc"+id).value, document.getElementById("chooseDate"+id).value)
+            for(let i=0;i<this.showModal.length;i++) {
+                if(this.poaList[i].id == id) {
+                    this.showModal[i] = false
+                    return null
+                }
+            }
+        }
+  },
+  emits: ['complete-milestone', "edit-milestone"],
 }
 </script>
 
 <style scoped>
+    input, textarea {
+        border: solid black 3px;
+        font-size: medium;
+    }
+    #descLabel {
+        margin-bottom: 0;
+    }
     .milestone {
         border: 5px solid #110F32;
         border-collapse: collapse;
@@ -80,6 +165,14 @@ export default {
         width: 5rem;
         height: 2rem;
     }
+    .poaComplete:hover {
+        color: #00001A;
+        background-color: white;
+    }
+    .poaEdit:hover {
+        color: #00001A;
+        background-color: #243B6F;
+    }
     .poaEdit {
         float: right;
         background-color: #00001A;
@@ -88,5 +181,50 @@ export default {
         width: 4rem;
         height: 2rem;
         font-weight: bold;
+    }
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index: 98;
+        background-color: rgba(0,0,0,0.3);
+    }
+    .modal {
+        position: fixed;
+        display: block;
+        max-height: 80%;
+        height: auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 99;
+        width: 100%;
+        max-width: 600px;
+        background-color: #FFF;
+        font-style: normal;
+        font-size: medium;
+        color: black;
+        border-radius: 16px;
+        padding: 25px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 0.5s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+
+    .slide-enter-active,
+    .slide-leave-active {
+        transition: transform .5s;
+    }
+
+    .slide-enter,
+    .slide-leave-to {
+        transform: translateY(-50%) translateX(100vw);
     }
 </style>
