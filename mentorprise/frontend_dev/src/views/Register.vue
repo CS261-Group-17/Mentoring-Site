@@ -6,19 +6,32 @@
             <div class="title">Register</div>
 
             <form class="form" @submit="submit">
-                <input type="text" name="FirstName" placeholder="First Name" />
-                <input type="text" name="LastName" placeholder="Last Name" />
-                <input type="email" name="Email" placeholder="Email" />
-                <input type="email" name="ConfirmEmail" placeholder="Confirm Email" />
-                <input type="password" name="Password" placeholder="Password" />
+                <input type="text" id="first" name="FirstName" placeholder="First Name" />
+                <input type="text" id="last" name="LastName" placeholder="Last Name" />
+                <input type="text" id="user" name="UserName" placeholder="Username" />
+                <input type="email" id="email" name="Email" placeholder="Email" />
+                <input type="email" id="confirmEmail" name="ConfirmEmail" placeholder="Confirm Email" />
+                <input type="password" id="password" name="Password" placeholder="Password" />
                 <input
+                id="confirmPassword"
                 type="password"
                 name="ConfirmPassword"
                 placeholder="Confirm Password"
-                />
+                /><br><br>
+                <select name="businessArea" id="businessArea">
+                    <option disabled selected value="">Business Area</option>
+                    <option value="dev">Software Development</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="retail">Retail</option>
+                    <option value="manage">Management</option>
+                </select>
+                <input type="text" id="jobTitle" name="jobTitle" placeholder="Job Title" />
+                <br><br><textarea id="bio" rows=4 cols=38 placeholder="Tell us here about you..."></textarea>
+
+
 
                 <div class="form-check">
-                <input type="checkbox" value="keep" name="keepLogin" checked />
+                <input id="keepLogin" type="checkbox" value="keep" name="keepLogin" checked />
                 <label for="keepLogin"> Keep me logged in </label>
                 </div>
 
@@ -36,33 +49,88 @@
 </template>
 <script>
 export default {
-  methods: {
-    submit(e) {
-      e.preventDefault();
-      let data = e.target.jsondata;
-      console.log(data);
+    methods: {
+        async submit(e) {
+            e.preventDefault();
+            if(document.getElementById("email").value != document.getElementById("confirmEmail").value) {
+                alert("Emails are not matching")
+            }
+            else if(document.getElementById("password").value != document.getElementById("confirmPassword").value) {
+                alert("Passwords are not matching")
+            }
+            else {
+                let register = {
+                    email: document.getElementById("email").value,
+                    username: document.getElementById("user").value,
+                    first_name: document.getElementById("first").value,
+                    last_name: document.getElementById("last").value,
+                    password: document.getElementById("password").value,
+                    //keepLogin: document.getElementById("keepLogin").value,
+                    profile: {
+                        biography: document.getElementById("bio").value,
+                        business_area: document.getElementById("businessArea").value,
+                        job_title: document.getElementById("jobTitle").value,
+                        mentor: false
+                    }
+                }
+                if(register.profile.businessArea == "") {
+                    alert("Need to select a business area")
+                }
+                else if(register.username == "") {
+                    alert("Username cannot be empty")
+                }
+                else if(register.first_name == "") {
+                    alert("First name cannot be empty")
+                }
+                else if(register.last_name == "") {
+                    alert("Last name cannot be empty")
+                }
+                else if(register.profile.job_title == "") {
+                    alert("Job title cannot be empty")
+                }
+                else {
+                    const res = await fetch("backend/api/users/register/", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify(register)
+                    })
+                    const status = await res.json()
+                    if(status.email != undefined) {
+                        //register worked
+                        const loginRes = await fetch("backend/api/users/login/", {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                username: register.username,
+                                password: register.password
+                            })
+                        })
+                        const loginStatus = await loginRes.json()
+                        if(loginStatus.token != null) {
+                            this.$router.push("Dashboard?t="+loginStatus.token)
+                        }
+                        else {
+                            alert("Unexpected failure")
+                        }
+                    }
+                    else {
+                        alert("Failed to login")
+                    }
+                }
+            }
+        },
     },
-  },
-  beforeMount() {
-    Object.defineProperty(HTMLFormElement.prototype, "jsondata", {
-      get() {
-        const jsondata = {};
-        const formdata = new FormData(this);
-        formdata.forEach((value, key) => {
-          if (!jsondata[key]) {
-            jsondata[key] =
-              formdata.getAll(key).length > 1
-                ? formdata.getAll(key)
-                : formdata.get(key);
-          }
-        });
-        return jsondata;
-      },
-    });
-  },
 };
 </script>
 <style scoped>
+    #businessArea {
+        width:18.9rem;
+        height: 1.7rem;
+    }
     .register {
         display: inline-block;
         justify-content: center;
@@ -71,6 +139,7 @@ export default {
         margin-top: 3%;
         padding-left: 1rem;
         padding-right: 1rem;
+        border-bottom: solid 2rem #00001A;
     }
     .cont-register {
         text-align: center;
@@ -96,7 +165,7 @@ export default {
     .form > input {
         margin-top: 30px;
         width: 300px;
-        color: #fff;
+        color: black;
     }
     .form-check {
         margin-top: 30px;

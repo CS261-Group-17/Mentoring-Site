@@ -12,9 +12,13 @@
         <input type="text" id="lname" name="lname" size="40" :value="profile.last"><br>
         <!-- <label for="email">Email</label><br>
         <input type="email" id="email" name="email" size="40" :value="profile.email"><br> -->
-        <br><p>Email: {{ profile.email }}</p>
+        <p>Email: {{ profile.email }}</p>
+        <p>Username: {{ profile.username }}</p>
         <label for="jobTitle">Job Title</label><br>
         <input type="text" id="jobTitle" name="jobTitle" size="40" :value="profile.jobTitle"><br>
+        <label for="bio">Bio</label><br>
+        <textarea v-model="profile.biography" id="bio" rows=4 cols=50>
+        </textarea>
         <button class="saveChanges">Save Changes</button>
         <br><br>
 
@@ -80,7 +84,9 @@
                 first: "Ben",
                 last:  "Lewis",
                 email: "u2003284@warwick.live.ac.uk",
+                username: "BennyBoy",
                 jobTitle: "Student",
+                biography: "I am in pain",
                 isMentor: true,
                 businessArea_type: "dev",
                 password: "CompSci",
@@ -171,6 +177,13 @@
 </script>
 
 <style scoped>
+    #bio {
+        background-color: #00001A;
+        color: #424E76;
+        border: #424E76 solid 0.2rem;
+        margin-top: 0.2rem;
+        font-weight: bold;
+    }
     #dangerZoneTitle {
         color: #FF4655;
     }
@@ -205,6 +218,11 @@
         width: 7rem;
         height: 2.5rem;
     }
+    .saveChanges:hover {
+        color: #00001A;
+        border: solid #00001A;
+        background-color: white;
+    }
     #newStrength, #newWeakness {
         color: #243B6F;
         background-color: #00001A;
@@ -223,5 +241,11 @@
         color: #FF4655;
         border: solid 2px #FF4655;
         border-radius: 10px;
+    }
+    .dangerButton:hover {
+        color: #00001A;
+        background-color: #FF4655;
+        border: solid 2px #00001A;
+        font-weight: 500;
     }
 </style>

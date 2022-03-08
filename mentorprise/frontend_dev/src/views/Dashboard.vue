@@ -261,6 +261,7 @@ export default {
   },
   data() {
     return {
+      token: {},
       requests_data: [
         {
           content: "Bill has requested a meeting",
@@ -324,6 +325,22 @@ export default {
       wait_request_mentor_choose: false,
       wait_request_mentor_choose_data: "",
     };
+  },
+  created() {
+    //alert(document.URL.split("?")[1])
+    let splitURL = document.URL.split("?")
+    let failed = true
+    if(splitURL.length > 1) {
+      let urlParams = new URLSearchParams("?" + splitURL[1])
+      if(urlParams.has("t")) {
+        this.token = urlParams.get("t")
+        //alert(this.token)
+        failed = false
+      }
+    }
+    if(failed) {
+      this.$router.push("/")
+    }
   },
   methods: {
     request(name) {

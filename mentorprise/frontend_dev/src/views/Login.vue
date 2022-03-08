@@ -6,8 +6,8 @@
         <div class="header">Login</div>
 
         <form @submit="onSubmit" class="form">
-          <input type="email" name="Email" placeholder="Email" />
-          <input type="password" name="Password" placeholder="Password" />
+          <input id="username" type="text" name="Username" placeholder="Username" />
+          <input id="password" type="password" name="Password" placeholder="Password" />
 
           <div class="form-check">
             <input type="checkbox" value="keep" name="keepLogin" checked />
@@ -29,11 +29,33 @@
 
 export default {
   methods: {
-    onSubmit(e) {
+    async onSubmit(e) {
       e.preventDefault();
-      let data = e.target.jsondata;
-      console.log(data);
-      this.$router.push("Dashboard")
+      let login = {"username": document.getElementById("username").value, "password": document.getElementById("password").value}
+      
+      const res = await fetch("backend/api/users/login/", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify(login)
+      })
+
+      const status = await res.json()
+      if(status.token != null) {
+        //alert("Login successful")
+        this.$router.push("Dashboard?t="+status.token)
+      }
+      else if(status.non_field_errors != null) {
+        alert(status.non_field_errors)
+      }
+      else {
+        alert("Please try logging in again")
+      }
+      //alert(status.token + ", " + status.non_field_errors)
+      //let userToken = status.token
+      //alert(username + ", " + password)
+      //this.$router.push("Dashboard")
     },
   },
 };

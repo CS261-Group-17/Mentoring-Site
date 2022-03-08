@@ -22,7 +22,7 @@ const routes = [
   {
     path: "/Dashboard",
     name: "Dashboard",
-    component: Dashboard
+    component: Dashboard,
   },
   {
     path: "/Profile",
