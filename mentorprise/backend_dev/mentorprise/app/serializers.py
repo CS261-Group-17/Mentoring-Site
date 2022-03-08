@@ -30,10 +30,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ['profile']
 
-class EmailSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email']
+        fields = ['username', 'first_name', 'last_name', 'email']
 
 # class PasswordResetSerializer(serializers.ModelSerializer):
 #     class Meta:

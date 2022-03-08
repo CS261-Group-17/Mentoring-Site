@@ -72,25 +72,24 @@ def user_profile(request):
 
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
-def user_email(request):
+def user_account(request):
     """
     get:
-        Return the user's email.
+        Return the user's account.
     patch:
-        Update the user's email.
+        Update the user's account.
     """
     if request.method == 'GET':
         # Get the email of the user who sent the request
-        serializer = EmailSerializer(request.user)
+        serializer = AccountSerializer(request.user)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
     elif request.method == 'PATCH':
         # Try to update the email of the user who sent the request
-        serializer = EmailSerializer(request.user, data=request.data)
+        serializer = AccountSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
