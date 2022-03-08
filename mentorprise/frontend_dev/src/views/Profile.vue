@@ -74,12 +74,42 @@
         },
         data() {
             return {
+                token: {},
                 profile : {},
                 options: {}
             }
         },
         created() {
             // ran when page loaded
+            let splitURL = document.URL.split("?")
+            let failed = true
+            if(splitURL.length > 1) {
+            let urlParams = new URLSearchParams("?" + splitURL[1])
+            if(urlParams.has("t")) {
+                this.token = urlParams.get("t")
+                //alert(this.token)
+                failed = false
+            }
+            }
+            if(failed) {
+                this.$router.push("/")
+            }
+            const res = await fetch("backend/api/users/profile/", {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    "authorisation": "token "+this.token
+                }
+            })
+
+            const status = await res.json()
+            if(status.profile != undefined) {
+                
+            }  
+            else {
+                this.$router.push("/")
+            }
+
             this.profile = {
                 first: "Ben",
                 last:  "Lewis",
