@@ -411,6 +411,51 @@
 					"response": []
 				},
 				{
+					"name": "Get user account",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete user",
 					"request": {
 						"auth": {
@@ -456,7 +501,7 @@
 					"response": []
 				},
 				{
-					"name": "Update user",
+					"name": "Update account",
 					"request": {
 						"auth": {
 							"type": "apikey",
@@ -491,7 +536,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/users/profile/",
+							"raw": "http://127.0.0.1:8000/api/users/account/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -503,7 +548,7 @@
 							"path": [
 								"api",
 								"users",
-								"profile",
+								"account",
 								""
 							]
 						}
@@ -511,10 +556,7 @@
 					"response": []
 				},
 				{
-					"name": "Get email",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Get user strengths",
 					"request": {
 						"auth": {
 							"type": "apikey",
@@ -538,12 +580,8 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/users/email/",
+							"raw": "http://127.0.0.1:8000/api/users/strengths/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -555,7 +593,272 @@
 							"path": [
 								"api",
 								"users",
-								"email",
+								"strengths",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user weaknesses",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/weaknesses/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"weaknesses",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a strength",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sw_type",
+									"value": "Django",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/strengths/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"strengths",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a weaknesses",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sw_type",
+									"value": "Django",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/weaknesses/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"weaknesses",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a strength",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sw_type",
+									"value": "Django",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/strengths/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"strengths",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a weakness",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sw_type",
+									"value": "Django",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/users/weaknesses/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"users",
+								"weaknesses",
 								""
 							]
 						}

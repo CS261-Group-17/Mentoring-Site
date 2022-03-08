@@ -1,6 +1,15 @@
 from rest_framework import serializers
 from app.models import *
 
+##############
+### Topics ###
+##############
+
+class StrengthWeaknessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StrengthWeakness
+        fields = '__all__'
+
 ############
 ### User ###
 ############
@@ -34,6 +43,26 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+
+class StrengthListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StrengthList
+        exclude = ['user', 'sw_type']
+
+    def create(self, validated_data):
+        validated_data["user"] = self.context["request"].user
+        validated_data["sw_type"] = self.context["sw_type"]
+        return super().create(validated_data)
+
+class WeaknessListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeaknessList
+        exclude = ['user', 'sw_type']
+
+    def create(self, validated_data):
+        validated_data["user"] = self.context["request"].user
+        validated_data["sw_type"] = self.context["sw_type"]
+        return super().create(validated_data)
 
 # class PasswordResetSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -170,17 +199,6 @@ class MilestoneSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
-
-
-##############
-### Topics ###
-##############
-
-class StrengthWeaknessSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StrengthWeakness
-        fields = '__all__'
-
 
 #####################
 ### Notifications ###

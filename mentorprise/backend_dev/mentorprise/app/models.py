@@ -27,9 +27,12 @@ class Profile(models.Model):
     time_available = models.FloatField()
 
 
-class StrengthWeaknessList(models.Model):
+class StrengthList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_strength = models.BooleanField()
+    sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE)
+
+class WeaknessList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE)
 
 
