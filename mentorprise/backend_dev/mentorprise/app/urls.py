@@ -29,6 +29,7 @@ urlpatterns = [
     ################
     path('feedback/system/', views.feedback_system),
     # path('feedback/meetings/', views.feedback_meeting),
+    # path('feedback/group_events/', views.feedback_group_event),
     # path('feedback/mentor/', views.feedback_mentor),
 
     ################
@@ -49,8 +50,8 @@ urlpatterns = [
     #######################
     ### Plans of action ###
     #######################
-    # path('plans_of_action/', views.plan_of_action_list),
-    # path('plans_of_action/milestones/', views.plan_of_action_milestone),
+    path('plans_of_action/', views.plan_of_action_list),
+    path('plans_of_action/milestones/', views.plan_of_action_milestone),
 
     ##############
     ### Topics ###
