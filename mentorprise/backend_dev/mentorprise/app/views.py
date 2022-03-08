@@ -46,7 +46,6 @@ def user_register(request):
 
 
 @api_view(['GET', 'PATCH'])
-# TODO: Allow changing of strengths and weaknesses
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     """
@@ -72,24 +71,117 @@ def user_profile(request):
 
 @api_view(['GET', 'PATCH'])
 @permission_classes([IsAuthenticated])
-def user_email(request):
+def user_account(request):
     """
     get:
-        Return the user's email.
+        Return the user's account.
     patch:
-        Update the user's email.
+        Update the user's account.
     """
     if request.method == 'GET':
-        # Get the email of the user who sent the request
-        serializer = EmailSerializer(request.user)
+        # Get the account of the user who sent the request
+        serializer = AccountSerializer(request.user)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
     elif request.method == 'PATCH':
-        # Try to update the email of the user who sent the request
-        serializer = EmailSerializer(request.user, data=request.data)
+        # Try to update the account of the user who sent the request
+        serializer = AccountSerializer(
+            request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def user_strengths(request):
+    """
+    get:
+        Get all the user's strengths
+    post:
+        Add a user strength
+    delete:
+        Delete a user strength
+    """
+    if request.method == 'GET':
+        # Serialize then return all the user's strengths
+        strengths_weaknesses = StrengthList.objects.filter(user=request.user)
+        # Get a list of ids for the sw_types in these pairings
+        sw_type_ids = strengths_weaknesses.values_list('sw_type', flat=True)
+        # Get a list of users who are sw_types of the user who sent the request,
+        # then serialize them and return them
+        sw_types = StrengthWeakness.objects.filter(id__in=sw_type_ids)
+        serializer = StrengthWeaknessSerializer(sw_types, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST' and 'sw_type' in request.data:
+        try:
+            # Get the strength with the name
+            strength = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            # Add the user as having that strength
+            serializer = StrengthListSerializer(
+                data=request.data, context={'request': request, 'sw_type': strength})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except StrengthList.DoesNotExist:
+            return Response("Cannot add non-existent strength", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'sw_type' in request.data:
+        try:
+            # Get the strength with the name
+            strength = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            user_strength = StrengthList.objects.filter(user=request.user).get(sw_type=strength)
+            serializer = StrengthListSerializer(user_strength)
+            user_strength.delete()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except StrengthList.DoesNotExist:
+            return Response("Cannot delete non-existent strength", status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def user_weaknesses(request):
+    """
+    get:
+        Get all the user's weaknesses
+    post:
+        Add a user weakness
+    delete:
+        Delete a user weakness
+    """
+    if request.method == 'GET':
+        # Serialize then return all the user's strengths
+        strengths_weaknesses = WeaknessList.objects.filter(user=request.user)
+        # Get a list of ids for the sw_types in these pairings
+        sw_type_ids = strengths_weaknesses.values_list('sw_type', flat=True)
+        # Get a list of users who are sw_types of the user who sent the request,
+        # then serialize them and return them
+        sw_types = StrengthWeakness.objects.filter(id__in=sw_type_ids)
+        serializer = StrengthWeaknessSerializer(sw_types, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST' and 'sw_type' in request.data:
+        try:
+            # Get the weakness with the name
+            weakness = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            # Add the user as having that weakness
+            serializer = WeaknessListSerializer(
+                data=request.data, context={'request': request, 'sw_type': weakness})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except WeaknessList.DoesNotExist:
+            return Response("Cannot add non-existent weakness", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'sw_type' in request.data:
+        try:
+            # Get the weakness with the name
+            weakness = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            user_weakness = WeaknessList.objects.filter(user=request.user).get(sw_type=weakness)
+            serializer = WeaknessListSerializer(user_weakness)
+            user_weakness.delete()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except WeaknessList.DoesNotExist:
+            return Response("Cannot delete non-existent weakness", status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['PATCH'])
@@ -150,7 +242,7 @@ def mentoring_mentees_list(request):
     # Get the pairings with the mentees of the user who sent the request by
     # filtering over all pairings for the one who made the request, then
     # excluding terminated and unapproved relationships
-    pairings = Pairing.objects.filter(mentor=request.user.id).filter(
+    pairings = Pairing.objects.filter(mentor=request.user.id).filter(   # TODO: Omit user.id
         terminated=False).filter(in_proposal=False)
     # Get a list of ids for the mentees in these pairings
     mentee_ids = pairings.values_list('mentee', flat=True)
@@ -256,7 +348,8 @@ def mentoring_proposed_mentors(request):
     elif 'mentor' in request.data:
         try:
             # Get the user object for the specified mentor
-            mentor = User.objects.get(username__exact=request.data.get('mentor'))
+            mentor = User.objects.get(
+                username__exact=request.data.get('mentor'))
             # Get the pairing with the specificed mentor
             pairing = pairings.get(mentor=mentor)
             if request.method == 'POST':
@@ -277,6 +370,7 @@ def mentoring_proposed_mentors(request):
         except (User.DoesNotExist, Pairing.DoesNotExist):
             return Response("Mentee or pairing does not exist", status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def mentoring_potential_mentees_list(request):
@@ -288,7 +382,8 @@ def mentoring_potential_mentees_list(request):
     """
     if request.method == 'GET':
         # TODO: This is our mentor matching bit
-        possible_mentees = User.objects.order_by('-first_name') #.filter(mentee=False) # filter not self etc
+        # .filter(mentee=False) # filter not self etc
+        possible_mentees = User.objects.order_by('-first_name')
         serializer = UserSerializer(possible_mentees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
@@ -431,7 +526,8 @@ def topics(request):
     elif request.method == 'DELETE' and 'sw_type' in request.data:
         # Get the topic by its name if it exists, and delete it
         try:
-            topic = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            topic = StrengthWeakness.objects.get(
+                sw_type__exact=request.data.get('sw_type'))
             serializer = StrengthWeaknessSerializer(topic)
             topic.delete()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -469,8 +565,10 @@ def notifications_list(request):
         # Get a notification by its id, then update it with the request data
         # if it is valid
         try:
-            notification = Notification.objects.get(id=request.data.get('notification'))
-            serializer = NotificationSerializer(notification, data=request.data, partial=True)
+            notification = Notification.objects.get(
+                id=request.data.get('notification'))
+            serializer = NotificationSerializer(
+                notification, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -480,7 +578,8 @@ def notifications_list(request):
     elif request.method == 'DELETE' and 'notification' in request.data:
         # Get a notification by its id, then delete it if it is valid
         try:
-            notification = Notification.objects.get(id=request.data.get('notification'))
+            notification = Notification.objects.get(
+                id=request.data.get('notification'))
             serializer = NotificationSerializer(notification)
             notification.delete()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -509,10 +608,12 @@ def plan_of_action_list(request):
         milestones.
     """
     # Get all the user's milestone objects ordered by creation date
-    milestones = Milestone.objects.filter(user=request.user).order_by('-creation_datetime')
+    milestones = Milestone.objects.filter(
+        user=request.user).order_by('-creation_datetime')
     # Serialize and return all the user milestones
     serializer = MilestoneSerializer(milestones, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -547,8 +648,10 @@ def plan_of_action_milestone(request):
         # Get a milestone by its id, then update it with the request data
         # if it is valid
         try:
-            notification = Milestone.objects.get(id=request.data.get('milestone'))
-            serializer = MilestoneSerializer(notification, data=request.data, partial=True)
+            notification = Milestone.objects.get(
+                id=request.data.get('milestone'))
+            serializer = MilestoneSerializer(
+                notification, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
