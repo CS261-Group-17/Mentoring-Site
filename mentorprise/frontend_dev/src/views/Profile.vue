@@ -81,6 +81,7 @@
         },
         async created() {
             // ran when page loaded
+            // currently not implemented gives a 500 error
             let splitURL = document.URL.split("?")
             let failed = true
             if(splitURL.length > 1) {

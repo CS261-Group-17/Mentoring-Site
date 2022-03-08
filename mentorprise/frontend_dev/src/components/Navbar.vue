@@ -20,7 +20,12 @@
                 </ul>
             </div>
             <!-- <span class="endIcons"><fa icon="sort-down" size="2x"/></span> -->
-            <span class="endIcons" id="bell"><fa icon="bell" size="2x"/></span>
+            <div class="dropdown">
+                <button id="bellButton" data-bs-toggle="dropdown" aria_expanded=false><fa id="bell" icon="bell" size="2x"/></button>
+                <ul class="dropdown-menu" aria-labelledby="bellButton">
+                    <li v-for="notif in this.notifications" :key="notif.id"><span class="dropdown-item">{{ notif.message }}</span></li>
+                </ul>
+            </div>
             <!-- <div class="dropdown">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     <fa icon="bell" size="2x"/>
@@ -40,6 +45,37 @@ export default {
     name: "Navbar",
     props: {
         token: String
+    },
+    data() {
+        return {
+            notifications: []
+        }
+    },
+    methods: {
+        async getNotifications() {
+            const res = await fetch("backend/api/notifications/", {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Token "+this.token
+                }
+            })
+
+            const notifs= await res.json()
+            this.notifications = notifs
+            if(this.notifications.length == 0)
+            {
+                this.notifications = [{
+                    id: 1,
+                    message: "No notifications"
+                }]
+            }
+            //console.log(this.notifications[0].message)
+            return this.notifications
+        }
+    },
+    created() {
+        this.notifications = this.getNotifications();
     }
 }
 </script>
@@ -93,5 +129,13 @@ export default {
         padding-top: 1.8rem;
         padding-right: 0.4rem;
         padding-left: 0.4rem;
+    }
+    button {
+        height: 3rem;
+    }
+    #bellButton {
+        background-color: #0A102C;
+        border: solid 2px #0A102C;
+        color: white;
     }
 </style>

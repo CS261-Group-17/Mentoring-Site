@@ -11,7 +11,7 @@
         </div>
         <div class="part_content">
           <div class="part_connections_item">
-            <template v-if="mentor_data.length != 0">
+            <template v-if="this.mentor_data.length != 0">
               <div
                 class="part_connections_item_title"
                 style="display: flex; justify-content: space-between"
@@ -27,11 +27,11 @@
               <template v-if="!wait_request_mentor_choose">
                 <template v-if="!request_mentor_choose">
                   <div class="part_connections_item_select">
-                    <div class="title">You don't have a mentor yet!</div>
-                    <div style="display: flex">
+                    <div v-if="hasNoMentor()" class="title">You don't have a mentor yet!</div>
+                    <div v-if="hasNoMentor()" style="display: flex">
                       <div style="padding-right: 30px; color: #8faae3">
-                        Benefits of having a mentor here,maybe say if you click
-                        on the button then you will be paired with a mentor
+                        Mentoring can help build up skills and develop life long relationships,
+                        click here to find a mentor
                       </div>
                       <div>
                         <button
@@ -171,7 +171,7 @@
       </div>
       <div>
         <div class="part_title">
-          <fa icon="fa-solid fa-bars-progress" />
+          <fa icon="circle-exclamation" />
           Requests
         </div>
 
@@ -194,7 +194,7 @@
             <fa icon="clock" />
             Today
           </span>
-          <router-link to="/Schedule">
+          <router-link :to="'/Schedule?t='+this.token">
             <button class="part_title_button">View full schedule</button>
           </router-link>
         </div>
@@ -222,7 +222,7 @@
         <div class="part_title">
           <span>
             <fa icon="flag" />
-            Milestiones
+            Milestones
           </span>
 
           <span>
@@ -233,7 +233,7 @@
         </div>
 
         <div
-          v-for="(v, i) in milestiones_data"
+          v-for="(v, i) in milestones_data"
           :key="i"
           class="milestones_item"
         >
@@ -293,7 +293,7 @@ export default {
           bg_color: "#160046",
         },
       ],
-      milestiones_data: [
+      milestones_data: [
         {
           title: "You",
           content: "Learn Python",
@@ -356,6 +356,9 @@ export default {
         ];
       }, 2000);
     },
+    hasNoMentor() {
+      return this.mentor_data.length == 0
+    },
   },
 };
 </script>
@@ -414,6 +417,11 @@ export default {
   padding: 6px;
   font-size: 12px;
   transform: translateY(-12px);
+}
+.part_title_button:hover {
+  color: #00001a;
+  background-color: white;
+  border: solid 2px #00001a;
 }
 .today_item {
   border: 1px solid #1e2d50;
@@ -500,6 +508,10 @@ export default {
   cursor: pointer;
   background-color: #00001a;
   border-radius: 0 6px 6px 0;
+}
+.request_button:hover {
+  color: #00001a;
+  background-color: #2b3e75;
 }
 .part_connections_item_select {
   background-color: #0a102c;
