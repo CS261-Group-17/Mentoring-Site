@@ -443,7 +443,7 @@ def topics(request):
 #####################
 
 
-@api_view(['GET', 'PATCH', 'POST'])  # TODO: REMOVE POST, ONLY FOR DEBUGGING!
+@api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def notifications_list(request):
     """
@@ -457,18 +457,6 @@ def notifications_list(request):
         notifications = Notification.objects.filter(user__exact=request.user)
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'PATCH' and 'id' in request.data:
-        # Get a notification by its id, then update it with the request data
-        # if it is valid
-        try:
-            notification = Notification.objects.get(id=request.data.get('id'))
-            serializer = NotificationSerializer(notification, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Notification.DoesNotExist:
-            return Response("Cannot update non-existent notification", status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'POST':
         # Create a new notification with the request data
         serializer = NotificationSerializer(
@@ -477,7 +465,32 @@ def notifications_list(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PATCH' and 'notification' in request.data:
+        # Get a notification by its id, then update it with the request data
+        # if it is valid
+        try:
+            notification = Notification.objects.get(id=request.data.get('notification'))
+            serializer = NotificationSerializer(notification, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Notification.DoesNotExist:
+            return Response("Cannot update non-existent notification", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'notification' in request.data:
+        # Get a notification by its id, then delete it if it is valid
+        try:
+            notification = Notification.objects.get(id=request.data.get('notification'))
+            serializer = NotificationSerializer(notification)
+            notification.delete()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except Notification.DoesNotExist:
+            return Response("Cannot delete non-existent notification", status=status.HTTP_400_BAD_REQUEST)
 
+
+################
+### Meetings ###
+################
 
 ####################
 ### Group events ###
@@ -487,6 +500,67 @@ def notifications_list(request):
 ### Plans of action ###
 #######################
 
-################
-### Meetings ###
-################
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def plan_of_action_list(request):
+    """
+    get:
+        Get the contents of the user's plan of action; a list of all their
+        milestones.
+    """
+    # Get all the user's milestone objects ordered by creation date
+    milestones = Milestone.objects.filter(user=request.user).order_by('-creation_datetime')
+    # Serialize and return all the user milestones
+    serializer = MilestoneSerializer(milestones, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def plan_of_action_milestone(request):
+    """
+    get:
+        Get the contents of the milestone.
+    post:
+        Add a milestone to the user's plan of action.
+    patch:
+        Modify a user's milestone, including marking it as complete.
+    delete:
+        Delete a user's milestone.
+    """
+    if request.method == 'GET' and 'milestone' in request.data:
+        try:
+            # Serialize then return the milestone with the specified id
+            milestone = Milestone.objects.get(id=request.data.get('milestone'))
+            serializer = MilestoneSerializer(milestone)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Milestone.DoesNotExist:
+            return Response("Milestone does not exist", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'POST':
+        # Create a new milestone with the request data
+        serializer = MilestoneSerializer(
+            data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PATCH' and 'milestone' in request.data:
+        # Get a milestone by its id, then update it with the request data
+        # if it is valid
+        try:
+            notification = Milestone.objects.get(id=request.data.get('milestone'))
+            serializer = MilestoneSerializer(notification, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Milestone.DoesNotExist:
+            return Response("Cannot update non-existent milestone", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'milestone' in request.data:
+        # Get a notification by its id, then delete it if it is valid
+        try:
+            milestone = Milestone.objects.get(id=request.data.get('milestone'))
+            serializer = MilestoneSerializer(milestone)
+            milestone.delete()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except Milestone.DoesNotExist:
+            return Response("Cannot delete non-existent milestone", status=status.HTTP_400_BAD_REQUEST)

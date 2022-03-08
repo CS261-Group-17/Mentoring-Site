@@ -50,8 +50,8 @@ urlpatterns = [
     #######################
     ### Plans of action ###
     #######################
-    # path('plans_of_action/', views.plan_of_action_list),
-    # path('plans_of_action/milestones/', views.plan_of_action_milestone),
+    path('plans_of_action/', views.plan_of_action_list),
+    path('plans_of_action/milestones/', views.plan_of_action_milestone),
 
     ##############
     ### Topics ###

@@ -162,10 +162,14 @@ class MeetingFeedbackSerializer(serializers.ModelSerializer):
 ### Plans of action ###
 #######################
 
-# class MilestoneSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Milestone
-#         fields = '__all__'
+class MilestoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Milestone
+        exclude = ['user']
+
+    def create(self, validated_data):
+        validated_data["user"] = self.context["request"].user
+        return super().create(validated_data)
 
 
 ##############

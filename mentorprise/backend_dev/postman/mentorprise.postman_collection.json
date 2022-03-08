@@ -699,7 +699,7 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "id",
+									"key": "notification",
 									"value": "1",
 									"type": "text"
 								},
@@ -1157,6 +1157,290 @@
 								"api",
 								"feedback",
 								"system",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "plans_of_action",
+			"item": [
+				{
+					"name": "Get plan of action",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/plans_of_action/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"plans_of_action",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add milestone #1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "This is a title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a description",
+									"type": "text"
+								},
+								{
+									"key": "complete",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "creation_datetime",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "deadline",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "urgency",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/plans_of_action/milestones/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"plans_of_action",
+								"milestones",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add milestone #2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "This is another title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is another description",
+									"type": "text"
+								},
+								{
+									"key": "complete",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "creation_datetime",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "deadline",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "urgency",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/plans_of_action/milestones/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"plans_of_action",
+								"milestones",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete milestone #1",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "milestone",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "complete",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/plans_of_action/milestones/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"plans_of_action",
+								"milestones",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete milestone #1",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "milestone",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/plans_of_action/milestones/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"plans_of_action",
+								"milestones",
 								""
 							]
 						}
