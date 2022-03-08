@@ -3,19 +3,19 @@
         <img id="logo" src="../assets/logo.png" alt="Logo">
         <span>
             <ul id="navcontent">
-                <li class="nav-item"><router-link class="nav-link" to="/Dashboard">Dashboard</router-link></li>
-                <li class="nav-item"><router-link class="nav-link" to="/POA">Plans Of Action</router-link></li>
-                <li class="nav-item"><router-link class="nav-link" to="/Schedule">Schedule</router-link></li>
-                <li class="nav-item"><router-link class="nav-link" to="/GroupEvents">Group Events</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" :to="'/Dashboard?t='+this.token">Dashboard</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" :to="'/POA?t='+this.token">Plans Of Action</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" :to="'/Schedule?t='+this.token">Schedule</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" :to="'/GroupEvents?t='+this.token">Group Events</router-link></li>
             </ul>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><router-link class="dropdown-item" to="/Profile">Profile</router-link></li>
-                    <li><router-link class="dropdown-item" to="/Feedback">Feedback</router-link></li>
-                    <li><router-link class="dropdown-item" to="/tos">Terms of Service</router-link></li>
-                    <li><router-link class="dropdown-item" to="/privacy">Privacy</router-link></li>
+                    <li><router-link class="dropdown-item" :to="'/Profile?t='+this.token">Profile</router-link></li>
+                    <li><router-link class="dropdown-item" :to="'/Feedback?t='+this.token">Feedback</router-link></li>
+                    <li><router-link class="dropdown-item" :to="'/tos?t='+this.token">Terms of Service</router-link></li>
+                    <li><router-link class="dropdown-item" :to="'/privacy?t='+this.token">Privacy</router-link></li>
                     <li><router-link class="dropdown-item" to="/">Sign out</router-link></li>
                 </ul>
             </div>
@@ -38,7 +38,9 @@
 <script>
 export default {
     name: "Navbar",
-    props: {}
+    props: {
+        token: String
+    }
 }
 </script>
 

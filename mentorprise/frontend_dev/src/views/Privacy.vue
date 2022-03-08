@@ -1,5 +1,5 @@
 <template>
-    <NavBar />
+    <NavBar :token="this.token"/>
     <div id="privacy">
         <h1>Privacy</h1>
         <hr>
@@ -13,6 +13,26 @@
         name: "privacy",
         components: {
             NavBar
+        },
+        data() {
+            return {
+                token: {}
+            }
+        },
+        created() {
+            let splitURL = document.URL.split("?")
+            let failed = true
+            if(splitURL.length > 1) {
+            let urlParams = new URLSearchParams("?" + splitURL[1])
+            if(urlParams.has("t")) {
+                this.token = urlParams.get("t")
+                //alert(this.token)
+                failed = false
+            }
+            }
+            if(failed) {
+                this.$router.push("/")
+            }
         }
     }
 </script>

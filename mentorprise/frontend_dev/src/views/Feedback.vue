@@ -1,5 +1,5 @@
 <template>
-    <Navbar />
+    <Navbar :token="this.token"/>
     <div id="Feedback">
         <h1>System Feedback</h1>
         <br>
@@ -20,9 +20,29 @@
         components: {
             Navbar
         },
+        data() {
+            return {
+                token: {}
+            }
+        },
         methods: {
             submitFeedback() {
                 alert("Thank you for the feedback")
+            }
+        },
+        created() {
+            let splitURL = document.URL.split("?")
+            let failed = true
+            if(splitURL.length > 1) {
+            let urlParams = new URLSearchParams("?" + splitURL[1])
+            if(urlParams.has("t")) {
+                this.token = urlParams.get("t")
+                //alert(this.token)
+                failed = false
+            }
+            }
+            if(failed) {
+                this.$router.push("/")
             }
         }
     }

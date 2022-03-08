@@ -1,5 +1,5 @@
 <template>
-  <Navbar />
+  <Navbar :token="this.token"/>
   <div id="grpevents">
     <h1>Group Events</h1>
     <h3>Event schedule</h3>
@@ -65,10 +65,24 @@ export default {
   data() {
     return {
       Groupevents: [],
-      search: ''
+      search: '',
+      token: {}
     };
   },
   created() {
+    let splitURL = document.URL.split("?")
+    let failed = true
+    if(splitURL.length > 1) {
+      let urlParams = new URLSearchParams("?" + splitURL[1])
+      if(urlParams.has("t")) {
+        this.token = urlParams.get("t")
+        //alert(this.token)
+        failed = false
+      }
+    }
+    if(failed) {
+      this.$router.push("/")
+    }
     this.Groupevents = [
       {
         id: 1,

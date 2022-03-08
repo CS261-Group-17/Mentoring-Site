@@ -1,5 +1,5 @@
 <template>
-  <Navbar />
+  <Navbar :token="this.token"/>
   <div class="content">
     <div
       v-if="state == 'participant' || state == 'events_done' || state == 'host'"
@@ -209,6 +209,7 @@ export default {
   },
   data() {
     return {
+      token: {},
       state: "host", //host participant events_done tutor mentee all_done
       event_attendees_data: [
         "Ben lewis",
@@ -257,6 +258,21 @@ export default {
       ],
     };
   },
+  created() {
+    let splitURL = document.URL.split("?")
+    let failed = true
+    if(splitURL.length > 1) {
+        let urlParams = new URLSearchParams("?" + splitURL[1])
+        if(urlParams.has("t")) {
+          this.token = urlParams.get("t")
+          //alert(this.token)
+          failed = false
+        }
+    }
+    if(failed) {
+        this.$router.push("/")
+    }
+  }
 };
 </script>
 <style scoped>

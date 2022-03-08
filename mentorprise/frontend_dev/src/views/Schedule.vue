@@ -1,5 +1,5 @@
 <template>
-    <NavBar />
+    <NavBar :token="this.token"/>
     <div id="schedule">
         <h1>Schedule</h1>
         <Calendar :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
@@ -154,7 +154,8 @@
             profile: {},
             requests: [],
             schedule: [],
-            renderCalendar:true
+            renderCalendar:true,
+            token: {}
         }
     },
     methods: {
@@ -291,6 +292,19 @@
         }
     },
     created() {
+        let splitURL = document.URL.split("?")
+        let failed = true
+        if(splitURL.length > 1) {
+        let urlParams = new URLSearchParams("?" + splitURL[1])
+        if(urlParams.has("t")) {
+            this.token = urlParams.get("t")
+            //alert(this.token)
+            failed = false
+        }
+        }
+        if(failed) {
+            this.$router.push("/")
+        }
         this.profile = {
                 first: "Ben",
                 last:  "Lewis",

@@ -1,5 +1,5 @@
 <template>
-    <Navbar />
+    <Navbar :token="this.token"/>
     <div id="IndPOA">
         <h1>{{ profile.fname }}'s Plan of Action</h1>
         <h3>Current Milestones</h3>

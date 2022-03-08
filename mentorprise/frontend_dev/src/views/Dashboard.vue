@@ -1,5 +1,5 @@
 <template>
-  <Navbar />
+  <Navbar :token="this.token"/>
   <div class="dashboard">
     <h1>Dashboard</h1>
 
