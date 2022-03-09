@@ -11,6 +11,9 @@
 				{
 					"name": "Add topic #1",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -46,6 +49,9 @@
 				{
 					"name": "Add topic #2",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -81,6 +87,9 @@
 				{
 					"name": "Get topics",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -105,6 +114,9 @@
 				{
 					"name": "Delete topic",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "DELETE",
 						"header": [],
 						"body": {
@@ -144,6 +156,9 @@
 				{
 					"name": "Register user #1",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -179,6 +194,9 @@
 				{
 					"name": "Register user #2",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -243,6 +261,9 @@
 				{
 					"name": "Log in user #1 (get token)",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -283,6 +304,9 @@
 				{
 					"name": "Log in user #2 (get token)",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -290,7 +314,7 @@
 							"formdata": [
 								{
 									"key": "username",
-									"value": "Foobar",
+									"value": "FooBar",
 									"type": "text"
 								},
 								{
@@ -328,7 +352,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -373,7 +397,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -418,7 +442,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -463,7 +487,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -508,7 +532,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -563,7 +587,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -608,7 +632,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -653,7 +677,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -708,7 +732,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -730,7 +754,7 @@
 							"formdata": [
 								{
 									"key": "sw_type",
-									"value": "Django",
+									"value": "VueJS",
 									"type": "text"
 								}
 							]
@@ -763,7 +787,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -818,7 +842,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -840,7 +864,7 @@
 							"formdata": [
 								{
 									"key": "sw_type",
-									"value": "Django",
+									"value": "VueJS",
 									"type": "text"
 								}
 							]
@@ -878,7 +902,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -922,7 +946,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -996,6 +1020,26 @@
 				{
 					"name": "Update user notification",
 					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -1045,7 +1089,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1089,7 +1133,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1144,7 +1188,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token FooBar}}",
 									"type": "string"
 								},
 								{
@@ -1189,7 +1233,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token FooBar}}",
 									"type": "string"
 								},
 								{
@@ -1247,7 +1291,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token FooBar}}",
 									"type": "string"
 								},
 								{
@@ -1296,7 +1340,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1341,7 +1385,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1391,84 +1435,6 @@
 			]
 		},
 		{
-			"name": "feedback",
-			"item": [
-				{
-					"name": "http://127.0.0.1:8000/api/feedback/system/",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/feedback/system/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"feedback",
-								"system",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "http://127.0.0.1:8000/api/feedback/system/",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "title",
-									"value": "This is a title",
-									"type": "text"
-								},
-								{
-									"key": "category",
-									"value": "This is a category",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "This is a description",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/feedback/system/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"feedback",
-								"system",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "plans_of_action",
 			"item": [
 				{
@@ -1479,7 +1445,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1518,6 +1484,26 @@
 				{
 					"name": "Add milestone #1",
 					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1643,7 +1629,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1703,7 +1689,7 @@
 							"apikey": [
 								{
 									"key": "value",
-									"value": "{{Auth token}}",
+									"value": "{{Auth token EdmundGoodman}}",
 									"type": "string"
 								},
 								{
@@ -1751,6 +1737,771 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "meetings",
+			"item": [
+				{
+					"name": "Get scheduled meetings",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token FooBar}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request a meeting",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token FooBar}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentor",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "I want to meet for this reason",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/request/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								"request",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get requested meetings",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token FooBar}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/request/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								"request",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get meeting requests",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/propose/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								"propose",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Propose meeting times",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentee",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "time1",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "time2",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "time3",
+									"value": "{{now}}",
+									"type": "text"
+								},
+								{
+									"key": "duration1",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "duration2",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "duration3",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "meeting_request_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/propose/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								"propose",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get accepted meetings",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token FooBar}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/accept/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								"accept",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept a meeting",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token FooBar}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "meeting_proposal_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "instructor",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "This is a meeting title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a meeting description",
+									"type": "text"
+								},
+								{
+									"key": "start_datetime",
+									"value": "2022-03-09T01:31:39Z",
+									"type": "text"
+								},
+								{
+									"key": "duration",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "cancelled",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/meetings/accept/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"meetings",
+								"accept",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "feedback",
+			"item": [
+				{
+					"name": "Get all system feedback",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/feedback/system/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"feedback",
+								"system",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add system feedback",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "This is a title",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "This is a category",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is a description",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/feedback/system/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"feedback",
+								"system",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get meeting feedback",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "meeting",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/feedback/meetings/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"feedback",
+								"meetings",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add meeting feedback",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "meeting",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "positives",
+									"value": "Good vibes",
+									"type": "text"
+								},
+								{
+									"key": "negatives",
+									"value": "Bad teaching",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/feedback/meetings/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"feedback",
+								"meetings",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get mentor feedback",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentor_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/feedback/mentor/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"feedback",
+								"mentor",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update mentor feedback",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{Auth token EdmundGoodman}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								},
+								{
+									"key": "in",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mentor_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "rating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "feedback_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/feedback/mentor/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"feedback",
+								"mentor",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {
@@ -1758,7 +2509,7 @@
 		"apikey": [
 			{
 				"key": "value",
-				"value": "{{Auth token}}",
+				"value": "{{Auth token EdmundGoodman}}",
 				"type": "string"
 			},
 			{
@@ -1796,13 +2547,12 @@
 	],
 	"variable": [
 		{
-			"key": "Auth token",
-			"value": "FooBar",
-			"disabled": true
+			"key": "Auth token EdmundGoodman",
+			"value": "EdmundGoodman"
 		},
 		{
-			"key": "Auth token",
-			"value": "EdmundGoodman"
+			"key": "Auth token FooBar",
+			"value": "FooBar"
 		}
 	]
 }
