@@ -1,5 +1,4 @@
-from curses import meta
-from functools import partial
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -116,7 +115,8 @@ def user_strengths(request):
     elif request.method == 'POST' and 'sw_type' in request.data:
         try:
             # Get the strength with the name
-            strength = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            strength = StrengthWeakness.objects.get(
+                sw_type__exact=request.data.get('sw_type'))
             # Add the user as having that strength
             serializer = StrengthListSerializer(
                 data=request.data, context={'request': request, 'sw_type': strength})
@@ -129,13 +129,16 @@ def user_strengths(request):
     elif request.method == 'DELETE' and 'sw_type' in request.data:
         try:
             # Get the strength with the name
-            strength = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
-            user_strength = StrengthList.objects.filter(user=request.user).get(sw_type=strength)
+            strength = StrengthWeakness.objects.get(
+                sw_type__exact=request.data.get('sw_type'))
+            user_strength = StrengthList.objects.filter(
+                user=request.user).get(sw_type=strength)
             serializer = StrengthListSerializer(user_strength)
             user_strength.delete()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except StrengthList.DoesNotExist:
             return Response("Cannot delete non-existent strength", status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -161,7 +164,8 @@ def user_weaknesses(request):
     elif request.method == 'POST' and 'sw_type' in request.data:
         try:
             # Get the weakness with the name
-            weakness = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
+            weakness = StrengthWeakness.objects.get(
+                sw_type__exact=request.data.get('sw_type'))
             # Add the user as having that weakness
             serializer = WeaknessListSerializer(
                 data=request.data, context={'request': request, 'sw_type': weakness})
@@ -174,14 +178,15 @@ def user_weaknesses(request):
     elif request.method == 'DELETE' and 'sw_type' in request.data:
         try:
             # Get the weakness with the name
-            weakness = StrengthWeakness.objects.get(sw_type__exact=request.data.get('sw_type'))
-            user_weakness = WeaknessList.objects.filter(user=request.user).get(sw_type=weakness)
+            weakness = StrengthWeakness.objects.get(
+                sw_type__exact=request.data.get('sw_type'))
+            user_weakness = WeaknessList.objects.filter(
+                user=request.user).get(sw_type=weakness)
             serializer = WeaknessListSerializer(user_weakness)
             user_weakness.delete()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except WeaknessList.DoesNotExist:
             return Response("Cannot delete non-existent weakness", status=status.HTTP_400_BAD_REQUEST)
-
 
 
 @api_view(['PATCH'])
@@ -432,7 +437,6 @@ def feedback_system(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
 
 # @api_view(['GET', 'POST', 'PATCH'])     # TODO: Does this need to be somehow initialised empty?
 # @permission_classes([IsAuthenticated])
@@ -590,6 +594,154 @@ def notifications_list(request):
 ################
 ### Meetings ###
 ################
+
+
+@api_view(['GET', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def meetings_list(request):
+    """
+    get:
+        Get the list of all the user's scheduled meetings
+    patch:
+        Modify a meeting
+    """
+    # Get all the meetings relating to the user
+    meetings = Meeting.objects.filter(Q(instructor__exact=request.user) | Q(
+        mentee__exact=request.user)).order_by('-start_datetime')
+    # Serialize and return all the user objects
+    serializer = MeetingSerializer(meetings, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def meetings_request(request):
+    """
+    get:
+        Get the list of meetings requests from a specific user
+    post:
+        Add a new meeting request from a specific user
+    delete:
+        Cancel a user's meeting request
+    """
+    if request.method == 'GET':
+        # Serialize and return the meeting requests from the authenticated user
+        meeting_requests = MeetingRequest.objects.filter(
+            mentee__exact=request.user)
+        serializer = MeetingRequestSerializer(meeting_requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        # Add a new meeting request
+        serializer = MeetingRequestSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'mentor' in request.data:
+        try:
+            # Get the appropriate meeting, and delete it
+            meeting = MeetingRequest.objects.filter(mentee__exact=request.user).get(
+                mentor__exact=request.data.get('mentor'))
+            serializer = MeetingRequestSerializer(meeting)
+            meeting.delete()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except MeetingRequest.DoesNotExist:
+            return Response("Cannot delete non-existent meeting request", status=status.HTTP_400_BAD_REQUEST)
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def meetings_propose(request):
+    """
+    get:
+        Get the list of meeting requests from all the users mentees
+    post:
+        Add a new set of proposed times for a meeting request (delete not
+        implemented due to rules of mentoring)
+    """
+    if request.method == 'GET':
+        meeting_requests = MeetingRequest.objects.filter(
+            mentor__exact=request.user).filter(is_proposed=False)
+        # Serialize and return the meeting requests from the authenticated user
+        serializer = MeetingRequestSerializer(meeting_requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST' and 'meeting_request_id' in request.data:
+        # Mark the meeting request as proposed
+        try:
+            meeting_request = MeetingRequest.objects.get(id=request.data.get('meeting_request_id'))
+            serializer = MeetingRequestSerializer(
+                meeting_request, data={"is_proposed":True}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+            # Add a new meeting proposal
+            # TODO: THIS IS NOT TOTALLY SECURE AS USER CAN CHANGE MEETING DATA
+            serializer = MeetingProposalSerializer(data=request.data, context={'request': request, 'meeting_request': meeting_request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except MeetingRequest.DoesNotExist:
+            return Response("Cannot propose times for non-existent meeting request", status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def meetings_accept(request):
+    """
+    get:
+        Get the list of meetings with proposed times for the user
+    post:
+        Accept one of the proposed times, and schedule the meeting
+    delete:
+        Indicate none of the times work, and throw the proposal back to the
+        mentor to find more times
+    """
+    if request.method == 'GET':
+        # Serialize and return the meeting proposals from the authenticated user
+        meeting_requests = MeetingProposal.objects.filter(
+            mentee__exact=request.user).filter(is_accepted=False).filter(is_rejected=False)
+        serializer = MeetingProposalSerializer(meeting_requests, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST' and 'meeting_proposal_id':
+        # Create a new meeting at the specfifed time
+        try:
+            meeting_proposal = MeetingProposal.objects.get(id=request.data.get('meeting_proposal_id'))
+            proposal_serializer = MeetingProposalSerializer(
+                meeting_proposal, data={"is_accepted":True}, partial=True)
+            if proposal_serializer.is_valid():
+                proposal_serializer.save()
+                return Response(proposal_serializer.data, status=status.HTTP_202_ACCEPTED)
+            # Add a new meeting proposal
+            # TODO: THIS IS NOT TOTALLY SECURE AS USER CAN CHANGE MEETING DATA
+            meeting_serializer = MeetingSerializer(data=request.data, context={'request': request})
+            if meeting_serializer.is_valid():
+                meeting_serializer.save()
+                return Response(meeting_serializer.data, status=status.HTTP_201_CREATED)
+            return Response(meeting_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except MeetingProposal.DoesNotExist:
+            return Response("Cannot accept non-existent meeting proposal", status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE' and 'meeting_proposal_id' in request.data:
+        try:
+            # Mark the proposal as rejected
+            meeting_proposal = MeetingProposal.objects.get(id=request.data.get('meeting_proposal_id'))
+            serializer_proposal = MeetingProposalSerializer(
+                meeting_proposal, data={"is_rejected":True}, partial=True)
+            if serializer_proposal.is_valid():
+                serializer_proposal.save()
+            # Re-open the meeting request
+            meeting_request = meeting_proposal.request
+            serializer_request = MeetingRequestSerializer(
+                meeting_request, data={"is_proposed":False}, partial=True)
+            if serializer_request.is_valid():
+                serializer_request.save()
+                return Response(serializer_proposal.data, status=status.HTTP_201_CREATED)
+        except MeetingProposal.DoesNotExist:
+            return Response("Cannot accept non-existent meeting proposal", status=status.HTTP_400_BAD_REQUEST)
+    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    # return Response("Required data values not received", status=status.HTTP_400_BAD_REQUEST)
+
+
 
 ####################
 ### Group events ###

@@ -128,63 +128,48 @@ class MeetingFeedbackSerializer(serializers.ModelSerializer):
 ### Meetings ###
 ################
 
-# class MeetingWeaknessesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MeetingWeaknesses
-#         fields = ['weakness_type']
+class MeetingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meeting
+        exclude = ['mentee']
 
-# class MeetingSerializer(serializers.ModelSerializer):
-#     weaknesses = MeetingWeaknessesSerializer(many=True)
+    def create(self, validated_data):
+        validated_data["mentee"] = self.context["request"].user
+        return super().create(validated_data)
 
-#     class Meta:
-#         model = Meeting
-#         fields = ['instructor', 'title', 'description', 'start_datetime', 'duration', 'cancelled', 'mentee', 'weaknesses']
+class MeetingRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MeetingRequest
+        exclude = ['mentee']
 
-#     def create(self, validated_data):
-#         weakness_data = validated_data.pop('weaknesses')
-#         meeting = Meeting.objects.create(**validated_data)
-#         weakness_list = [MeetingWeaknesses(weakness_type=item['weakness_type'], event=meeting) for item in weakness_data]
-#         MeetingWeaknesses.objects.bulk_create(weakness_list)
-#         return meeting
+    def create(self, validated_data):
+        validated_data["mentee"] = self.context["request"].user
+        return super().create(validated_data)
 
-# class MeetingProposalSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MeetingProposal
-#         fields = '__all__'
+class MeetingProposalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MeetingProposal
+        exclude = ['mentor']
 
-# class MeetingRequestSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MeetingRequest
-#         fields = '__all__'
+    def create(self, validated_data):
+        validated_data["mentor"] = self.context["request"].user
+        validated_data["request"] = self.context["meeting_request"]
+        return super().create(validated_data)
 
 
 ####################
 ### Group events ###
 ####################
 
-# class GroupEventWeaknessesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = GroupEventWeaknesses
-#         fields = ['weakness_type']
+class GroupEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupEvent
+        fields = '__all__'
 
-# class GroupEventSerializer(serializers.ModelSerializer):
-#     weaknesses = GroupEventWeaknessesSerializer(many=True)
-
-#     class Meta:
-#         model = GroupEvent
-#         fields = ['instructor', 'title', 'description', 'start_datetime', 'duration', 'cancelled', 'event_type', 'capacity', 'weaknesses']
-
-#     def create(self, validated_data):
-#         weakness_data = validated_data.pop('weaknesses')
-#         group_event = GroupEvent.objects.create(**validated_data)
-#         weakness_list = [GroupEventWeaknesses(weakness_type=item['weakness_type'], event=group_event) for item in weakness_data]
-#         GroupEventWeaknesses.objects.bulk_create(weakness_list)
-#         return group_event
-
-# class AttendanceSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Attendance
-#         fields = '__all__'
+class AttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = '__all__'
 
 
 #######################

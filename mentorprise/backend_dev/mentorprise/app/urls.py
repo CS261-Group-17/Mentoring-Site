@@ -37,10 +37,10 @@ urlpatterns = [
     ################
     ### Meetings ###
     ################
-    # path('meetings/', views.meetings_list),
-    # path('meetings/request/', views.meetings_request),
-    # path('meetings/propose/', views.meetings_propose),
-    # path('meetings/accept/', views.meetings_accept),
+    path('meetings/', views.meetings_list),
+    path('meetings/request/', views.meetings_request),
+    path('meetings/propose/', views.meetings_propose),
+    path('meetings/accept/', views.meetings_accept),
 
     ####################
     ### Group events ###
