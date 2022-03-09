@@ -30,9 +30,9 @@ urlpatterns = [
     ### Feedback ###
     ################
     path('feedback/system/', views.feedback_system),
-    # path('feedback/meetings/', views.feedback_meeting),
+    path('feedback/meetings/', views.feedback_meeting),
     # path('feedback/group_events/', views.feedback_group_event),
-    # path('feedback/mentor/', views.feedback_mentor),
+    path('feedback/mentor/', views.feedback_mentor),
 
     ################
     ### Meetings ###

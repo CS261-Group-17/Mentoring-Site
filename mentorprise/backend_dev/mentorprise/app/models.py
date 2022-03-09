@@ -123,8 +123,8 @@ class MeetingProposal(models.Model):
 
 class Feedback(models.Model):
     rating = models.IntegerField()
-    positives = models.TextField()
-    negatives = models.TextField()
+    positives = models.TextField(blank=True)
+    negatives = models.TextField(blank=True)
     giver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_given_feedback")
 

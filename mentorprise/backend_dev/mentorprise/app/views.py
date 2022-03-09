@@ -359,21 +359,20 @@ def mentoring_proposed_mentors(request):
             pairing = pairings.get(mentor=mentor)
             if request.method == 'POST':
                 # Update the pairing to be accepted through its serializer
-                serializer = PairingSerializer(
+                pairing_serializer = PairingSerializer(
                     pairing, data={"in_proposal": False}, partial=True)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                if pairing_serializer.is_valid():
+                    pairing_serializer.save()
                 # Make feedback for the new mentor
-                serializer = GeneralFeedbackSerializer(data={
+                feedback_serializer = GeneralFeedbackSerializer(data={
                     "rating": 3,
-                    "positives": "",
-                    "negatives": ""
+                    "positives": "Write something about why you like your mentor!",
+                    "negatives": "Write something about what your mentor could improve!"
                 }, context={'request': request, 'mentor': mentor})
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                if feedback_serializer.is_valid():
+                    feedback_serializer.save()
+                    return Response(feedback_serializer.data, status=status.HTTP_201_CREATED)
+                return Response(pairing_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             elif request.method == 'DELETE':
                 # Update the pairing to be terminated through its serializer
                 serializer = PairingSerializer(
@@ -461,70 +460,77 @@ def feedback_mentor(request):
     patch:
         Modify the mentor feedback from a user.
     """
-    if request.method == 'GET':
-        # Get the general feedback
-        feedback = GeneralFeedback.objects.all()
-        serializer = GeneralFeedbackSerializer(feedback, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'PATCH' and 'feedback_id' in request.data:
-        # Get a notification by its id, then update it with the request data
-        # if it is valid
-        try:
-            notification = GeneralFeedback.objects.get(
-                id=request.data.get('feedback_id'))
-            serializer = GeneralFeedbackSerializer(
-                notification, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except GeneralFeedback.DoesNotExist:
-            return Response("Cannot update non-existent feedback", status=status.HTTP_400_BAD_REQUEST)
+    if 'mentor_id' in request.data:
+        if request.method == 'GET':
+            # Get the general feedback
+            try:
+                feedback = GeneralFeedback.objects.all() # get(mentor__exact=request.data.get('mentor_id'))
+                serializer = GeneralFeedbackSerializer(feedback, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except GeneralFeedback.DoesNotExist:
+                return Response("Cannot update feedback for non-existent mentor", status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == 'PATCH' and 'mentor_id' in request.data:
+            # Get a notification by its id, then update it with the request data
+            # if it is valid
+            try:
+                notification = GeneralFeedback.objects.get(
+                    id=request.data.get('feedback_id'))
+                serializer = GeneralFeedbackSerializer(
+                    notification, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except GeneralFeedback.DoesNotExist:
+                return Response("Cannot update non-existent feedback", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No mentor provided", status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
-# @permission_classes([IsAuthenticated])
-# def feedback_meeting(request):
-#     """
-#     get:
-#         Get the contents of the meeting feedback.
-#     post:
-#         Add a new meeting feedback from a user.
-#     patch:
-#         Modify the meeting feedback from a user.
-#     """
-#     if 'meeting' in request.data:
-#         try:
-#             meeting = Meeting.objects.get(id__exact=request.data.get('meeting'))
-#             if request.method == 'GET':
-#                 serializer = MeetingFeedbackSerializer(meeting)
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
-#             elif request.method == 'POST':
-#                 serializer = MeetingFeedbackSerializer(
-#                     data=request.data,
-#                     context={'request': request, 'meeting': meeting}
-#                 )
-#                 if serializer.is_valid():
-#                     serializer.save()
-#                     return Response(serializer.data, status=status.HTTP_201_CREATED)
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#             elif request.method == 'PATCH':
-#                 serializer = MeetingFeedbackSerializer(
-#                     data=request.data,
-#                     context={'request': request, 'meeting': meeting},
-#                     partial=True
-#                 )
-#                 if serializer.is_valid():
-#                     serializer.save()
-#                     return Response(serializer.data, status=status.HTTP_201_CREATED)
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#             elif request.method == 'DELETE':
-#                 serializer = MeetingFeedbackSerializer(
-#                     data=request.data,
-#                     context={'request': request, 'meeting': meeting}
-#                 )
-#         except Meeting.DoesNotExist:
-#             return Response("Meeting does not exist", status=status.HTTP_404_NOT_FOUND)
-#     return Response("No meeting provided", status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def feedback_meeting(request):
+    """
+    get:
+        Get the contents of the meeting feedback.
+    post:
+        Add a new meeting feedback from a user.
+    patch:
+        Modify the meeting feedback from a user.
+    """
+    if 'meeting' in request.data:
+        try:
+            meeting = Meeting.objects.get(id__exact=request.data.get('meeting'))
+            print(meeting.id)
+            meeting_feedback = MeetingFeedback.objects.all()
+            if request.method == 'GET':
+                serializer = MeetingFeedbackSerializer(meeting_feedback)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            elif request.method == 'POST':
+                serializer = MeetingFeedbackSerializer(
+                    data=request.data,
+                    context={'request': request, 'meeting': meeting}
+                )
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            elif request.method == 'PATCH':
+                serializer = MeetingFeedbackSerializer(
+                    data=request.data,
+                    context={'request': request, 'meeting': meeting},
+                    partial=True
+                )
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            elif request.method == 'DELETE':
+                serializer = MeetingFeedbackSerializer(meeting_feedback)
+                meeting_feedback.delete()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        except (Meeting.DoesNotExist, MeetingFeedback.DoesNotExist):
+            return Response("Meeting does not exist", status=status.HTTP_404_NOT_FOUND)
+    return Response("No meeting provided", status=status.HTTP_400_BAD_REQUEST)
 
 
 ##############
@@ -738,7 +744,6 @@ def meetings_accept(request):
                 meeting_proposal, data={"is_accepted":True}, partial=True)
             if proposal_serializer.is_valid():
                 proposal_serializer.save()
-                return Response(proposal_serializer.data, status=status.HTTP_202_ACCEPTED)
             # Add a new meeting proposal
             # TODO: THIS IS NOT TOTALLY SECURE AS USER CAN CHANGE MEETING DATA
             meeting_serializer = MeetingSerializer(data=request.data, context={'request': request})
