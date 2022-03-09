@@ -7,7 +7,7 @@
                     <li v-for="event in dayEvent" :key="event.eventID" :class="'events'+event.type">
                         <button class="cancelEvent" @click="this.$emit('cancel-event', event.eventID);"><fa icon="xmark" size="2x"/></button>
                         <p class="eventDesc">
-                            <span class="eventName">{{event.eventName}}</span><br>
+                            <span class="eventName"><router-link class="eventLink" :to="'/IndEvent?t='+this.token">{{event.eventName}}</router-link></span><br>
                             {{event.startTime + " - " + event.endTime + ", " + event.location}}
                         </p>
                     </li>
@@ -21,7 +21,8 @@
     export default {
         name: "Calendar",
         props: {
-            events: Array
+            events: Array,
+            token: String
         },
         emits: ['cancel-event'],
         data() {
@@ -106,6 +107,15 @@
 </script>
 
 <style scoped>
+    .eventLink:link,
+    .eventLink:visited,
+    .eventLink:active {
+        color: white;
+        text-decoration: none;
+    }
+    .eventLink:hover {
+        color: grey;
+    }
     #calendar {
         background-color: #0A102C;
         padding: 1rem;

@@ -2,7 +2,7 @@
     <NavBar :token="this.token"/>
     <div id="schedule">
         <h1>Schedule</h1>
-        <Calendar :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
+        <Calendar :token="this.token" :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
         <div id="requests">
             <h3>Requests</h3>
             <ul> 
@@ -124,7 +124,7 @@
             <h3>Past Events</h3>
             <ul>
                 <li v-for="event in pastEvents(schedule)" :key="event.eventID" :class="'past' + event.type">
-                        <span class="pastTitle">{{event.eventName}}</span> <span :class="'seeFeedback'+event.type">See Feedback</span><br>
+                        <span class="pastTitle">{{event.eventName}}</span> <router-link :to="'/IndEvent?t='+this.token"><span :class="'seeFeedback'+event.type">See Feedback</span></router-link><br>
                         <span class="innerPast">{{event.date}}, {{event.location}}</span>
                         <br><br>
                 </li>

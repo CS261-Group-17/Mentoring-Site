@@ -5,7 +5,7 @@
       v-if="state == 'participant' || state == 'events_done' || state == 'host'"
       class="event_title"
     >
-      Event: Introduction to Python
+      {{this.event_name}}
     </div>
     <div v-if="state == 'host'">
       <div class="event_content">
@@ -17,18 +17,24 @@
           <div class="event_info_form">
             <div>
               <div class="event_info_form_title">Event title</div>
-              <input style="width: 100%" placeholder="Introduction to Python" />
+              <input style="width: 100%" :value="this.event_name" />
             </div>
             <div>
               <div class="event_info_form_title">Event type</div>
               <div style="margin-top: 8px">
-                <input type="radio" id="gm" name="et" value="gm" checked />
+                <input type="radio" id="wh" name="et" value="wh" :checked="this.event_info.type == 'Meeting'"/>
+                <label style="margin-left: 8px; color: #7d95c9" for="wh"
+                  >Meeting</label
+                >
+              </div>
+              <div style="margin-top: 8px">
+                <input type="radio" id="gm" name="et" value="gm" :checked="this.event_info.type == 'Group Meeting'" />
                 <label style="margin-left: 8px; color: #7d95c9" for="gm"
                   >Group Meeting</label
                 >
               </div>
               <div style="margin-top: 8px">
-                <input type="radio" id="wh" name="et" value="wh" />
+                <input type="radio" id="wh" name="et" value="wh" :checked="this.event_info.type == 'Workshop'"/>
                 <label style="margin-left: 8px; color: #7d95c9" for="wh"
                   >Workshop</label
                 >
@@ -39,25 +45,27 @@
               <textarea
                 style="width: 100%"
                 class="event_info_form_textarea"
-                placeholder="description the event"
+                :value="this.event_info.description"
               />
             </div>
             <div style="display: flex">
               <div>
                 <div class="event_info_form_title">Start time</div>
-                <input type="date" />
+                <input type="datetime-local" class="eventTimes" :value="this.event_info.date + 'T'+this.event_info.startTime"/>
               </div>
               <div style="margin-left: 14px">
                 <div class="event_info_form_title">End time</div>
-                <input type="date" />
+                <input type="datetime-local" class="eventTimes" :value="this.event_info.date + 'T' + this.event_info.endTime"/>
               </div>
             </div>
             <div>
-              <div class="event_info_form_title">Event capacity</div>
-              <input type="number" placeholder="Set a capacity" />
+              <div class="event_info_form_title" id="cap">Event capacity</div>
+              <div class="event_info_form_title" id="loc">Location</div><br>
+              <input type="number" id="capInput" :value="this.event_info.capacity" />
+              <input type="text" id="locInput" :value="this.event_info.location"/>
             </div>
             <div class="event_info_form_button">
-              <button>Update event</button>
+              <button class="update_btn">Update event</button>
               <button class="cancel_btn">Cancel event</button>
             </div>
           </div>
@@ -76,128 +84,16 @@
         </div>
       </div>
     </div>
-    <div v-if="state == 'participant' || state == 'events_done'">
-      <div class="event_info">
-        <div class="event_info_title">Event info</div>
-      </div>
-      <div class="participant_list">
-        <div>
-          <div>Event Hosts:</div>
-          <div>{{ event_info.host }}</div>
-        </div>
-        <div>
-          <div>Event Type:</div>
-          <div>{{ event_info.type }}</div>
-        </div>
-        <div>
-          <div>Description:</div>
-          <div>{{ event_info.description }}</div>
-        </div>
-        <div>
-          <div>Date:</div>
-          <div>{{ event_info.date }}</div>
-        </div>
-        <div>
-          <div>Time:</div>
-          <div>{{ event_info.time }}</div>
-        </div>
-      </div>
-      <button class="cancel_btn" v-if="state == 'participant'">
-        Unattend event
-      </button>
-    </div>
-    <div v-if="state == 'events_done'">
-      <div class="event_content">
-        <div class="event_info">
-          <div class="event_info_title">Event feedback</div>
-          <div
-            class="events_done_feedback_list"
-            v-for="(v, i) in events_done_feedback_data"
-            :key="i"
-          >
-            <div>
-              <span
-                v-for="(v, i) in v.progress"
-                :key="i"
-                class="white_circle"
-              ></span>
-              <span
-                v-for="(v, i) in 5 - v.progress"
-                :key="i"
-                class="blue_circle"
-              ></span>
-            </div>
-            <div>{{ v.title }}</div>
-            <div style="color: #213260">{{ v.time }}</div>
-            <div style="color: #8faae3">{{ v.content }}</div>
-          </div>
-        </div>
-        <div class="event_attendees">
-          <div class="event_attendees_title">Leave feedback</div>
-          <div style="margin-top: 8px">Feedback title</div>
-          <input class="input_blue" type="text" />
-          <div style="margin-top: 8px">Feedback title</div>
-          <textarea class="input_blue" type="text" />
-          <button class="white_btn">Submit feedback</button>
-        </div>
-      </div>
-    </div>
-    <div v-if="state == 'tutor' || state == 'mentee' || state == 'all_done'">
-      <div class="event_title">Meeting: Quarterly Review</div>
-      <div class="event_info">
-        <div class="event_info_title">Meeting info</div>
-      </div>
-      <div class="participant_list">
-        <div>
-          <div>Mentee:</div>
-          <div>{{ meeting_info.mentee }}</div>
-        </div>
-        <div>
-          <div>Description:</div>
-          <div>{{ meeting_info.description }}</div>
-        </div>
-        <div>
-          <div>Date:</div>
-          <div>{{ meeting_info.date }}</div>
-        </div>
-        <div>
-          <div>Time:</div>
-          <div>{{ meeting_info.time }}</div>
-        </div>
-      </div>
-      <button class="blue_btn" v-if="state == 'tutor' || state == 'mentee'">
-        Rearrange meeting
-      </button>
-      <button class="cancel_btn" v-if="state == 'mentee'">
-        Cancel meeting
-      </button>
-    </div>
-    <div v-if="state == 'all_done'">
-      <div class="event_content">
-        <div class="event_info">
-          <div class="event_info_title">Meeting review</div>
-          <div
-            class="meeting_review_list"
-            :key="i"
-            v-for="(v, i) in meeting_review_data"
-          >
-            <div>{{ v.title }}</div>
-            <div>{{ v.time }}</div>
-            <div>{{ v.content }}</div>
-          </div>
-        </div>
-        <div class="event_attendees">
-          <div class="event_attendees_title">Leave feedback</div>
-          <div style="margin-top: 8px">Feedback body</div>
-          <textarea
-            class="input_blue"
-            type="text"
-            style="border-radius: 6px; margin-top: 10px"
-            placeholder="Give your feedback here"
-          />
-          <button style="float: left" class="white_btn">Submit feedback</button>
-        </div>
-      </div>
+    <br><hr>
+    <div id="feedbackDiv">
+      <h1>Feedback</h1>
+      <ul id="allFeedback">
+        <li v-for="feedback in this.feedback_data" :key="feedback.id">
+          <h3>{{feedback.title}} <span class="fullStars">{{ getStars(feedback.stars) }}</span><span class="emptyStars">{{ getStars(5- feedback.stars) }}</span></h3>
+          <p class="feedbackContent">{{feedback.content}}</p>
+          <p class="feedbackDate">Feedback Submitted on: {{feedback.time}}</p>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -210,50 +106,42 @@ export default {
   data() {
     return {
       token: {},
-      state: "host", //host participant events_done tutor mentee all_done
+      state: "host", //host participant events_done tutor mentee all_done,
+      event_name: "Learn Python",
       event_attendees_data: [
-        "Ben lewis",
-        "Ben lewis",
-        "Ben lewis",
-        "Ben lewis",
-        "Ben lewis",
-        "Ben lewis",
-        "Ben lewis",
+        "Greed",
+        "Gluttony",
+        "Sloth",
+        "Lust",
+        "Pride",
+        "Envy",
+        "Wrath"
       ],
       event_info: {
         host: "Nathan Griffiths",
         type: "Workshop",
         description:
           "description description description description description description",
-        date: "22-01-2022",
-        time: "13:00-15:00",
+        date: "2022-05-12",
+        startTime: "13:00",
+        endTime: "15:00",
+        location: "Hell",
+        capacity: "100"
       },
-      meeting_info: {
-        mentee: "Bill",
-        description:
-          "description description description description description description",
-        date: "22-01-2022",
-        time: "13:00-15:00",
-      },
-      events_done_feedback_data: [
+      feedback_data: [
         {
-          progress: 2,
-          title: "not very good",
-          content: "content content content",
-          time: "23-01-2022 11:53",
+          id: 1,
+          stars: 2,
+          title: "Too hot",
+          content: "I was sweating the entire time",
+          time: "23-01-2022 16:53",
         },
         {
-          progress: 4,
-          title: "good overall",
-          content: "content content content",
-          time: "23-01-2022 11:53",
-        },
-      ],
-      meeting_review_data: [
-        {
-          title: "James Archblod",
-          time: "25-01-2022 01:54",
-          content: "good talk,le's do it again sometime",
+          id: 2,
+          stars: 4,
+          title: "Very fun",
+          content: "Everyone was super friendly too",
+          time: "23-05-2022 18:01",
         },
       ],
     };
@@ -272,10 +160,63 @@ export default {
     if(failed) {
         this.$router.push("/")
     }
+    //alert(this.feedback_data[0].stars)
+  },
+  methods: {
+    getStars(stars) {
+      if(stars == 0) {
+        return ""
+      }
+      else if(stars == 1) {
+        return "★"
+      }
+      else if(stars == 2) {
+        return "★★"
+      }
+      else if(stars == 3) {
+        return "★★★"
+      }
+      else if(stars == 4) {
+        return "★★★★"
+      }
+      else {
+        return "★★★★★"
+      }
+    }
   }
 };
 </script>
 <style scoped>
+.eventTimes  {
+  width: 12rem;
+}
+#allFeedback>li {
+  list-style: none;
+}
+.feedbackContent {
+  font-size: medium;
+}
+input, textarea {
+  color: white;
+}
+#cap, #loc {
+  display: inline-block;
+}
+#cap {
+  margin-right: 7.8rem;
+}
+#capInput {
+  margin-right: 2.8rem;
+}
+#capInput, #locInput {
+  display: inline;
+}
+.emptyStars {
+  color: grey;
+}
+.fullStars {
+  color: gold;
+}
 .content {
   padding: 2rem;
   background-color: #00001a;
@@ -364,6 +305,19 @@ export default {
   margin-right: 10px;
   color: #a32d3f;
   background-color: transparent;
+}
+/* .cancel_btn, .update_btn {
+  padding-right: 0.6rem !important;
+} */
+.cancel_btn:hover {
+  color: white;
+  background-color: #a32d3f;
+  font-weight: bold;
+}
+.update_btn:hover {
+  color: black !important;
+  background-color: white !important;
+  font-weight: bold !important;
 }
 .blue_btn {
   padding: 4px 8px;

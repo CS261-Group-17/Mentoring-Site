@@ -86,7 +86,8 @@ export default {
         background-color: #0A102C;
     }
     #logo {
-        width: 7rem;
+        width: 5rem;
+        height: 5.7rem;
         float: left;
         display: inline;
     }
