@@ -7,9 +7,9 @@
 
     <div class="your-grpevents">
       <div class="sort">
-        <button>Filter</button>
-        <button>Sort by date</button>
-        <input type="text" v-model="search" placeholder="Search all events">
+        <button @click="changeFilter()">Filter</button>
+        <button @click="this.sorted = !this.sorted">Sort by date</button>
+        <input type="text" id="filterCond" @input="changeFilter()" placeholder="Search all events">
       </div>
       <br>
       <br>
@@ -20,7 +20,7 @@
         <div>Host:</div>
       </div>
 
-      <div i v-for="event in filteredEvents" :key="event.id" class="collapse-card">
+      <div i v-for="event in filterEvents()" :key="event.id" class="collapse-card">
         <div class="collapse-list" data-bs-toggle="collapse" :data-bs-target="'#collapse_' + random + event.id" aria-expanded="false">
           <div>
             <svg
@@ -40,14 +40,14 @@
             </svg>
             &nbsp; {{ event.eventname }}
           </div>
-          <div style="color: #bdc9e3">{{ event.date }}</div>
+          <div style="color: #bdc9e3">{{ dateToString(event.date) }}</div>
           <div style="color: #bdc9e3">{{ event.time }}</div>
           <div style="color: #bdc9e3">{{ event.host }}</div>
         </div>
         <div class="collapse collapse-content" :id="'collapse_' + random + event.id">
           {{ event.description }}
-          <router-link to="/schedule" class="view">
-            <button>Add to schedule</button>
+          <router-link :to="'/Schedule?t='+this.token" class="view">
+            <button class="addEvent">Add to schedule</button>
           </router-link>
         </div>
       </div>
@@ -66,7 +66,8 @@ export default {
     return {
       Groupevents: [],
       search: '',
-      token: {}
+      token: {},
+      sorted: false
     };
   },
   created() {
@@ -87,7 +88,7 @@ export default {
       {
         id: 1,
         eventname: "Learn Python",
-        date: "3 March 2022",
+        date: "2022 03 16",
         time: "12:00 - 14:00",
         host: "Ben",
         description: "to be filled and button to be added",
@@ -95,7 +96,7 @@ export default {
       {
         id: 2,
         eventname: "Learn Vue",
-        date: "4 March 2022",
+        date: "2022 04 02",
         time: "12:00 - 14:00",
         host: "John",
         description: "to be filled and button to be added",
@@ -103,7 +104,7 @@ export default {
       {
         id: 3,
         eventname: "Learn Java",
-        date: "5 March 2022",
+        date: "2022 03 19",
         time: "12:00 - 14:00",
         host: "Jay",
         description: "to be filled and button to be added",
@@ -111,7 +112,7 @@ export default {
       {
         id: 4,
         eventname: "Dance Party",
-        date: "2 March 2022",
+        date: "2022 03 22",
         time: "12:00 - 14:00",
         host: "Jay",
         description: "to be filled and button to be added",
@@ -119,7 +120,7 @@ export default {
       {
         id: 5,
         eventname: "Charity Bazaar",
-        date: "5 March 2022",
+        date: "2022 05 12",
         time: "12:00 - 14:00",
         host: "Jay",
         description: "to be filled and button to be added",
@@ -127,23 +128,77 @@ export default {
       {
         id: 6,
         eventname: "Charity Dance",
-        date: "1 March 2022",
+        date: "2022 05 05",
         time: "12:00 - 14:00",
         host: "Jay",
         description: "to be filled and button to be added",
       },
     ];
   },
-  computed: {
-    filteredEvents: function(){
-      return this.Groupevents.filter((event) => {
-        return event.eventname.toLowerCase().match(this.search.toLowerCase())
-      })
-      /* this function below sorts the page automatically*/
-    .sort(function(a, b) {
-        return new Date(a.date) - new Date(b.date);
-      });
-    }
+  // computed: {
+  //   filteredEvents: function(){
+  //     return this.Groupevents.filter((event) => {
+  //       return event.eventname.toLowerCase().match(this.search.toLowerCase())
+  //     })
+  //     /* this function below sorts the page automatically*/
+  //   .sort(function(a, b) {
+  //       return new Date(a.date) - new Date(b.date);
+  //     });
+  //   }
+  // },
+  methods: {
+    filterEvents() {
+      let fEvents = []
+      for(let i =0;i<this.Groupevents.length;i++) {
+          if(this.Groupevents[i].eventname.toLowerCase().includes(this.search.toLowerCase())) {
+            fEvents.push(this.Groupevents[i])
+          }
+      }
+      if(this.sorted) {
+        fEvents = this.sortDates(fEvents)
+      }
+      return fEvents
+    },
+    changeFilter() {
+      this.search = document.getElementById("filterCond").value
+    },
+    sortDates(currentEvents) {
+      if(currentEvents.length < 2) {
+          //alert(currentEvents.length)
+          return currentEvents;
+      }
+      let mid = Math.ceil(currentEvents.length / 2);
+      let arr1 = this.sortDates(currentEvents.slice(0, mid));
+      let arr2 = this.sortDates(currentEvents.slice(mid, currentEvents.length));
+      let newArr = [], p1 = 0, p2 = 0;
+      while(newArr.length < currentEvents.length) {
+          if(p1 >= arr1.length) {
+              // finished with first list
+              newArr.push(arr2[p2]);
+              p2+=1;
+          }
+          else if (p2 >= arr2.length) {
+              // finished with second list
+              newArr.push(arr1[p1]);
+              p1+=1;
+          }
+          else if(Date.parse(arr1[p1].date) >= Date.parse(arr2[p2].date)) {
+              // second array is earlier
+              newArr.push(arr2[p2]);
+              p2+=1;
+          }
+          else {
+              // first array is earlier
+              newArr.push(arr1[p1]);
+              p1+=1;
+          }
+      }
+      return newArr
+    },
+    dateToString(ourDate) {
+      let dateDate = new Date(ourDate);
+      return dateDate.toString().substring(4, 15)
+    },
   }
 }
 </script>
@@ -163,6 +218,10 @@ export default {
   opacity: 1;
   height: 2px;
   margin-top: 0px;
+}
+.addEvent:hover {
+  color: black;
+  background-color: white;
 }
 .your-grpevents {
   font-size: 14px;

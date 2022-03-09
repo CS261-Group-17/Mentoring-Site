@@ -84,6 +84,7 @@
         async created() {
             // ran when page loaded
             // currently not implemented gives a 500 error
+            //alert(document.URL)
             let splitURL = document.URL.split("?")
             let failed = true
             if(splitURL.length > 1) {
@@ -97,6 +98,7 @@
             if(failed) {
                 this.$router.push("/")
             }
+            //alert("No failure")
             const res = await fetch("backend/api/users/profile/", {
                 method: "GET",
                 headers: {
@@ -106,8 +108,9 @@
             })
 
             const profileStatus = await res.json()
-            if(profileStatus.profile != undefined) {
+            if(profileStatus.id != undefined) {
                 // this gets us the profile but not the account
+                //alert("Get profile")
                 const accRes = await fetch("backend/api/users/account/", {
                     method: "GET",
                     headers: {
@@ -126,11 +129,11 @@
                         last: accStatus.last_name,
                         email: accStatus.email,
                         username: accStatus.username,
-                        biography: profileStatus.profile.biography,
-                        isMentor: profileStatus.profile.mentor,
-                        businessArea_type: profileStatus.profile.business_area,
-                        jobTitle: profileStatus.profile.job_title,
-                        time_available: profileStatus.profile.time_available,
+                        biography: profileStatus.biography,
+                        isMentor: profileStatus.mentor,
+                        businessArea_type: profileStatus.business_area,
+                        jobTitle: profileStatus.job_title,
+                        time_available: profileStatus.time_available,
                         ss: [{
                                 id: 1,
                                 val: "tennis",
