@@ -26,6 +26,7 @@
                     <option value="manage">Management</option>
                 </select>
                 <input type="text" id="jobTitle" name="jobTitle" placeholder="Job Title" />
+                <input type="number" id="time" name="time" placeholder="Time you can commit to mentoring" />
                 <br><br><textarea id="bio" rows=4 cols=38 placeholder="Tell us here about you..."></textarea>
 
 
@@ -52,6 +53,7 @@ export default {
     methods: {
         async submit(e) {
             e.preventDefault();
+            //alert(document.getElementById("time").value)
             if(document.getElementById("email").value != document.getElementById("confirmEmail").value) {
                 alert("Emails are not matching")
             }
@@ -70,7 +72,8 @@ export default {
                         biography: document.getElementById("bio").value,
                         business_area: document.getElementById("businessArea").value,
                         job_title: document.getElementById("jobTitle").value,
-                        mentor: false
+                        mentor: false,
+                        time_available: document.getElementById("time").value
                     }
                 }
                 if(register.profile.businessArea == "") {
@@ -87,6 +90,9 @@ export default {
                 }
                 else if(register.profile.job_title == "") {
                     alert("Job title cannot be empty")
+                }
+                else if(register.profile.time_available == "") {
+                    alert("You must give an estimate of the number of hours you can commit to the system")
                 }
                 else {
                     const res = await fetch("backend/api/users/register/", {

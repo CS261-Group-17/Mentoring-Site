@@ -16,10 +16,12 @@
         <p>Username: {{ profile.username }}</p>
         <label for="jobTitle">Job Title</label><br>
         <input type="text" id="jobTitle" name="jobTitle" size="40" :value="profile.jobTitle"><br>
+        <label for="timeCommit">Time commitment to the system (in hours per week)</label><br>
+        <input type="number" id="timeCommit" name="timeCommit" size="40" :value="profile.time_available"><br>
         <label for="bio">Bio</label><br>
         <textarea v-model="profile.biography" id="bio" rows=4 cols=50>
         </textarea>
-        <button class="saveChanges">Save Changes</button>
+        <button class="saveChanges" @click="saveChanges()">Save Changes</button>
         <br><br>
 
         <h3>Mentorship Settings</h3>
@@ -103,43 +105,87 @@
                 }
             })
 
-            const status = await res.json()
-            if(status.profile != undefined) {
-                alert("pain you are here")
+            const profileStatus = await res.json()
+            if(profileStatus.profile != undefined) {
+                // this gets us the profile but not the account
+                const accRes = await fetch("backend/api/users/account/", {
+                    method: "GET",
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": "Token "+this.token
+                    }
+                })
+                const accStatus = await accRes.json()
+                if(accStatus.username == undefined) {
+                    this.$router.push("/")
+                }
+                else {
+                    // when strengths api works then come back
+                    this.profile = {
+                        first: accStatus.first_name,
+                        last: accStatus.last_name,
+                        email: accStatus.email,
+                        username: accStatus.username,
+                        biography: profileStatus.profile.biography,
+                        isMentor: profileStatus.profile.mentor,
+                        businessArea_type: profileStatus.profile.business_area,
+                        jobTitle: profileStatus.profile.job_title,
+                        time_available: profileStatus.profile.time_available,
+                        ss: [{
+                                id: 1,
+                                val: "tennis",
+                            },
+                            {
+                                id: 2,
+                                val: "team"
+                            }
+                        ],
+                        ws: [{
+                                id: 1,
+                                val: "communication"
+                            },
+                            {
+                                id: 2,
+                                val: "friendly"   
+                            }                
+                        ]
+                    }
+                    //alert(this.profile.jobTitle)
+                }
             }  
             else {
                 this.$router.push("/")
             }
 
-            this.profile = {
-                first: "Ben",
-                last:  "Lewis",
-                email: "u2003284@warwick.live.ac.uk",
-                username: "BennyBoy",
-                jobTitle: "Student",
-                biography: "I am in pain",
-                isMentor: true,
-                businessArea_type: "dev",
-                password: "CompSci",
-                ss: [{
-                        id: 1,
-                        val: "tennis",
-                    },
-                    {
-                        id: 2,
-                        val: "team"
-                    }
-                ],
-                ws: [{
-                        id: 1,
-                        val: "communication"
-                    },
-                    {
-                        id: 2,
-                        val: "friendly"   
-                    }                
-                ]
-            }
+            // this.profile = {
+            //     first: "Ben",
+            //     last:  "Lewis",
+            //     email: "u2003284@warwick.live.ac.uk",
+            //     username: "BennyBoy",
+            //     jobTitle: "Student",
+            //     biography: "I am in pain",
+            //     isMentor: true,
+            //     businessArea_type: "dev",
+            //     password: "CompSci",
+            //     ss: [{
+            //             id: 1,
+            //             val: "tennis",
+            //         },
+            //         {
+            //             id: 2,
+            //             val: "team"
+            //         }
+            //     ],
+            //     ws: [{
+            //             id: 1,
+            //             val: "communication"
+            //         },
+            //         {
+            //             id: 2,
+            //             val: "friendly"   
+            //         }                
+            //     ]
+            // }
             this.options = {
                 businessArea: [
                     {value: "dev", text: "Software Dev"},
@@ -150,36 +196,135 @@
             }
         },
         methods: {
-            deleteAccount() {
-                var enteredPass = document.getElementById("password");
-                if(this.profile.password != enteredPass.value) {
-                    alert("Wrong password, enter in correct password")
+            async saveChanges() {
+                const changeRes = await fetch("backend/api/users/account/", {
+                    method: "PATCH",
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": "Token "+this.token
+                    },
+                    body: JSON.stringify({
+                        "first_name": document.getElementById("fname").value,
+                        "last_name": document.getElementById("lname").value
+                    })
+                })
+
+                const changeStatus = await changeRes.status
+                if(changeStatus >= 200 && changeStatus < 300) {
+                    this.profile.first = document.getElementById("fname").value
+                    this.profile.last = document.getElementById("lname").value
+                    const profRes = await fetch("backend/api/users/profile/", {
+                        method: "PATCH",
+                        headers: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
+                        },
+                        body: JSON.stringify({
+                            //"profile" : {
+                                "biography": document.getElementById("bio").value,
+                                "job_title": document.getElementById("jobTitle").value,
+                                "time_available": document.getElementById("timeCommit").value
+                            //}
+                        })
+                    })
+
+                    const profStatus = await profRes.status
+                    if(profStatus >= 200 && profStatus < 300) {
+                        this.profile.jobTitle = document.getElementById("jobTitle").value
+                        this.profile.biography = document.getElementById("bio").value
+                        this.profile.time_available = document.getElementById("timeCommit").value
+                    }
+                    else {
+                        alert("Failed to update successfully")
+                    }
+                } 
+                else {
+                    alert("Failed to update correctly")
+                }
+            },
+            async checkPassword() {
+                const res = await fetch("backend/api/users/login/", {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "username": this.profile.username,
+                        "password": document.getElementById("password").value
+                    })
+                }) 
+                const status = await res.json()
+                return status.token != null
+
+            },
+            async deleteAccount() {
+                if(this.checkPassword()) {
+                    const deleteRes = await fetch("backend/api/users/delete/", {
+                        method: "DELETE",
+                        headers: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
+                        }
+                    })
+
+                    const deleteStatus = await deleteRes.status
+                    if(deleteStatus >= 200 && deleteStatus < 300) {
+                        alert("Account deletion successful, going back to the login page")
+                        this.$router.push("/")
+                    }
+                    else {
+                        alert("Account deletion failed")
+                    }
                 }
                 else {
-                    alert("Correct password, account deleted")
+                    alert("Wrong password, enter in correct password")
+                    document.getElementById("password").value = ""
                 }
-                enteredPass.value = ""
             },
-            passwordReset() {
-                var enteredPass = document.getElementById("password");
-                if(this.profile.password != enteredPass.value) {
+            async passwordReset() {
+                if(!this.checkPassword()) {
                     alert("Wrong password, enter in correct password")
                 }
                 else {
                     alert("Correct password, password reset email sent")
                 }
-                enteredPass.value = ""
+                document.getElementById("password").value = ""
             },
-            emailChange() {
-                var enteredPass = document.getElementById("password");
-                if(this.profile.password != enteredPass.value) {
-                    alert("Wrong password, enter in correct password")
+            async emailChange() {
+                // var enteredPass = document.getElementById("password");
+                // if(this.profile.password != enteredPass.value) {
+                //     alert("Wrong password, enter in correct password")
+                // }
+                // else {
+                //     alert("Correct password, email changed")
+                //     this.profile.email = document.getElementById("newEmail").value;
+                // }
+                // enteredPass.value = ""
+                if(this.checkPassword()) {
+                    //change email
+                    const emailRes = await fetch("backend/api/users/account/", {
+                        method: "PATCH",
+                        headers: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token " +this.token 
+                        },
+                        body: JSON.stringify({
+                            "email": document.getElementById("newEmail").value
+                        })
+                    })
+                    const emailStatus = await emailRes.status
+                    if(emailStatus >= 200 && emailStatus < 300) {
+                        alert("Email changed")
+                        this.profile.email = document.getElementById("newEmail").value
+                    }
+                    else {
+                        alert("Email change unexpectedly fail")
+                    }
                 }
                 else {
-                    alert("Correct password, email changed")
-                    this.profile.email = document.getElementById("newEmail").value;
+                    alert("Password is not correct")
                 }
-                enteredPass.value = ""
+                document.getElementById("password").value = ""
             },
             addStrength() {
                 if(this.profile.ss.length < 5) {
