@@ -30,17 +30,17 @@ urlpatterns = [
     ### Feedback ###
     ################
     path('feedback/system/', views.feedback_system),
-    # path('feedback/meetings/', views.feedback_meeting),
+    path('feedback/meetings/', views.feedback_meeting),
     # path('feedback/group_events/', views.feedback_group_event),
-    # path('feedback/mentor/', views.feedback_mentor),
+    path('feedback/mentor/', views.feedback_mentor),
 
     ################
     ### Meetings ###
     ################
-    # path('meetings/', views.meetings_list),
-    # path('meetings/request/', views.meetings_request),
-    # path('meetings/propose/', views.meetings_propose),
-    # path('meetings/accept/', views.meetings_accept),
+    path('meetings/', views.meetings_list),
+    path('meetings/request/', views.meetings_request),
+    path('meetings/propose/', views.meetings_propose),
+    path('meetings/accept/', views.meetings_accept),
 
     ####################
     ### Group events ###
