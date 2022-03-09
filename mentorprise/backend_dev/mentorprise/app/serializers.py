@@ -104,24 +104,15 @@ class MeetingFeedbackSerializer(serializers.ModelSerializer):
 #         model = GroupEventFeedback
 #         fields = '__all__'
 
-# class ImprovedWeaknessesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ImprovedWeaknesses
-#         fields = ['weakness_type']
+class GeneralFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GeneralFeedback
+        exclude = ['giver', 'mentor']
 
-# class GeneralFeedbackSerializer(serializers.ModelSerializer):
-#     weaknesses = ImprovedWeaknessesSerializer(many=True)
-
-#     class Meta:
-#         model = GeneralFeedback
-#         fields = ['rating', 'positives', 'negatives', 'giver', 'creation_datetime', 'improved_weaknesses']
-
-#     def create(self, validated_data):
-#         weakness_data = validated_data.pop('improved_weaknesses')
-#         feedback = GeneralFeedback.objects.create(**validated_data)
-#         weakness_list = [ImprovedWeaknesses(weakness_type=item['weakness_type'], feedback=feedback) for item in weakness_data]
-#         ImprovedWeaknesses.objects.bulk_create(weakness_list)
-#         return feedback
+    def create(self, validated_data):
+        validated_data["giver"] = self.context["request"].user
+        validated_data["mentor"] = self.context["mentor"]
+        return super().create(validated_data)
 
 
 ################

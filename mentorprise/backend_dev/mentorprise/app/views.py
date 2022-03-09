@@ -364,6 +364,16 @@ def mentoring_proposed_mentors(request):
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                # Make feedback for the new mentor
+                serializer = GeneralFeedbackSerializer(data={
+                    "rating": 3,
+                    "positives": "",
+                    "negatives": ""
+                }, context={'request': request, 'mentor': mentor})
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             elif request.method == 'DELETE':
                 # Update the pairing to be terminated through its serializer
                 serializer = PairingSerializer(
@@ -391,6 +401,10 @@ def mentoring_potential_mentees_list(request):
         possible_mentees = User.objects.order_by('-first_name')
         serializer = UserSerializer(possible_mentees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
     elif request.method == 'POST':
         if 'mentee' in request.data:
             try:
@@ -438,21 +452,34 @@ def feedback_system(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['GET', 'POST', 'PATCH'])     # TODO: Does this need to be somehow initialised empty?
-# @permission_classes([IsAuthenticated])
-# def feedback_mentor(request):
-#     """
-#     get:
-#         Get the contents of the mentor feedback.
-#     post:
-#         Create feedback for a mentor from a user
-#     patch:
-#         Modify the mentor feedback from a user.
-#     """
-#     if request.method == 'GET':
-
-#     return Response("API not yet implemented", status=status.HTTP_200_OK)
-
+@api_view(['GET', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def feedback_mentor(request):
+    """
+    get:
+        Get the contents of the mentor feedback.
+    patch:
+        Modify the mentor feedback from a user.
+    """
+    if request.method == 'GET':
+        # Get the general feedback
+        feedback = GeneralFeedback.objects.all()
+        serializer = GeneralFeedbackSerializer(feedback, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'PATCH' and 'feedback_id' in request.data:
+        # Get a notification by its id, then update it with the request data
+        # if it is valid
+        try:
+            notification = GeneralFeedback.objects.get(
+                id=request.data.get('feedback_id'))
+            serializer = GeneralFeedbackSerializer(
+                notification, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except GeneralFeedback.DoesNotExist:
+            return Response("Cannot update non-existent feedback", status=status.HTTP_400_BAD_REQUEST)
 
 # @api_view(['GET', 'POST', 'PATCH', 'DELETE'])
 # @permission_classes([IsAuthenticated])

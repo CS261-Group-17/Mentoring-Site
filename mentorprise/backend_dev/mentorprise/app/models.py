@@ -141,15 +141,8 @@ class GroupEventFeedback(Feedback):
 
 
 class GeneralFeedback(Feedback):
-    creation_datetime = models.DateTimeField()  # TODO: What is this?
     mentor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_received_feedback")
-
-
-class ImprovedWeaknesses(models.Model):
-    feedback = models.ForeignKey(GeneralFeedback, on_delete=models.CASCADE)
-    weakness_type = models.ForeignKey(
-        StrengthWeakness, on_delete=models.CASCADE)
 
 
 class SystemFeedback(models.Model):
