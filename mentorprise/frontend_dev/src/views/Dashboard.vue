@@ -150,7 +150,7 @@
                 <div class="title">You don't have any mentees</div>
                 <div style="display: flex">
                   <div style="padding-right: 40px; color: #8faae3">
-                    Something about whether or not you are currently visibile to
+                    Something about whether or not you are currently visible to
                     prospective mentees,go to profile to change
                   </div>
                   <div>
@@ -179,12 +179,12 @@
           <div class="triangle"></div>
           <div class="request">
             <span class="request_content">{{ v.content }}</span>
-            <span class="request_button" v-if="v.type === 'st'">
+            <!-- <span class="request_button" v-if="v.type === 'st'">
               Select times >
             </span>
             <span class="request_button" v-if="v.type === 'gf'">
               Give feedback >
-            </span>
+            </span> -->
           </div>
         </div>
       </div>
