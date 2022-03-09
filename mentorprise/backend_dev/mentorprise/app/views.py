@@ -53,19 +53,23 @@ def user_profile(request):
     patch:
         Update the contents of the user's profile.
     """
-    if request.method == 'GET':
-        # Get the profile of the user who sent the request
-        serializer = UserProfileSerializer(request.user)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
-    elif request.method == 'PATCH':
-        # Try to update the profile of the user who sent the request with the
-        # data in the request
-        serializer = UserProfileSerializer(
-            request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        profile = Profile.objects.get(user=request.user)
+        if request.method == 'GET':
+            # Get the profile of the user who sent the request
+            serializer = ProfileSerializer(profile)
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        elif request.method == 'PATCH':
+            # Try to update the profile of the user who sent the request with the
+            # data in the request
+            serializer = ProfileSerializer(
+                profile, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Profile.DoesNotExist:
+        return Response("Cannot get profile for non-existent user", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PATCH'])
