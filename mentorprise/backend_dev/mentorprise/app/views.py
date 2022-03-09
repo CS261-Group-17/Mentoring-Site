@@ -138,7 +138,7 @@ def user_strengths(request):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except StrengthList.DoesNotExist:
             return Response("Cannot delete non-existent strength", status=status.HTTP_400_BAD_REQUEST)
-
+    return Response("No strength provided", status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -187,6 +187,7 @@ def user_weaknesses(request):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except WeaknessList.DoesNotExist:
             return Response("Cannot delete non-existent weakness", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No weakness provided", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['PATCH'])
@@ -383,6 +384,7 @@ def mentoring_proposed_mentors(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except (User.DoesNotExist, Pairing.DoesNotExist):
             return Response("Mentee or pairing does not exist", status=status.HTTP_404_NOT_FOUND)
+    return Response("No mentor provided", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -570,6 +572,8 @@ def topics(request):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except StrengthWeakness.DoesNotExist:
             return Response("Cannot delete non-existent topic", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No topic provided", status=status.HTTP_400_BAD_REQUEST)
+
 
 #####################
 ### Notifications ###
@@ -622,6 +626,7 @@ def notifications_list(request):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except Notification.DoesNotExist:
             return Response("Cannot delete non-existent notification", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No noitification provided", status=status.HTTP_400_BAD_REQUEST)
 
 
 ################
@@ -680,7 +685,7 @@ def meetings_request(request):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except MeetingRequest.DoesNotExist:
             return Response("Cannot delete non-existent meeting request", status=status.HTTP_400_BAD_REQUEST)
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
+    return Response("No mentor provided", status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
@@ -716,6 +721,8 @@ def meetings_propose(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except MeetingRequest.DoesNotExist:
             return Response("Cannot propose times for non-existent meeting request", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No meeting request provided", status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -770,8 +777,8 @@ def meetings_accept(request):
                 return Response(serializer_proposal.data, status=status.HTTP_201_CREATED)
         except MeetingProposal.DoesNotExist:
             return Response("Cannot accept non-existent meeting proposal", status=status.HTTP_400_BAD_REQUEST)
-    return Response("API not yet implemented", status=status.HTTP_200_OK)
-    # return Response("Required data values not received", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No meeting proposal provided", status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -851,3 +858,4 @@ def plan_of_action_milestone(request):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         except Milestone.DoesNotExist:
             return Response("Cannot delete non-existent milestone", status=status.HTTP_400_BAD_REQUEST)
+    return Response("No milestone provided", status=status.HTTP_400_BAD_REQUEST)
