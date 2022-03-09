@@ -32,12 +32,12 @@ class UserSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=user, **profile_data)
         return user
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
+# class UserProfileSerializer(serializers.ModelSerializer):
+#     profile = ProfileSerializer()
 
-    class Meta:
-        model = User
-        fields = ['profile']
+#     class Meta:
+#         model = User
+#         fields = ['profile']
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
