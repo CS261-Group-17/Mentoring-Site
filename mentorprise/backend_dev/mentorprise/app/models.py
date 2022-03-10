@@ -86,7 +86,7 @@ class GroupEvent(Event):
 class Attendance(models.Model):
     group_event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE)
     attendee_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    attended = models.BooleanField()
+    attended = models.BooleanField(default=False)
 
 
 class MeetingRequest(models.Model):
