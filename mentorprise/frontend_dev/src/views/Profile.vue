@@ -37,10 +37,10 @@
             </option>
         </select><br><br>
         <p>Strengths</p>
-        <SWList :swlist="profile.ss"/>
+        <SWList :swlist="profile.ss" :givenSWs="swOptions"/>
         <button id="newStrength" @click="addStrength()">+ New Strength</button>
         <br><br><p>Weaknesses</p>
-        <SWList :swlist="profile.ws"/>
+        <SWList :swlist="profile.ws" :givenSWs="swOptions"/>
         <button id="newWeakness" @click="addWeakness()">+ New Weakness</button>
         <br>
         <button class="saveChanges" @click="saveMentoringSettings()">Save Changes</button>
@@ -78,7 +78,8 @@
             return {
                 token: {},
                 profile : {},
-                options: {}
+                options: {},
+                swOptions: []
             }
         },
         async created() {
@@ -123,7 +124,77 @@
                     this.$router.push("/")
                 }
                 else {
-                    // when strengths api works then come back
+                    const getTopics = await fetch("backend/api/topics/",{
+                        method: "GET",
+                        headers: {
+                            "Content-type": "application/json",
+                        }
+                    })
+                    const getList = await getTopics.text()
+                    const getJSON = await JSON.parse(getList)
+                    const getStatus = await getTopics.status
+                    if(getStatus >= 200 && getStatus < 300) {
+                        if(getList == "[]") {
+                            this.swOptions = [
+                                { value:"tennis", text: "Tennis"},
+                                { value:"team", text: "Teamwork"},
+                                { value:"communication", text: "Communication"},
+                                { value:"friendly", text: "Friendly"}
+                            ]
+                            for(let i=0;i<this.swOptions.length;i++) {
+                                await fetch("backend/api/topics/", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        "sw_type": this.swOptions[i].text
+                                    })
+                                })
+                            }
+                        }
+                        else {
+                            for(let i=0;i<getJSON.length;i++) {
+                                this.swOptions.push({"value": getJSON[i].sw_type, "text": getJSON[i].sw_type})
+                            }
+                            // alert(this.options.businessArea[2].text)
+                        }
+                    }
+                    else {
+                        alert("Failed to connect to API")
+                        let newURL = "/Dashboard?t="+this.token
+                        this.$router.push(newURL)
+                    }
+                    const strengthRes = await fetch("backend/api/users/strengths/", {
+                        method: "GET",
+                        header: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
+                        }
+                    })
+                    const strengths = await strengthRes.json()
+                    let userss = []
+                    for(let i=0;i<strengths.length;i++) {
+                        userss.push({
+                            "id": strengths[i].id,
+                            "text": strengths[i].sw_type
+                        })
+                    }
+                    const weakRes = await fetch("backend/api/users/weaknesses/", {
+                        method: "GET",
+                        header: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
+                        }
+                    })
+                    const weaks = await weakRes.json()
+                    let userws = []
+                    for(let i=0;i<weaks.length;i++) {
+                        userws.push({
+                            "id": weaks[i].id,
+                            "text": weaks[i].sw_type
+                        })
+                    }
                     this.profile = {
                         first: accStatus.first_name,
                         last: accStatus.last_name,
@@ -134,24 +205,8 @@
                         businessArea_type: profileStatus.business_area,
                         jobTitle: profileStatus.job_title,
                         time_available: profileStatus.time_available,
-                        ss: [{
-                                id: 1,
-                                text: "tennis",
-                            },
-                            {
-                                id: 2,
-                                text: "team"
-                            }
-                        ],
-                        ws: [{
-                                id: 1,
-                                text: "communication"
-                            },
-                            {
-                                id: 2,
-                                text: "friendly"   
-                            }                
-                        ]
+                        ss: userss,
+                        ws: userws
                     }
                     //alert(this.profile.jobTitle)
                 }
@@ -191,55 +246,11 @@
             // }
             this.options = {
                 businessArea: [
-                    {text: "Software Dev"},
-                    {text: "Marketing"},
-                    {text: "Retail"},
-                    {text: "Management"}
+                    {value: "dev", text: "Software Dev"},
+                    {value: "marketing", text: "Marketing"},
+                    {value: "retail", text: "Retail"},
+                    {value: "management", text: "Management"}
                 ]
-            }
-            const getTopics = await fetch("backend/api/topics/",{
-                method: "GET",
-                headers: {
-                    "Content-type": "application/json",
-                }
-            })
-            const getList = await getTopics.text()
-            const getJSON = await JSON.parse(getList)
-            const getStatus = await getTopics.status
-            if(getStatus >= 200 && getStatus < 300) {
-                if(getList == "[]") {
-                    this.options = {
-                        businessArea: [
-                            {text: "Software Dev"},
-                            {text: "Marketing"},
-                            {text: "Retail"},
-                            {text: "Management"}
-                        ]
-                    }
-                    for(let i=0;i<this.options.businessArea.length;i++) {
-                        await fetch("backend/api/topics/", {
-                            method: "POST",
-                            headers: {
-                                "Content-type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                "sw_type": this.options.businessArea[i].text
-                            })
-                        })
-                    }
-                }
-                else {
-                    this.options.businessArea = []
-                    for(let i=0;i<getJSON.length;i++) {
-                        this.options.businessArea.push({"text": getJSON[i].sw_type})
-                    }
-                    // alert(this.options.businessArea[2].text)
-                }
-            }
-            else {
-                alert("Failed to connect to API")
-                let newURL = "/Dashboard?t="+this.token
-                this.$router.push(newURL)
             }
         },
         methods: {
@@ -375,26 +386,6 @@
             },
             async addStrength() {
                 if(this.profile.ss.length < 5) {
-                    // const addStrengthRes = await fetch("backend/api/users/strengths/", {
-                    //     method: "POST",
-                    //     headers: {
-                    //         "Content-type": "application/json",
-                    //         "Authorization": "Token "+this.token
-                    //     },
-                    //     body: JSON.stringify({
-                    //         "sw_type": ""
-                    //     })
-                    // })
-                    // const addStatus = await addStrengthRes.status
-                    // if(addStatus >= 200 && addStatus < 300) {
-                    //     this.profile.ss.push({
-                    //         id: this.profile.ss.length+1,
-                    //         value:""
-                    //     })
-                    // }
-                    // else {
-                    //     alert("Failed to add a strength")
-                    // }
                     this.profile.ss.push({
                             id: this.profile.ss.length+1,
                             value:""
@@ -440,7 +431,118 @@
                 if(changeStatus >= 200 && changeStatus < 300) {
                     this.profile.businessArea_type = document.getElementById("businessArea").value
                     this.profile.isMentor = document.getElementById("mentorship").checked
+
+                    // time to do the changes in the backend
+                    // for(let i =0;i<this.profile.ss.length;i++) {
+                    //     alert(this.profile.ss[i].text)
+                    // }
+
+                    const sRes = await fetch("backend/api/users/strengths/", {
+                        method: "GET",
+                        headers: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
+                        }
+                    })
+
+                    const oldS = await sRes.json()
+                    for(let i=0;i<oldS.length;i++) {
+                        let found= false
+                        for(let j=0;j<this.profile.ss.length;j++) {
+                            if(oldS[i].sw_type == this.profile.ss[j].text) {
+                                found = true
+                                j=this.profile.ss.length
+                            }
+                        }
+                        if(!found) {
+                            await fetch("backend/api/users/strengths/", {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "Authorization": "Token "+this.token
+                                },
+                                body: JSON.stringify({
+                                    "sw_type": oldS[i].sw_type
+                                })
+                            })
+                        }
+                    }
+                    for(let i=0;i<this.profile.ss.length;i++) {
+                        let found= false
+                        for(let j=0;j<oldS.length;j++) {
+                            if(oldS[i].text == this.profile.ss[j].sw_type) {
+                                found = true
+                                j=this.profile.ss.length
+                            }
+                        }
+                        if(!found) {
+                            await fetch("backend/api/users/strengths/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "Authorization": "Token "+this.token
+                                },
+                                body: JSON.stringify({
+                                    "sw_type": this.profile.ss[i].text
+                                })
+                            })
+                        }
+                    }
+
+                    const wRes = await fetch("backend/api/users/weaknesses/", {
+                        method: "GET",
+                        headers: {
+                            "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
+                        }
+                    })
+
+                    const oldW = await wRes.json()
+                    for(let i=0;i<oldW.length;i++) {
+                        let found= false
+                        for(let j=0;j<this.profile.ws.length;j++) {
+                            if(oldW[i].sw_type == this.profile.ws[j].text) {
+                                found = true
+                                j=this.profile.ws.length
+                            }
+                        }
+                        if(!found) {
+                            await fetch("backend/api/users/weaknesses/", {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "Authorization": "Token "+this.token
+                                },
+                                body: JSON.stringify({
+                                    "sw_type": oldW[i].sw_type
+                                })
+                            })
+                        }
+                    }
+                    for(let i=0;i<this.profile.ws.length;i++) {
+                        let found= false
+                        for(let j=0;j<oldW.length;j++) {
+                            if(oldW[j].sw_type == this.profile.ws[i].text) {
+                                found = true
+                                j=oldW.length
+                            }
+                        }
+                        if(!found) {
+                            await fetch("backend/api/users/weaknesses/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-type": "application/json",
+                                    "Authorization": "Token "+this.token
+                                },
+                                body: JSON.stringify({
+                                    "sw_type": this.profile.ws[i].text
+                                })
+                            })
+                        }
+                    }
+
                     alert("Change done")
+
                 }
                 else {
                     alert("Change did not occur")
