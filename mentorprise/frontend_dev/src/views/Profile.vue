@@ -136,20 +136,20 @@
                         time_available: profileStatus.time_available,
                         ss: [{
                                 id: 1,
-                                val: "tennis",
+                                text: "tennis",
                             },
                             {
                                 id: 2,
-                                val: "team"
+                                text: "team"
                             }
                         ],
                         ws: [{
                                 id: 1,
-                                val: "communication"
+                                text: "communication"
                             },
                             {
                                 id: 2,
-                                val: "friendly"   
+                                text: "friendly"   
                             }                
                         ]
                     }
@@ -191,11 +191,55 @@
             // }
             this.options = {
                 businessArea: [
-                    {value: "dev", text: "Software Dev"},
-                    {value: "marketing", text: "Marketing"},
-                    {value: "retail", text: "Retail"},
-                    {value: "manage", text: "Management"}
+                    {text: "Software Dev"},
+                    {text: "Marketing"},
+                    {text: "Retail"},
+                    {text: "Management"}
                 ]
+            }
+            const getTopics = await fetch("backend/api/topics/",{
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                }
+            })
+            const getList = await getTopics.text()
+            const getJSON = await JSON.parse(getList)
+            const getStatus = await getTopics.status
+            if(getStatus >= 200 && getStatus < 300) {
+                if(getList == "[]") {
+                    this.options = {
+                        businessArea: [
+                            {text: "Software Dev"},
+                            {text: "Marketing"},
+                            {text: "Retail"},
+                            {text: "Management"}
+                        ]
+                    }
+                    for(let i=0;i<this.options.businessArea.length;i++) {
+                        await fetch("backend/api/topics/", {
+                            method: "POST",
+                            headers: {
+                                "Content-type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                "sw_type": this.options.businessArea[i].text
+                            })
+                        })
+                    }
+                }
+                else {
+                    this.options.businessArea = []
+                    for(let i=0;i<getJSON.length;i++) {
+                        this.options.businessArea.push({"text": getJSON[i].sw_type})
+                    }
+                    // alert(this.options.businessArea[2].text)
+                }
+            }
+            else {
+                alert("Failed to connect to API")
+                let newURL = "/Dashboard?t="+this.token
+                this.$router.push(newURL)
             }
         },
         methods: {
@@ -329,11 +373,31 @@
                 }
                 document.getElementById("password").value = ""
             },
-            addStrength() {
+            async addStrength() {
                 if(this.profile.ss.length < 5) {
+                    // const addStrengthRes = await fetch("backend/api/users/strengths/", {
+                    //     method: "POST",
+                    //     headers: {
+                    //         "Content-type": "application/json",
+                    //         "Authorization": "Token "+this.token
+                    //     },
+                    //     body: JSON.stringify({
+                    //         "sw_type": ""
+                    //     })
+                    // })
+                    // const addStatus = await addStrengthRes.status
+                    // if(addStatus >= 200 && addStatus < 300) {
+                    //     this.profile.ss.push({
+                    //         id: this.profile.ss.length+1,
+                    //         value:""
+                    //     })
+                    // }
+                    // else {
+                    //     alert("Failed to add a strength")
+                    // }
                     this.profile.ss.push({
-                        id: this.profile.ss.length+1,
-                        value:""
+                            id: this.profile.ss.length+1,
+                            value:""
                     })
                 }
                 else {
@@ -352,16 +416,23 @@
                 }
             },
             async saveMentoringSettings() {
+                let stringVal = document.getElementById("mentorship").checked
+                if(stringVal) {
+                    stringVal = "true"
+                }
+                else {
+                    stringVal = "false"
+                }
                 const changeProfile = await fetch("backend/api/users/profile/", {
                     method: "PATCH",
                     headers: {
                         "Content-type": "application/json",
                         "Authorization": "Token "+this.token
                     },
-                    body: {
+                    body: JSON.stringify({
                         "business_area": document.getElementById("businessArea").value,
-                        "mentor": document.getElementById("mentorship").checked
-                    }
+                        "mentor": stringVal
+                    })
                 })
                 // alert(document.getElementById("businessArea").value)
                 // alert(document.getElementById("mentorship").checked)

@@ -64,9 +64,11 @@ def user_profile(request):
             # data in the request
             serializer = ProfileSerializer(
                 profile, data=request.data, partial=True)
+            #print(serializer)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            #print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Profile.DoesNotExist:
         return Response("Cannot get profile for non-existent user", status=status.HTTP_400_BAD_REQUEST)
