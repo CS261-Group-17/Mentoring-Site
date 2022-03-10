@@ -4,7 +4,7 @@
     <h1>Dashboard</h1>
 
     <div class="content">
-      <div>
+      <div id="connectionsDiv">
         <div class="part_title">
           <fa icon="network-wired" />
           Connections
@@ -17,7 +17,7 @@
                 style="display: flex; justify-content: space-between"
               >
                 <span>Mentor</span>
-                <router-link to="/">
+                <router-link :to="'/Schedule?t='+this.token">
                   <button class="mentor_button">Request meeting</button>
                 </router-link>
               </div>
@@ -37,7 +37,7 @@
                         <button
                           class="part_title_button"
                           style="width: 140px; transform: translateY(5px)"
-                          @click="request_mentor_choose = true"
+                          @click="getMentorsList()"
                         >
                           Request mentor
                         </button>
@@ -45,7 +45,7 @@
                     </div>
                   </div>
                 </template>
-                <div v-else>
+                <div v-else> <!-- Will show if looking for mentor -->
                   <div style="background-color: #0a102c; padding: 8px 6px">
                     Choose a mentor:
                   </div>
@@ -55,18 +55,18 @@
                       border-top: none;
                       padding: 4px 6px;
                     "
-                    v-for="(v, i) in request_mentor_choose_data"
-                    :key="i"
+                    v-for="mentor in request_mentor_choose_data"
+                    :key="mentor.name"
                   >
                     <div>
-                      {{ v.name }}
+                      {{ mentor.name }}
                       <span
                         style="
                           font-size: 12px;
                           color: #2b3e75;
                           margin-left: 10px;
                         "
-                        v-if="v.recommend"
+                        v-if="mentor.recommend"
                         >Recommended</span
                       >
                     </div>
@@ -79,11 +79,11 @@
                         color: #8faae3;
                       "
                     >
-                      <div style="width: 30%">{{ v.info }}</div>
-                      <div>{{ v.status }}</div>
+                      <div style="width: 30%">{{ mentor.info }}</div>
+                      <div>{{ mentor.status }}</div>
                       <div>
                         <button
-                          @click="request(v.name)"
+                          @click="request(mentor.name)"
                           style="
                             border-radius: 4px;
                             color: #2b3e75;
@@ -94,6 +94,7 @@
                             font-size: 12px;
                             transform: translateY(-10px);
                           "
+                          class ="mentorBut"
                         >
                           Choose mentor
                         </button>
@@ -132,6 +133,7 @@
                         padding: 4px 14px;
                         border-radius: 4px;
                       "
+                      class ="mentorBut"
                     >
                       Change request
                     </button>
@@ -307,23 +309,23 @@ export default {
           warning: false,
         },
       ],
-      request_mentor_choose: false,
-      request_mentor_choose_data: [
-        {
-          name: "James Archbold",
-          recommend: true,
-          info: "Software Engineering",
-          status: "Rating",
-        },
-        {
-          name: "Nathan Griffiths",
-          recommend: false,
-          info: "Business area",
-          status: "Rating",
-        },
-      ],
-      wait_request_mentor_choose: false,
-      wait_request_mentor_choose_data: "",
+      request_mentor_choose: false, // whether you are requesting a mentor
+      // request_mentor_choose_data: [
+      //   {
+      //     name: "James Archbold",
+      //     recommend: true,
+      //     info: "Software Engineering",
+      //     status: "Available",
+      //   },
+      //   {
+      //     name: "Nathan Griffiths",
+      //     recommend: false,
+      //     info: "Marketing",
+      //     status: "Available",
+      //   },
+      // ],
+      wait_request_mentor_choose: false, // waiting for mentor to respond to request
+      wait_request_mentor_choose_data: "", // stores name of mentor that we have requested
     };
   },
   created() {
@@ -347,24 +349,60 @@ export default {
       this.request_mentor_choose = false;
       this.wait_request_mentor_choose = true;
       this.wait_request_mentor_choose_data = name;
-      setTimeout(() => {
-        this.mentor_data = [
-          {
-            upcoming_milestones: "James Archbold",
-            content: "content...",
-          },
-        ];
-      }, 2000);
+      // setTimeout(() => {
+      //   this.mentor_data = [
+      //     {
+      //       upcoming_milestones: "James Archbold",
+      //       content: "content...",
+      //     },
+      //   ];
+      // }, 2000);
     },
     hasNoMentor() {
       return this.mentor_data.length == 0
     },
+    async getMentorsList() {
+      this.request_mentor_choose = true
+      const res = await fetch("backend/api/mentoring/proposed_mentors/", {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Token "+this.token
+        }
+      })
+      //const mentorsList = await res.json()
+      const status = await res.status
+      if(status >= 200 && status < 300) {
+          alert("Hey Ben")
+          this.request_mentor_choose_data= [
+          {
+            name: "James Archbold",
+            recommend: true,
+            info: "Software Engineering",
+            status: "Available",
+          },
+          {
+            name: "Nathan Griffiths",
+            recommend: false,
+            info: "Marketing",
+            status: "Available",
+          },
+        ]
+      }
+      else {
+        this.request_mentor_choose = false
+        alert("Error collecting mentors")
+      }
+    }
   },
 };
 </script>
 <style scoped>
 .dashboard {
   padding: 2rem;
+}
+#connectionsDiv {
+  margin-bottom: 2rem;
 }
 .dashboard > h1 {
   color: #fff;
@@ -396,6 +434,10 @@ export default {
   margin-right: 6px;
   padding: 4px 6px;
   font-size: 14px;
+}
+.mentorBut:hover {
+  background-color: white !important;
+  color: black !important;
 }
 .part_connections_item_title {
   background-color: #0a102c;

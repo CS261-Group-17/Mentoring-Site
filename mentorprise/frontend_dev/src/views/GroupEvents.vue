@@ -8,7 +8,7 @@
     <div class="your-grpevents">
       <div class="sort">
         <button @click="changeFilter()">Filter</button>
-        <button @click="this.sorted = !this.sorted">Sort by date</button>
+        <button @click="toggleSort()" id="sortBut" class="unsorted">Sort by date</button>
         <input type="text" id="filterCond" @input="changeFilter()" placeholder="Search all events">
       </div>
       <br>
@@ -199,6 +199,16 @@ export default {
       let dateDate = new Date(ourDate);
       return dateDate.toString().substring(4, 15)
     },
+    toggleSort() {
+      if(this.sorted) {
+        document.getElementById("sortBut").className = "unsorted"
+      }
+      else {
+        document.getElementById("sortBut").className = "sorted"
+      }
+      this.sorted = !this.sorted
+
+    }
   }
 }
 </script>
@@ -222,6 +232,13 @@ export default {
 .addEvent:hover {
   color: black;
   background-color: white;
+}
+.sorted {
+  background-color: white !important;
+  color: black !important;
+}
+.sorted:hover {
+  background: lightgrey !important;
 }
 .your-grpevents {
   font-size: 14px;
