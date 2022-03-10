@@ -43,7 +43,7 @@
         <SWList :swlist="profile.ws"/>
         <button id="newWeakness" @click="addWeakness()">+ New Weakness</button>
         <br>
-        <button class="saveChanges">Save Changes</button>
+        <button class="saveChanges" @click="saveMentoringSettings()">Save Changes</button>
         
         <br><br>
         <h3 id="dangerZoneTitle">Danger Zone</h3><hr>
@@ -349,6 +349,30 @@
                 }
                 else {
                     alert("Cannot have more than 5 weaknesses")
+                }
+            },
+            async saveMentoringSettings() {
+                const changeProfile = await fetch("backend/api/users/profile/", {
+                    method: "PATCH",
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": "Token "+this.token
+                    },
+                    body: {
+                        "business_area": document.getElementById("businessArea").value,
+                        "mentor": document.getElementById("mentorship").checked
+                    }
+                })
+                // alert(document.getElementById("businessArea").value)
+                // alert(document.getElementById("mentorship").checked)
+                const changeStatus = await changeProfile.status
+                if(changeStatus >= 200 && changeStatus < 300) {
+                    this.profile.businessArea_type = document.getElementById("businessArea").value
+                    this.profile.isMentor = document.getElementById("mentorship").checked
+                    alert("Change done")
+                }
+                else {
+                    alert("Change did not occur")
                 }
             }
         }

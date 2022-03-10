@@ -152,7 +152,7 @@
                 <div class="title">You don't have any mentees</div>
                 <div style="display: flex">
                   <div style="padding-right: 40px; color: #8faae3">
-                    Click here to find mentees
+                    To find mentees you need to be a mentor on a profile, click here to change that
                   </div>
                   <div>
                     <router-link :to="'/Profile?t='+this.token">
