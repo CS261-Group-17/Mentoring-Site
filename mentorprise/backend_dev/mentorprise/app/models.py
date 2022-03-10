@@ -127,6 +127,7 @@ class Feedback(models.Model):
     negatives = models.TextField(blank=True)
     giver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_given_feedback")
+    sentiment = models.FloatField()
 
     class Meta:
         abstract = True
@@ -149,6 +150,7 @@ class SystemFeedback(models.Model):
     category = models.TextField()
     title = models.TextField()
     description = models.TextField()
+    sentiment = models.FloatField()
 
 #######################
 ### Plans of action ###

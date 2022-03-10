@@ -5,3 +5,4 @@ psycopg2-binary #psycopg2 cannot be successfully built
 pylint
 drf_yasg
 numpy
+nltk

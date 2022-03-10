@@ -16,32 +16,36 @@ class Matcher:
     def compare_strengths_weaknesses(mentor, mentee):
         # Prefer mentoring between people with the most shared skills to unblock
         mentor_strengths = [s.sw_type for s in StrengthList.objects.filter(user__exact=mentor)]
-        mentee_weaknesses = [w.sw_type for w in WeaknessList.objects.filter(user__exact=mentee)])
+        mentee_weaknesses = [w.sw_type for w in WeaknessList.objects.filter(user__exact=mentee)]
         return len(set(mentor_strengths).intersection(set(mentee_weaknesses)))
 
-    # @staticmethod
-    # def compare_times(mentor, mentee):
-    #     # Find the time they would be able to allocate to each other, and
-    #     # match it as closely as possible
-    #     mentor_profile = Profile.objects.get(user__exact=mentor)
-    #     mentee_profile = Profile.objects.get(user__exact=mentee)
-    #     mentor_time = mentor_profile.time / (mentor_profile.num_mentees + int(mentor_profile.mentored) + 1)
-    #     mentee_time = mentee_profile.time / (mentee_profile.num_mentees + 2)
-    #     return mentee_time / (mentor_time - mentee_time)
+    @staticmethod
+    def compare_times(mentor, mentee):
+        # Find the time they would be able to allocate to each other, and
+        # match it as closely as possible
+        mentor_profile_time = Profile.objects.get(user__exact=mentor).time_available
+        mentee_profile_time = Profile.objects.get(user__exact=mentor).time_available
+        mentor_num_mentees = len([Pairing.objects.filter(mentor__exact=mentor)])
+        mentor_mentored = len([Pairing.objects.filter(mentee__exact=mentor)])
+        mentee_num_mentees = len([Pairing.objects.filter(mentor__exact=mentee)])
+        mentor_time = mentor_profile_time / (mentor_num_mentees + int(mentor_mentored) + 1)
+        mentee_time = mentee_profile_time / (mentee_num_mentees + 2)
+        print(mentor_time - mentee_time, mentee_time)
+        return mentee_time / max(mentor_time - mentee_time, 0.1)
 
-    # @staticmethod
-    # def assess_feedback(person):
-    #     # Feedback should be on an ELO chess matching system!
-    #     return (
-    #         sum([f[1]*Matcher.FEEDBACK_STAR_WEIGHT+f[2]*Matcher.FEEDBACK_SENTIMENT_WEIGHT for f in person.meeting_feedback])
-    #         + sum([f[1]*Matcher.FEEDBACK_STAR_WEIGHT+f[2]*Matcher.FEEDBACK_SENTIMENT_WEIGHT for f in person.mentor_feedback])
-    #     )
+    @staticmethod
+    def assess_feedback(person):
+        # Feedback should be on an ELO chess matching system!
+        return sum([
+            feedback.rating * Matcher.FEEDBACK_STAR_WEIGHT
+                + feedback.sentiment * Matcher.FEEDBACK_SENTIMENT_WEIGHT
+            for feedback in Feedback.objects.filter(mentor__exact=person)])
 
-    # @staticmethod
-    # def match_feedback(mentor, mentee): # User, # User
-    #     mentor_feedback = Matcher.assess_feedback(mentor)
-    #     mentee_feedback = Matcher.assess_feedback(mentee)
-    #     return mentee_feedback / (mentor_feedback - mentee_feedback)
+    @staticmethod
+    def match_feedback(mentor, mentee): # User, # User
+        mentor_feedback = Matcher.assess_feedback(mentor)
+        mentee_feedback = Matcher.assess_feedback(mentee)
+        return mentee_feedback / (mentor_feedback - mentee_feedback)
 
     @staticmethod
     def get_ordered_list(mentor, people): # User, QuerySet[User]
@@ -52,8 +56,8 @@ class Matcher:
             mentee_scores[mentee] = (
                 Matcher.STRENGTH_WEAKNESS_WEIGHT
                         * Matcher.compare_strengths_weaknesses(mentor, mentee)
-                # + Matcher.TIMES_WEIGHT
-                #         * Matcher.compare_times(mentor, mentee)
+                + Matcher.TIMES_WEIGHT
+                        * Matcher.compare_times(mentor, mentee)
                 # + Matcher.FEEDBACK_WEIGHT
                 #         * Matcher.match_feedback(mentor, mentee)
             )
