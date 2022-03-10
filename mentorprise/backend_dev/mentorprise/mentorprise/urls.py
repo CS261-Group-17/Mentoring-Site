@@ -17,10 +17,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+# https://drf-yasg.readthedocs.io/en/stable/readme.html#quickstart
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Mentorprise API",
+      default_version='v1',
+      description="The API for the Mentorprise mentorship",
+      terms_of_service="./terms_of_service",
+      license=openapi.License(name="MIT License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny], # TODO: THIS NEEDS CHANGING :kekw:
+)
+
+
 urlpatterns = [
     path('api/', include('app.urls')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

@@ -1,8 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+##############
+### Topics ###
+##############
+
+
 class StrengthWeakness(models.Model):
-    sw_type = models.TextField()
+    sw_type = models.TextField(unique=True)
+
+############
+### User ###
+############
 
 
 class Profile(models.Model):
@@ -13,13 +22,29 @@ class Profile(models.Model):
     # if null the user is not an expert.
     expert_at = models.ForeignKey(
         StrengthWeakness, models.SET_NULL, null=True, blank=True)
-    mentor = models.BooleanField()
+    mentor = models.BooleanField(default=False)
+    mentee = models.BooleanField(default=True)
+    time_available = models.FloatField()
 
 
-class StrengthWeaknessList(models.Model):
+class StrengthList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_strength = models.BooleanField()
     sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE)
+
+
+class WeaknessList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sw_type = models.ForeignKey(StrengthWeakness, on_delete=models.CASCADE)
+
+
+class PasswordReset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_datetime = models.DateTimeField()
+    code = models.IntegerField()
+
+#####################
+### Notifications ###
+#####################
 
 
 class Notification(models.Model):
@@ -27,18 +52,22 @@ class Notification(models.Model):
     creation_datetime = models.DateTimeField()
     title = models.TextField()
     description = models.TextField()
-    is_read = models.BooleanField()
+    is_read = models.BooleanField(default=False)
     link = models.TextField()
+
+##############
+### Events ###
+##############
 
 
 class Event(models.Model):
     instructor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_instructor_meeting")
     title = models.TextField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
     start_datetime = models.DateTimeField()
     duration = models.IntegerField()
-    cancelled = models.BooleanField()
+    cancelled = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -53,33 +82,49 @@ class GroupEvent(Event):
     event_type = models.TextField()  # group session or workshop
     capacity = models.IntegerField()
 
-# weaknesses a group event is targeted to improving
-
-
-class GroupEventWeaknesses(models.Model):
-    event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE)
-    weakness_type = models.ForeignKey(
-        StrengthWeakness, on_delete=models.CASCADE)
-
-# weaknesses a meeting is targeted to improving
-
-
-class MeetingWeaknesses(models.Model):
-    event = models.ForeignKey(Meeting, on_delete=models.CASCADE)
-    weakness_type = models.ForeignKey(
-        StrengthWeakness, on_delete=models.CASCADE)
-
 
 class Attendance(models.Model):
     group_event = models.ForeignKey(GroupEvent, on_delete=models.CASCADE)
     attendee_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    attended = models.BooleanField()
+    attended = models.BooleanField(default=False)
+
+
+class MeetingRequest(models.Model):
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_meeting_request")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_meeting_request")
+    # title = models.TextField()
+    description = models.TextField(blank=True)
+    is_proposed = models.BooleanField(default=False)
+
+
+class MeetingProposal(models.Model):
+    mentor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentor_meeting")
+    mentee = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="mentee_meeting")
+    is_accepted = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False) # Need both, as there is a 3rd state "unprocessed"
+    rejection_note = models.TextField(blank=True)
+    time1 = models.DateTimeField()
+    duration1 = models.IntegerField()
+    time2 = models.DateTimeField()
+    duration2 = models.IntegerField()
+    time3 = models.DateTimeField()
+    duration3 = models.IntegerField()
+    request = models.OneToOneField(
+        MeetingRequest, null=True, blank=True, on_delete=models.SET_NULL)
+
+################
+### Feedback ###
+################
 
 
 class Feedback(models.Model):
     rating = models.IntegerField()
-    positives = models.TextField()
-    negatives = models.TextField()
+    positives = models.TextField(blank=True)
+    negatives = models.TextField(blank=True)
     giver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_given_feedback")
 
@@ -96,21 +141,18 @@ class GroupEventFeedback(Feedback):
 
 
 class GeneralFeedback(Feedback):
-    creation_datetime = models.DateTimeField()
     mentor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="%(class)s_received_feedback")
-
-
-class ImprovedWeaknesses(models.Model):
-    feedback = models.ForeignKey(GeneralFeedback, on_delete=models.CASCADE)
-    weakness_type = models.ForeignKey(
-        StrengthWeakness, on_delete=models.CASCADE)
 
 
 class SystemFeedback(models.Model):
     category = models.TextField()
     title = models.TextField()
     description = models.TextField()
+
+#######################
+### Plans of action ###
+#######################
 
 
 class Milestone(models.Model):
@@ -122,11 +164,9 @@ class Milestone(models.Model):
     deadline = models.DateTimeField()
     urgency = models.SmallIntegerField()
 
-
-class PasswordReset(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    start_datetime = models.DateTimeField()
-    code = models.IntegerField()
+#################
+### Mentoring ###
+#################
 
 
 class Pairing(models.Model):
@@ -136,25 +176,3 @@ class Pairing(models.Model):
         User, on_delete=models.CASCADE, related_name="mentee_pairing")
     in_proposal = models.BooleanField()
     terminated = models.BooleanField()
-
-
-class MeetingProposal(models.Model):
-    mentor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="mentor_meeting")
-    mentee = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="mentee_meeting")
-    description = models.TextField()
-    is_rejected = models.BooleanField()
-    rejection_note = models.TextField()
-    time1 = models.DateTimeField()
-    duration1 = models.IntegerField()
-    time2 = models.DateTimeField()
-    duration2 = models.IntegerField()
-    time3 = models.DateTimeField()
-    duration3 = models.IntegerField()
-
-
-# class Authenticator(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     # might overflow. IDK how big the auth token will be, or what the max integer size is for postgres
-#     auth_token = models.IntegerField()

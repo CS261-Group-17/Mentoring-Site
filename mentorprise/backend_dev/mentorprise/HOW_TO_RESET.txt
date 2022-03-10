@@ -1,0 +1,7 @@
+sudo -u postgres psql
+    =# DROP DATABASE mentorprise; CREATE DATABASE mentorprise;
+
+python3 manage.py makemigrations app
+python3 manage.py migrate
+python3 manage.py createsuperuser
+
