@@ -32,13 +32,6 @@ class UserSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=user, **profile_data)
         return user
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     profile = ProfileSerializer()
-
-#     class Meta:
-#         model = User
-#         fields = ['profile']
-
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -92,17 +85,22 @@ class SystemFeedbackSerializer(serializers.ModelSerializer):
 class MeetingFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingFeedback
-        exclude = ['giver', 'meeting'] # fields = '__all__'
+        exclude = ['giver', 'meeting']
 
     def create(self, validated_data):
         validated_data["giver"] = self.context["request"].user
         validated_data["meeting"] = self.context["meeting"]
         return super().create(validated_data)
 
-# class GroupEventFeedbackSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = GroupEventFeedback
-#         fields = '__all__'
+class GroupEventFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupEventFeedback
+        exclude = ['giver', 'group_event']
+
+    def create(self, validated_data):
+        validated_data["giver"] = self.context["request"].user
+        validated_data["group_event"] = self.context["group_event"]
+        return super().create(validated_data)
 
 class GeneralFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
@@ -140,7 +138,7 @@ class MeetingRequestSerializer(serializers.ModelSerializer):
 class MeetingProposalSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingProposal
-        exclude = ['mentor']
+        exclude = ['mentor'] # TODO: does this need meeting request?
 
     def create(self, validated_data):
         validated_data["mentor"] = self.context["request"].user
@@ -155,13 +153,28 @@ class MeetingProposalSerializer(serializers.ModelSerializer):
 class GroupEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupEvent
-        fields = '__all__'
+        exclude = ['instructor']
+
+    def create(self, validated_data):
+        validated_data["instructor"] = self.context["request"].user
+        return super().create(validated_data)
 
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = '__all__'
+        exclude = ['attendee_id', 'group_event']
 
+    def create(self, validated_data):
+        validated_data["attendee_id"] = self.context["request"].user
+        validated_data["group_event"] = self.context["event"]
+        return super().create(validated_data)
+
+class AttendanceGetterSerializer(serializers.ModelSerializer):
+    group_event = GroupEventSerializer()
+
+    class Meta:
+        model = Attendance
+        fields = '__all__'
 
 #######################
 ### Plans of action ###
@@ -188,8 +201,3 @@ class NotificationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
-
-# class NotificationReadSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Notification
-#         fields = 'is_read'
