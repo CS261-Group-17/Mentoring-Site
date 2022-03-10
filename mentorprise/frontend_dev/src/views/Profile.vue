@@ -128,6 +128,7 @@
                         method: "GET",
                         headers: {
                             "Content-type": "application/json",
+                            "Authorization": "Token "+this.token
                         }
                     })
                     const getList = await getTopics.text()
@@ -146,6 +147,7 @@
                                     method: "POST",
                                     headers: {
                                         "Content-type": "application/json",
+                                        "Authorization": "Token "+this.token
                                     },
                                     body: JSON.stringify({
                                         "sw_type": this.swOptions[i].text
@@ -165,11 +167,12 @@
                         let newURL = "/Dashboard?t="+this.token
                         this.$router.push(newURL)
                     }
+                    //alert(this.token)
                     const strengthRes = await fetch("backend/api/users/strengths/", {
                         method: "GET",
-                        header: {
+                        headers: {
                             "Content-type": "application/json",
-                            "Authorization": "Token "+this.token
+                            "Authorization": "Token " + this.token
                         }
                     })
                     const strengths = await strengthRes.json()
@@ -182,9 +185,9 @@
                     }
                     const weakRes = await fetch("backend/api/users/weaknesses/", {
                         method: "GET",
-                        header: {
+                        headers: {
                             "Content-type": "application/json",
-                            "Authorization": "Token "+this.token
+                            "Authorization": "Token " + this.token
                         }
                     })
                     const weaks = await weakRes.json()

@@ -143,29 +143,41 @@
             </template>
           </div>
           <div class="part_connections_item">
-            <template v-if="mentees_data.length != 0">
+            <template v-if="mentees_data.length != 0"> <!-- if you have mentees -->
               <div class="part_connections_item_title">Mentees</div>
               <Collapse :list="mentees_data" random="mentees" />
             </template>
-            <template v-else>
+            <template v-if="mentees_data.length < 3 && !looking_for_mentees"> <!-- Looking for more mentees -->
               <div class="part_connections_item_select">
-                <div class="title">You don't have any mentees</div>
+                <div class="title">Find a mentee</div>
                 <div style="display: flex">
                   <div style="padding-right: 40px; color: #8faae3">
-                    To find mentees you need to be a mentor on a profile, click here to change that
+                    You can start searching for a mentee right now, just click the button to find suitable students
                   </div>
                   <div>
-                    <router-link :to="'/Profile?t='+this.token">
                       <button
                         class="part_title_button"
+
                         style="width: 140px; transform: translateY(5px)"
+
+                        @click = "getPotMentees()"
                       >
-                        Change on profile
+                        Start searching
                       </button>
-                    </router-link>
                   </div>
                 </div>
               </div>
+            </template>
+            <template v-if="looking_for_mentees">
+                <ul id="lookingForMentee">
+                  <li class="potentialMentees" v-for="pot in potential_mentees" :key="pot.id">
+                    <p>
+                      <b>{{pot.name}}</b><br>
+                      {{pot.busArea}} <button class="acceptMentee"><span v-if="!mentee_to_confirm[pot.id]">Accept</span><span v-if="mentee_to_confirm[pot.id]">Waiting</span></button><br>
+                      {{pot.bio}}
+                    </p>
+                  </li>
+                </ul>
             </template>
           </div>
         </div>
@@ -275,8 +287,8 @@ export default {
       ],
       mentor_data: [],
       mentees_data: [
-        // { upcoming_milestones: "Bill", content: "content..." },
-        // { upcoming_milestones: "Harry", content: "content..." },
+         { upcoming_milestones: "Bill", content: "content..." },
+         { upcoming_milestones: "Harry", content: "content..." },
       ],
       today_data: [
         {
@@ -310,6 +322,21 @@ export default {
       ],
       request_mentor_choose: false, // whether you are requesting a mentor
       request_mentor_choose_data: [],
+      potential_mentees: [
+        {
+          id: 0,
+          name: "Edmund Goodman",
+          busArea: "Software Development",
+          bio: "Always looking to learn more"
+        },
+        {
+          id: 1,
+          name: "Mogus Bogus",
+          busArea: "Retail",
+          bio: "A young entrepreneur looking to learn how to code"
+        }
+      ],
+      mentee_to_confirm: [ true, false ],
       // request_mentor_choose_data: [
       //   {
       //     name: "James Archbold",
@@ -326,6 +353,7 @@ export default {
       // ],
       wait_request_mentor_choose: false, // waiting for mentor to respond to request
       wait_request_mentor_choose_data: "", // stores name of mentor that we have requested
+      looking_for_mentees: false
     };
   },
   created() {
@@ -393,11 +421,20 @@ export default {
         this.request_mentor_choose = false
         alert("Error collecting mentors")
       }
+    },
+    getPotMentees() {
+      this.looking_for_mentees = true
     }
   },
 };
 </script>
 <style scoped>
+.potentialMentees {
+  list-style-type: none;
+}
+.acceptMentee {
+  float: right;
+}
 .dashboard {
   padding: 2rem;
 }
@@ -414,8 +451,9 @@ export default {
   color: #fff;
   display: grid;
   grid-template-columns: 49% 49%;
-  grid-template-rows: 360px auto;
+  grid-template-rows: 30rem auto;
   gap: 2%;
+  margin-bottom: 2rem solid #00001a;
 }
 .part_title {
   color: #8faae3;
@@ -425,6 +463,18 @@ export default {
 }
 .part_title svg {
   margin-right: 4px;
+}
+#lookingForMentee {
+  margin-top: 1rem;
+}
+.acceptMentee {
+  color: white;
+  background-color: #00001a;
+  border: solid 2px white;
+}
+.acceptMentee:hover {
+  color: black;
+  background-color: white;
 }
 .mentor_button {
   background-color: transparent;
