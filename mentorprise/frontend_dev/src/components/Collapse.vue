@@ -6,7 +6,7 @@
       :data-bs-target="'#collapse_' + random + i"
       aria-expanded="false"
     >
-      <div :style="!v.comoplete_by ? 'width:auto' : 'width:33%'">
+      <div :style="!v.complete_by ? 'width:auto' : 'width:33%'">
         <svg
           viewBox="64 64 896 896"
           focusable="false"
@@ -23,8 +23,8 @@
         </svg>
         &nbsp; {{ v.upcoming_milestones }}
       </div>
-      <div v-if="v.comoplete_by" style="color: #bdc9e3; width: 33%">
-        {{ v.comoplete_by }}
+      <div v-if="v.complete_by" style="color: #bdc9e3; width: 33%">
+        {{ v.complete_by }}
       </div>
       <div v-if="v.time_remaining" style="color: #bdc9e3; width: 33%">
         {{ v.time_remaining }}

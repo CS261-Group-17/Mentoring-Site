@@ -152,11 +152,10 @@
                 <div class="title">You don't have any mentees</div>
                 <div style="display: flex">
                   <div style="padding-right: 40px; color: #8faae3">
-                    Something about whether or not you are currently visible to
-                    prospective mentees,go to profile to change
+                    Click here to find mentees
                   </div>
                   <div>
-                    <router-link to="/Profile">
+                    <router-link :to="'/Profile?t='+this.token">
                       <button
                         class="part_title_button"
                         style="width: 140px; transform: translateY(5px)"
@@ -276,8 +275,8 @@ export default {
       ],
       mentor_data: [],
       mentees_data: [
-        { upcoming_milestones: "Bill", content: "content..." },
-        { upcoming_milestones: "Harry", content: "content..." },
+        // { upcoming_milestones: "Bill", content: "content..." },
+        // { upcoming_milestones: "Harry", content: "content..." },
       ],
       today_data: [
         {
@@ -310,6 +309,7 @@ export default {
         },
       ],
       request_mentor_choose: false, // whether you are requesting a mentor
+      request_mentor_choose_data: [],
       // request_mentor_choose_data: [
       //   {
       //     name: "James Archbold",
@@ -373,7 +373,7 @@ export default {
       //const mentorsList = await res.json()
       const status = await res.status
       if(status >= 200 && status < 300) {
-          alert("Hey Ben")
+          //alert("Hey Ben")
           this.request_mentor_choose_data= [
           {
             name: "James Archbold",
