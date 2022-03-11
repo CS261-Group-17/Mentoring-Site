@@ -466,7 +466,7 @@ def feedback_mentor(request):
     patch:
         Modify the mentor feedback from a user.
     """
-    if 'mentor_id' in request.data:
+    if 'mentor_id' in request.data or 'mentor_id' in request.GET:
         if request.method == 'GET':
             # Get the general feedback
             try:
@@ -475,7 +475,7 @@ def feedback_mentor(request):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except GeneralFeedback.DoesNotExist:
                 return Response("Cannot update feedback for non-existent mentor", status=status.HTTP_400_BAD_REQUEST)
-        elif request.method == 'PATCH' and 'mentor_id' in request.data:
+        elif request.method == 'PATCH' and ('mentor_id' in request.data or 'mentor_id' in request.GET):
             # Get a notification by its id, then update it with the request data
             # if it is valid
             try:
@@ -674,11 +674,16 @@ def meetings_request(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         # Add a new meeting request
-        serializer = MeetingRequestSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            mentor = Pairing.objects.get(mentee__exact=request.user).mentor
+            serializer = MeetingRequestSerializer(
+                data=request.data, context={'request': request, "mentor": mentor})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Pairing.DoesNotExist:
+            return Response("Cannot request a meeting if the user has no mentor", status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE' and 'mentor' in request.data:
         try:
             # Get the appropriate meeting, and delete it
