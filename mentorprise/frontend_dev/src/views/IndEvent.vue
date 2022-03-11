@@ -107,32 +107,32 @@ export default {
     return {
       token: {},
       state: "host", //host participant events_done tutor mentee all_done,
-      event_name: "Learn Python",
+      event_name: "Learning JS",
       event_attendees_data: [
-        "Greed",
-        "Gluttony",
-        "Sloth",
-        "Lust",
-        "Pride",
-        "Envy",
-        "Wrath"
+        "Edmund",
+        "Tomas",
+        "John-loong",
+        "Ben",
+        "Dan",
+        "Jay",
+        "Rahul"
       ],
       event_info: {
-        host: "Nathan Griffiths",
+        host: "Ben Lewis",
         type: "Workshop",
         description:
-          "description description description description description description",
-        date: "2022-05-12",
+          "Come here to Learn JS",
+        date: "2022-02-15",
         startTime: "13:00",
         endTime: "15:00",
-        location: "Hell",
+        location: "CS262",
         capacity: "100"
       },
       feedback_data: [
         {
           id: 1,
           stars: 2,
-          title: "Too hot",
+          title: "Room was too hot",
           content: "I was sweating the entire time",
           time: "23-01-2022 16:53",
         },
