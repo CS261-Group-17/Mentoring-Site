@@ -1,7 +1,7 @@
 <template>
     <ol>
         <li v-for="sw in swlist" :key="sw.id">
-            <select v-model="sw.val">
+            <select v-model="sw.text">
                 <option disabled value="">Nothing Selected</option>
                 <option v-for="option in categories.options" :value="option.value" :key="option.value">
                     {{ option.text }}
@@ -15,7 +15,8 @@
 export default {
     name:"SWList",
     props: {
-        swlist: Array
+        swlist: Array,
+        givenSWs: Array
     },
     components: {},
     data() {
@@ -25,12 +26,7 @@ export default {
     },
     created() {
         this.categories =  {
-            options: [
-                { value:"tennis", text: "Tennis"},
-                { value:"team", text: "Teamwork"},
-                { value:"communication", text: "Communication"},
-                { value:"friendly", text: "Friendly"}
-            ]
+            options: this.givenSWs
         }
     },
 }

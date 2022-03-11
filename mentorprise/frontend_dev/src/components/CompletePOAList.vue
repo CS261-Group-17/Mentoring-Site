@@ -5,7 +5,7 @@
             <button class="poaGone" @click="onDelete(poa.id)"><fa icon="xmark" size="2x"/></button>
             <button class="poaUndo" @click="this.$emit('undo-milestone', poa.id)">Undo</button>
             <br>
-            <p class="poaUndertext">{{poa.desc}}</p>
+            <p class="poaUndertext">{{poa.description}}</p>
         </li>
     </ul>
     <p id="anyComplete">{{anyComplete()}}</p>

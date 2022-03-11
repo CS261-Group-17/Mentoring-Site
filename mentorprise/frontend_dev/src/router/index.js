@@ -4,12 +4,14 @@ import Dashboard from "../views/Dashboard.vue";
 import Profile from "../views/Profile.vue";
 import Register from "../views/Register.vue"
 import IndPOA from "../views/IndPOA.vue"
-import GroupEvents from "../views/GroupEvent.vue"
+import GroupEvents from "../views/GroupEvents.vue"
 import POA from "../views/POA.vue"
 import Schedule from "../views/Schedule.vue"
 import IndEvent from "../views/IndEvent.vue"
 import Feedback from "../views/Feedback.vue"
 import Reset from "../views/Reset.vue"
+import Tos from "../views/TOS.vue"
+import Privacy from "../views/Privacy.vue"
 
 const routes = [
   {
@@ -20,7 +22,7 @@ const routes = [
   {
     path: "/Dashboard",
     name: "Dashboard",
-    component: Dashboard
+    component: Dashboard,
   },
   {
     path: "/Profile",
@@ -38,8 +40,8 @@ const routes = [
     component: IndPOA
   },
   {
-    path: "/GroupEvent",
-    name: "GroupEvent",
+    path: "/GroupEvents",
+    name: "GroupEvents",
     component: GroupEvents
   },
   {
@@ -66,7 +68,18 @@ const routes = [
     path: "/Reset",
     name: "Reset",
     component: Reset
+  },
+  {
+    path: "/tos",
+    name: "TOS",
+    component: Tos
+  },
+  {
+    path: "/privacy",
+    name: "Privacy",
+    component: Privacy
   }
+
 ];
 
 const router = createRouter({

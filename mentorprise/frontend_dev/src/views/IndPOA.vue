@@ -1,10 +1,10 @@
 <template>
-    <Navbar />
+    <Navbar :token="this.token"/>
     <div id="IndPOA">
         <h1>{{ profile.fname }}'s Plan of Action</h1>
         <h3>Current Milestones</h3>
         <hr>
-        <POAList @complete-milestone="completeMileStone" :poaList="getUndone(milestones)"/>
+        <POAList @complete-milestone="completeMileStone" @edit-milestone="editMileStone" :poaList="getUndone(milestones)"/>
         <button id="newMilestone" @click="addMilestone()">+ New milestone</button>
 
         <br><br>
@@ -28,44 +28,79 @@
         },
         data() {
             return {
+                token: {},
                 milestones: [],
                 profile: {},
             }
         },
-        created() {
+        async created() {
             this.profile = {
                 fname: "Tommy"
             }
-            this.milestones = [
-                { //Needs to be in YYYY-MM-DD
-                    id: 1,
-                    title: "Learn Python",
-                    desc: "Learn how to use Python 3.x",
-                    deadline: "2022-01-09",
-                    complete: false
-                },
-                {
-                    id: 2,
-                    title: "Complete mentoring course",
-                    desc: "Reach the end and pass the DB mentoring course",
-                    deadline: "2022-02-28",
-                    complete: false
-                },
-                {   
-                    id: 3,
-                    title: "Find a new house",
-                    desc: "Get a new place to live",
-                    deadline: "2022-01-09",
-                    complete: false
-                }, 
-                {
-                    id: 4,
-                    title: "Done done",
-                    desc: "This is finished",
-                    deadline: "2022-05-05",
-                    complete: true
+            let splitURL = document.URL.split("?")
+            let failed = true
+            if(splitURL.length > 1) {
+            let urlParams = new URLSearchParams("?" + splitURL[1])
+            if(urlParams.has("t")) {
+                this.token = urlParams.get("t")
+                //alert(this.token)
+                failed = false
+            }
+            }
+            if(failed) {
+                this.$router.push("/")
+            }
+            const getFname = await fetch("backend/api/users/account/", {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Token "+this.token
                 }
-            ]
+            })
+            const fname = await getFname.json()
+            this.profile.fname = fname.first_name
+            const res = await fetch("backend/api/plans_of_action/", {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Token "+this.token
+                }
+            })
+            const poa = await res.json()
+            this.milestones = poa
+            for(let i=0;i<this.milestones.length;i++) {
+                this.milestones[i].deadline = this.milestones[i].deadline.substring(0, this.milestones[i].deadline.length-4)
+            }
+            // this.milestones = [
+            //     { //Needs to be in YYYY-MM-DD
+            //         id: 1,
+            //         title: "Learn Python",
+            //         description: "Learn how to use Python 3.x",
+            //         deadline: "2022-01-09",
+            //         complete: false
+            //     },
+            //     {
+            //         id: 2,
+            //         title: "Complete mentoring course",
+            //         description: "Reach the end and pass the DB mentoring course",
+            //         deadline: "2022-02-28",
+            //         complete: false
+            //     },
+            //     {   
+            //         id: 3,
+            //         title: "Find a new house",
+            //         description: "Get a new place to live",
+            //         deadline: "2022-01-09",
+            //         complete: false
+            //     }, 
+            //     {
+            //         id: 4,
+            //         title: "Done done",
+            //         description: "This is finished",
+            //         deadline: "2022-05-05",
+            //         complete: true
+            //     }
+            // ]
         },
         methods: {
             getCompleted(listOfMileStones) {
@@ -86,35 +121,136 @@
                 }
                 return newList
             },
-            addMilestone() {
+            async addMilestone() {
+                let today = new Date()
                 this.milestones.push({
                     id: this.milestones.length+1,
                     title: "New Milestone",
-                    desc: "New Milestone Desc",
-                    deadline: "2022-02-09",
-                    complete: false
+                    description: "New Milestone Desc",
+                    deadline: today.getFullYear() +"-"+String(today.getMonth() + 1).padStart(2, '0') + "-"+ String(today.getDate()).padStart(2, '0'),
+                    creation_datetime: today.getFullYear() +"-"+String(today.getMonth() + 1).padStart(2, '0') + "-"+ String(today.getDate()).padStart(2, '0'),
+                    complete: false,
+                    urgency: 1
                 })
+                const res = await fetch("backend/api/plans_of_action/milestones/", {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": "Token "+this.token
+                    },
+                    body: JSON.stringify(this.milestones[this.milestones.length-1])
+                })
+
+                const status = await res.status
+                if(status >= 300) {
+                    alert("Milestone failed to be added")
+                    this.milestones = this.milestones.slice(-1)
+                }
+                else {
+                    this.milestones[this.milestones.length-1].deadline += "T00:00"
+                }
             },
-            deleteCancelled(id) {
+            async deleteCancelled(id) {
                 for(let i=0;i<this.milestones.length;i++) {
                     if(this.milestones[i].id == id) {
-                        this.milestones.splice(i,1)
+                        const res = await fetch("backend/api/plans_of_action/milestones/", {
+                            method: "DELETE",
+                            headers: {
+                                "Content-type": "application/json",
+                                "Authorization": "Token "+this.token
+                            },
+                            body: JSON.stringify({
+                                milestone: id,
+                            })
+                        })
+
+                        const status = await res.status
+                        if(status >= 300) {
+                            alert("The delete did not occur properly")
+                        }
+                        else {
+                            this.milestones.splice(i,1)
+                        }
                         return null
                     }
                 }
             },
-            completeMileStone(id) {
+            async completeMileStone(id) {
                 for(let i=0;i<this.milestones.length;i++) {
                     if(this.milestones[i].id == id) {
                         this.milestones[i].complete = true
+                        const res = await fetch("backend/api/plans_of_action/milestones/", {
+                            method: "PATCH",
+                            headers: {
+                                "Content-type": "application/json",
+                                "Authorization": "Token "+this.token
+                            },
+                            body: JSON.stringify({
+                                milestone: id,
+                                complete: true
+                            })
+                        })
+
+                        const status = await res.status
+                        if(status >= 300) {
+                            alert("Update did not occur properly")
+                            this.milestones[i].complete = false
+                        }
                         return null
                     }
                 }
             },
-            undoMileStone(id) {
+            async undoMileStone(id) {
                 for(let i=0;i<this.milestones.length;i++) {
                     if(this.milestones[i].id == id) {
                         this.milestones[i].complete = false
+                        const res = await fetch("backend/api/plans_of_action/milestones/", {
+                            method: "PATCH",
+                            headers: {
+                                "Content-type": "application/json",
+                                "Authorization": "Token "+this.token
+                            },
+                            body: JSON.stringify({
+                                milestone: id,
+                                complete: false
+                            })
+                        })
+
+                        const status = await res.status
+                        if(status >= 300) {
+                            alert("Update did not occur properly")
+                            this.milestones[i].complete = true
+                        }
+                        return null
+                    }
+                }
+            },
+            async editMileStone(id, newTitle, newDesc, newDate) {
+                for(let i=0;i<this.milestones.length;i++) {
+                    if(this.milestones[i].id == id) {
+                        const res = await fetch("backend/api/plans_of_action/milestones/", {
+                            method: "PATCH",
+                            headers: {
+                                "Content-type": "application/json",
+                                "Authorization": "Token "+this.token
+                            },
+                            body: JSON.stringify({
+                                milestone: id,
+                                title: newTitle,
+                                description: newDesc,
+                                deadline: newDate+":00Z"
+                            })
+                        })
+
+                        const status = await res.status
+                        if(status >= 300) {
+                            alert("Update did not occur properly")
+                        }
+                        else {
+                            this.milestones[i].title = newTitle
+                            this.milestones[i].description = newDesc
+                            this.milestones[i].deadline = newDate+":00Z"
+                        }
                         return null
                     }
                 }

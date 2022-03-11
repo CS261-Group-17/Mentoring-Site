@@ -1,8 +1,8 @@
 <template>
-    <NavBar />
+    <NavBar :token="this.token"/>
     <div id="schedule">
         <h1>Schedule</h1>
-        <Calendar :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
+        <Calendar :token="this.token" :events="this.upcoming(this.schedule)" @cancel-event="cancelEvent" v-if="this.renderCalendar"/>
         <div id="requests">
             <h3>Requests</h3>
             <ul> 
@@ -124,11 +124,9 @@
             <h3>Past Events</h3>
             <ul>
                 <li v-for="event in pastEvents(schedule)" :key="event.eventID" :class="'past' + event.type">
-                    <p class="innerPast">
-                        <span class="pastTitle">{{event.eventName}}</span><br>
-                        {{event.date}}, {{event.location}}
-                    </p>
-                    <button :class="'seeFeedback'+event.type">See Feedback</button>
+                        <span class="pastTitle">{{event.eventName}}</span> <router-link :to="'/IndEvent?t='+this.token"><span :class="'seeFeedback'+event.type">See Feedback</span></router-link><br>
+                        <span class="innerPast">{{event.date}}, {{event.location}}</span>
+                        <br><br>
                 </li>
             </ul>
         </div>
@@ -156,7 +154,8 @@
             profile: {},
             requests: [],
             schedule: [],
-            renderCalendar:true
+            renderCalendar:true,
+            token: {}
         }
     },
     methods: {
@@ -293,6 +292,19 @@
         }
     },
     created() {
+        let splitURL = document.URL.split("?")
+        let failed = true
+        if(splitURL.length > 1) {
+        let urlParams = new URLSearchParams("?" + splitURL[1])
+        if(urlParams.has("t")) {
+            this.token = urlParams.get("t")
+            //alert(this.token)
+            failed = false
+        }
+        }
+        if(failed) {
+            this.$router.push("/")
+        }
         this.profile = {
                 first: "Ben",
                 last:  "Lewis",
@@ -358,7 +370,7 @@
             {
                 eventID: 1,
                 eventName: "Meeting with Bill",
-                date: "2022 02 25",
+                date: "2022 03 25",
                 startTime: "11:00",
                 endTime: "13:00",
                 location: "CS35.1",
@@ -367,7 +379,7 @@
             {
                 eventID: 2,
                 eventName: "Meeting with Harry",
-                date: "2022 02 25",
+                date: "2022 03 25",
                 startTime: "16:00",
                 endTime: "17:00",
                 location: "CS36.2",
@@ -376,7 +388,7 @@
             {
                 eventID: 3,
                 eventName: "Python Workshop for Beginners",
-                date: "2022 02 26",
+                date: "2022 03 26",
                 startTime: "10:00",
                 endTime: "12:00",
                 location: "T35",
@@ -385,7 +397,7 @@
             {
                 eventID: 4,
                 eventName: "Group Session - Mentoring Support",
-                date: "2022 02 27",
+                date: "2022 03 27",
                 startTime: "14:00",
                 endTime: "15:00",
                 location: "MS Teams",
@@ -394,7 +406,7 @@
             {
                 eventID: 5,
                 eventName: "Meeting with Harry",
-                date: "2022 02 28",
+                date: "2022 03 28",
                 startTime: "16:00",
                 endTime: "17:00",
                 location: "CS36.2",
@@ -403,7 +415,7 @@
             {
                 eventID: 6,
                 eventName: "Meeting with Barry",
-                date: "2022 02 15",
+                date: "2022 03 15",
                 startTime: "13:00",
                 endTime: "15:00",
                 location: "CS242",
@@ -529,9 +541,9 @@
         overflow-y: auto;
         overflow-x:hidden;
         max-height: 30rem;
-        width: 64%;
+        width: 48%;
         float:right;
-        margin-right: 6%; 
+        margin-right: 5%; 
         display: block;
     }
     .meetingDateTime {
@@ -551,13 +563,6 @@
         height: auto;
     }
     .innerPast {
-        text-align: left;
-        display: inline-block;
-        margin-right: 7%;
-        width: 20rem;
-        word-wrap: break-word !important;
-        word-break: break-all !important;
-        white-space: normal !important;
         font-size:small;
     }
     .pastTitle {
@@ -580,6 +585,7 @@
     .seeFeedbackm, .seeFeedbackg, .seeFeedbackw {
         background-color: #00001A;
         padding: 1rem;
+        float: right;
     }
     .seeFeedbackm {
         border: 1px solid #F15A24;

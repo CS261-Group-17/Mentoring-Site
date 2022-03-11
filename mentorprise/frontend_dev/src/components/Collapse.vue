@@ -6,7 +6,7 @@
       :data-bs-target="'#collapse_' + random + i"
       aria-expanded="false"
     >
-      <div :style="!v.comoplete_by ? 'width:auto' : 'width:33%'">
+      <div :style="!v.complete_by ? 'width:auto' : 'width:33%'">
         <svg
           viewBox="64 64 896 896"
           focusable="false"
@@ -23,12 +23,15 @@
         </svg>
         &nbsp; {{ v.upcoming_milestones }}
       </div>
-      <div v-if="v.comoplete_by" style="color: #bdc9e3; width: 33%">
-        {{ v.comoplete_by }}
+      <div v-if="v.complete_by" style="color: #bdc9e3; width: 33%">
+        {{ v.complete_by }}
       </div>
       <div v-if="v.time_remaining" style="color: #bdc9e3; width: 33%">
         {{ v.time_remaining }}
       </div>
+      <button v-if="v.showButton" class="end" @click="this.$emit('end_relationship', v.username)">
+        End Relationship
+      </button>
     </div>
     <div class="collapse collapse-content" :id="'collapse_' + random + i">
       {{ v.content }}
@@ -43,6 +46,7 @@ export default {
     list: Array,
     random: String,
   },
+  emits: ['end_relationship']
 };
 </script>
 
@@ -71,5 +75,15 @@ export default {
 .collapse-content {
   margin-left: 26px;
   color: #bdc9e3;
+}
+.end {
+  color: white;
+  border: solid white 2px;
+  background-color: #00001a;
+  margin-right: 1rem;
+}
+.end:hover {
+  color: black;
+  background-color: white;
 }
 </style>
