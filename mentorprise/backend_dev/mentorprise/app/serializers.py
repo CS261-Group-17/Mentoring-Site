@@ -153,10 +153,11 @@ class MeetingSerializer(serializers.ModelSerializer):
 class MeetingRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingRequest
-        exclude = ['mentee']
+        exclude = ['mentee', 'mentor']
 
     def create(self, validated_data):
         validated_data["mentee"] = self.context["request"].user
+        validated_data["mentor"] = self.context["mentor"]
         return super().create(validated_data)
 
 
