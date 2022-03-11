@@ -19,6 +19,8 @@
             <span class="have-account">Already have an account? </span>
             <router-link to="/register" class="to-register">Click here to register.</router-link>
           </div>
+          <hr>
+          <p class="have-account">By logging in, you consent to storing necessary cookies.</p>
         </form>
       </div>
     </div>
