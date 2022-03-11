@@ -8,6 +8,7 @@
                         <button class="cancelEvent" @click="this.$emit('cancel-event', event.eventID);"><fa icon="xmark" size="2x"/></button>
                         <p class="eventDesc">
                             <span class="eventName"><router-link class="eventLink" :to="'/IndEvent?t='+this.token">{{event.eventName}}</router-link></span><br>
+
                             {{event.startTime + " - " + event.endTime + ", " + event.location}}
                         </p>
                     </li>

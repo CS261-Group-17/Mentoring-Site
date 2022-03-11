@@ -1,5 +1,6 @@
 <template>
     <Navbar :token="this.token"/>
+
     <div id="Feedback">
         <h1>System Feedback</h1>
         <br>

@@ -44,7 +44,8 @@
                     </div>
                   </div>
                 </template>
-                <div v-else> <!-- Will show if looking for mentor -->
+            <div v-else> <!-- Will show if looking for mentor -->
+
                   <div style="background-color: #0a102c; padding: 8px 6px">
                     Choose a mentor:
                   </div>
@@ -66,6 +67,7 @@
                           margin-left: 10px;
                         "
                         v-if="mentor.recommend"
+
                         >Recommended</span
                       >
                     </div>
@@ -265,6 +267,7 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import Collapse from "../components/Collapse.vue";
+
 export default {
   name: "Dashboard",
   components: {

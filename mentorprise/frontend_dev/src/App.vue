@@ -10,6 +10,7 @@
 
 <style>
 body,
+
 html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -20,6 +21,7 @@ html {
 #app {
   background-color: #00001a;
 }
+
 /* #footer {
   background-color: #0420b0;
   bottom: 0;

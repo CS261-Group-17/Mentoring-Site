@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
+from app.matcher import *
 from app.models import *
 from app.serializers import *
 
@@ -131,7 +132,7 @@ def user_strengths(request):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except StrengthList.DoesNotExist:
+        except StrengthWeakness.DoesNotExist:
             return Response("Cannot add non-existent strength", status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE' and 'sw_type' in request.data:
         try:
@@ -143,7 +144,7 @@ def user_strengths(request):
             serializer = StrengthListSerializer(user_strength)
             user_strength.delete()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        except StrengthList.DoesNotExist:
+        except StrengthWeakness.DoesNotExist:
             return Response("Cannot delete non-existent strength", status=status.HTTP_400_BAD_REQUEST)
     return Response("No strength provided", status=status.HTTP_400_BAD_REQUEST)
 
@@ -181,7 +182,7 @@ def user_weaknesses(request):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except WeaknessList.DoesNotExist:
+        except StrengthWeakness.DoesNotExist:
             return Response("Cannot add non-existent weakness", status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE' and 'sw_type' in request.data:
         try:
@@ -193,7 +194,7 @@ def user_weaknesses(request):
             serializer = WeaknessListSerializer(user_weakness)
             user_weakness.delete()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        except WeaknessList.DoesNotExist:
+        except StrengthWeakness.DoesNotExist:
             return Response("Cannot delete non-existent weakness", status=status.HTTP_400_BAD_REQUEST)
     return Response("No weakness provided", status=status.HTTP_400_BAD_REQUEST)
 
@@ -405,11 +406,19 @@ def mentoring_potential_mentees_list(request):
         Offer mentorship to a mentee
     """
     if request.method == 'GET':
-        # TODO: This is our mentor matching bit
-        # .filter(mentee=False) # filter not self etc
-        possible_mentees = User.objects.order_by('-first_name')
-        serializer = UserSerializer(possible_mentees, many=True)
+
+
+        # # TODO: This is our mentor matching bit
+        # # .filter(mentee=False) # filter not self etc
+        # possible_mentees = User.objects.order_by('-first_name')
+        # serializer = UserSerializer(possible_mentees, many=True)
+        # return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+        ordered_mentees = Matcher.get_ordered_list(request.user, User.objects.all())
+        serializer = UserSerializer(ordered_mentees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     elif request.method == 'POST':
         if 'mentee' in request.data:
@@ -468,7 +477,7 @@ def feedback_mentor(request):
     patch:
         Modify the mentor feedback from a user.
     """
-    if 'mentor_id' in request.data:
+    if 'mentor_id' in request.data or 'mentor_id' in request.GET:
         if request.method == 'GET':
             # Get the general feedback
             try:
@@ -478,7 +487,7 @@ def feedback_mentor(request):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except GeneralFeedback.DoesNotExist:
                 return Response("Cannot update feedback for non-existent mentor", status=status.HTTP_400_BAD_REQUEST)
-        elif request.method == 'PATCH' and 'mentor_id' in request.data:
+        elif request.method == 'PATCH' and ('mentor_id' in request.data or 'mentor_id' in request.GET):
             # Get a notification by its id, then update it with the request data
             # if it is valid
             try:
@@ -630,12 +639,16 @@ def meetings_request(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         # Add a new meeting request
-        serializer = MeetingRequestSerializer(
-            data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            mentor = Pairing.objects.get(mentee__exact=request.user).mentor
+            serializer = MeetingRequestSerializer(
+                data=request.data, context={'request': request, "mentor": mentor})
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Pairing.DoesNotExist:
+            return Response("Cannot request a meeting if the user has no mentor", status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE' and 'mentor' in request.data:
         try:
             # Get the appropriate meeting, and delete it
