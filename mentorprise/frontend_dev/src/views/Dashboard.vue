@@ -16,12 +16,11 @@
                 class="part_connections_item_title"
                 style="display: flex; justify-content: space-between"
               >
-                <span>Mentor</span>
+                <span>Mentor: {{ this.mentor_data[0].name }}</span>
                 <router-link :to="'/Schedule?t='+this.token">
                   <button class="mentor_button">Request meeting</button>
                 </router-link>
               </div>
-              <Collapse :list="mentor_data" random="mentor" />
             </template>
             <template v-else>
               <template v-if="!wait_request_mentor_choose">
@@ -83,7 +82,7 @@
                       <div>{{ mentor.status }}</div>
                       <div>
                         <button
-                          @click="request(mentor.name)"
+                          @click="request(mentor.name, mentor.username)"
                           style="
                             border-radius: 4px;
                             color: #2b3e75;
@@ -145,7 +144,7 @@
           <div class="part_connections_item">
             <template v-if="mentees_data.length != 0"> <!-- if you have mentees -->
               <div class="part_connections_item_title">Mentees</div>
-              <Collapse :list="mentees_data" random="mentees" />
+              <Collapse :list="mentees_data" random="mentees" @end_relationship="endRelationship" />
             </template>
             <template v-if="mentees_data.length < 3 && !looking_for_mentees"> <!-- Looking for more mentees -->
               <div class="part_connections_item_select">
@@ -173,7 +172,7 @@
                   <li class="potentialMentees" v-for="pot in potential_mentees" :key="pot.id">
                     <p>
                       <b>{{pot.name}}</b><br>
-                      {{pot.busArea}} <button class="acceptMentee"><span v-if="!mentee_to_confirm[pot.id]">Accept</span><span v-if="mentee_to_confirm[pot.id]">Waiting</span></button><br>
+                      {{pot.busArea}} <button class="acceptMentee" @click="offerMentorship(pot.username)"><span v-if="!mentee_to_confirm[pot.id]">Accept</span><span v-if="mentee_to_confirm[pot.id]">Waiting</span></button><br>
                       {{pot.bio}}
                     </p>
                   </li>
@@ -275,51 +274,13 @@ export default {
   data() {
     return {
       token: {},
-      requests_data: [
-        {
-          content: "Bill has requested a meeting",
-          type: "st",
-        },
-        {
-          content: 'Give feedback for "Meeting with Bill"',
-          type: "gf",
-        },
-      ],
+      requests_data: [],
       mentor_data: [],
-      mentees_data: [
-         { upcoming_milestones: "Bill", content: "content..." },
-         { upcoming_milestones: "Harry", content: "content..." },
-      ],
-      today_data: [
-        {
-          title: "Meeting with Bill",
-          time: "11:00-13:00",
-          room: "CS35.1",
-          color: "#1e2d50",
-          bg_color: "#001934",
-        },
-        {
-          title: "Meeting with Harry",
-          time: "16:00-17:00",
-          room: "CS36.2",
-          color: "#232364",
-          bg_color: "#160046",
-        },
-      ],
-      milestones_data: [
-        {
-          title: "You",
-          content: "Learn Python",
-          time: "20 days left",
-          warning: false,
-        },
-        {
-          title: "Bill",
-          content: "Get a better job",
-          time: "12 days left",
-          warning: false,
-        },
-      ],
+      mentees_data: [],
+        //  { upcoming_milestones: "Bill", content: "content..." },
+        //  { upcoming_milestones: "Harry", content: "content..." },,
+      today_data: [],
+      milestones_data: [],
       request_mentor_choose: false, // whether you are requesting a mentor
       request_mentor_choose_data: [],
       potential_mentees: [
@@ -336,7 +297,7 @@ export default {
           bio: "A young entrepreneur looking to learn how to code"
         }
       ],
-      mentee_to_confirm: [ true, false ],
+      mentee_to_confirm: [ false, false ],
       // request_mentor_choose_data: [
       //   {
       //     name: "James Archbold",
@@ -380,27 +341,123 @@ export default {
         "Authorization": "Token "+this.token
       }
     })
-    //const mentorRep = await mentorRes.json()
+    const mentorRep = await mentorRes.json()
+    //alert(mentorRep)
     if(mentorRes.status >= 200 && mentorRes.status < 300) {
-      alert("Worked")
+      //alert("Worked")
+      this.mentor_data = [{
+          name: mentorRep.first_name + " " + mentorRep.last_name,
+          username: mentorRep.username
+      }]
+    }
+    else if(mentorRes.status == 404) {
+      // means no mentor exists
+      this.mentor_data = []
     }
     else {
       alert("Could not load mentor")
     }
+  
+    // for demo
+    if(this.token == "83ca7a7dec97e66a8b7422636389cd99b415615c") {
+        this.mentees_data= [
+          { upcoming_milestones: "Bill", content: "You can find me at CS56.1", showButton: true, username: "Bill" },
+          { upcoming_milestones: "Harry", content: "Always looking to make a deal", showButton: true, username: "Harry" },
+        ]
+        this.milestones_data= [
+        {
+          title: "You",
+          content: "Learn Python",
+          time: "20 days left",
+          warning: false,
+        },
+        {
+          title: "Bill",
+          content: "Get a better job",
+          time: "12 days left",
+          warning: false,
+        },
+      ]
+      this.today_data= [
+        {
+          title: "Meeting with Bill",
+          time: "11:00-13:00",
+          room: "CS35.1",
+          color: "#1e2d50",
+          bg_color: "#001934",
+        },
+        {
+          title: "Meeting with Harry",
+          time: "16:00-17:00",
+          room: "CS36.2",
+          color: "#232364",
+          bg_color: "#160046",
+        },
+      ]
+      this.requests_data= [
+        {
+          content: "Bill has requested a meeting",
+          type: "st",
+        },
+        {
+          content: 'Give feedback for "Meeting with Bill"',
+          type: "gf",
+        },
+      ]
+    }
+    else {
+      this.mentees_data = []
+    }
+    const menteesRes = await fetch("backend/api/mentoring/mentees/", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": "Token " +this.token
+      }
+    })
+
+    // mentees_data: [
+    //   { upcoming_milestones: "Bill", content: "content..." },
+    //   { upcoming_milestones: "Harry", content: "content..." },
+    // ],
+    const menteesRep = await menteesRes.json()
+    if(menteesRes.status >= 200 && menteesRes.status < 300) {
+      for(let i=0;i<menteesRep.length;i++) {
+        this.mentees_data.push({
+          upcoming_milestones: menteesRep[i].first_name + " " + menteesRep[i].last_name,
+          content: menteesRep[i].profile.biography,
+          showButton: true,
+          username: menteesRep[i].username
+        })
+      }
+    }
+    else {
+      alert("Could not get mentees")
+    }
   },
   methods: {
-    request(name) {
+     async request(name, username) {
       this.request_mentor_choose = false;
       this.wait_request_mentor_choose = true;
       this.wait_request_mentor_choose_data = name;
-      // setTimeout(() => {
-      //   this.mentor_data = [
-      //     {
-      //       upcoming_milestones: "James Archbold",
-      //       content: "content...",
-      //     },
-      //   ];
-      // }, 2000);
+      
+      const acceptOffer = await fetch("backend/api/mentoring/proposed_mentors/", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Token " + this.token
+        },
+        body: JSON.stringify({
+          "mentor": username
+        })
+      }) 
+
+      if(acceptOffer.status >= 200 && acceptOffer.status < 300) {
+        alert("Mentoring established")
+      }
+      else {
+        alert("Mentoring has not been established")
+      }
     },
     hasNoMentor() {
       return this.mentor_data.length == 0
@@ -414,32 +471,118 @@ export default {
           "Authorization": "Token "+this.token
         }
       })
-      //const mentorsList = await res.json()
+      const mentorsList = await res.json()
       const status = await res.status
       if(status >= 200 && status < 300) {
           //alert("Hey Ben")
-          this.request_mentor_choose_data= [
-          {
-            name: "James Archbold",
-            recommend: true,
-            info: "Software Engineering",
-            status: "Available",
-          },
-          {
-            name: "Nathan Griffiths",
-            recommend: false,
-            info: "Marketing",
-            status: "Available",
-          },
-        ]
+          // this.request_mentor_choose_data= [
+          // {
+          //   name: "James Archbold",
+          //   recommend: true,
+          //   info: "Software Engineering",
+          //   status: "Available",
+          // },
+          // {
+          //   name: "Nathan Griffiths",
+          //   recommend: false,
+          //   info: "Marketing",
+          //   status: "Available",
+          // }]
+          this.request_mentor_choose_data = []
+          for(let i=0;i<mentorsList.length;i++) {
+            this.request_mentor_choose_data.push({
+              name: mentorsList[i].first_name + " " + mentorsList[i].last_name,
+              username: mentorsList[i].username,
+              info: mentorsList[i].profile.business_area,
+              status: "Available",
+              recommend: true
+            })
+          }
       }
       else {
         this.request_mentor_choose = false
         alert("Error collecting mentors")
       }
     },
-    getPotMentees() {
+    async getPotMentees() {
       this.looking_for_mentees = true
+      const getMenteesRes = await fetch("backend/api/mentoring/potential_mentees/", {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Token "+this.token
+        }
+      })
+
+      const potMentees = await getMenteesRes.json()
+      if(getMenteesRes.status >= 200 && getMenteesRes.status < 300) {
+        this.potential_mentees = []
+        this.mentee_to_confirm =[]
+        for(let i=0;i<potMentees.length;i++) {
+          this.potential_mentees.push({
+            id: potMentees[i].profile.id,
+            name: potMentees[i].first_name + " " +potMentees[i].last_name,
+            username: potMentees[i].username,
+            busArea: potMentees[i].profile.business_area,
+            bio: potMentees[i].profile.biography
+          })
+          this.mentee_to_confirm.push(false)
+        }
+      }
+      else {
+        alert("Failed to find any mentees")
+      }
+      //alert(this.potential_mentees.length)
+    },
+    async offerMentorship(username) {
+      const offerMentorRes = await fetch("backend/api/mentoring/potential_mentees/", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Token " + this.token
+        },
+        body: JSON.stringify({
+          "mentee": username
+        })
+      })
+
+      //const offerMentorRep = await offerMentorRes.text()
+      if(offerMentorRes.status >= 200 && offerMentorRes.status < 300) {
+        for(let i;i<this.potential_mentees.length;i++) {
+          if(this.potential_mentees[i].username == username) {
+            this.mentee_to_confirm[i] = true
+          }
+        }
+        alert("Request sent")
+      }
+      else {
+        alert("Request failed")
+      }
+    },
+    async endRelationship(mentee) {
+      //username of mentee
+      const endRes = await fetch("backend/api/mentoring/mentee/", {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Token "+this.token
+        },
+        body: JSON.stringify({
+          "mentee": mentee
+        })
+      })
+
+      if(endRes.status >= 200 && endRes.status < 300) {
+        for(let i=0;i<this.mentees_data.length;i++) {
+          if(this.mentees_data[i].username == mentee) {
+            this.mentees_data = this.mentees_data.splice(i, 1)
+            i = i -1
+          }
+        }
+      }
+      else {
+        alert("Relationship could not be broken")
+      }
     }
   },
 };
@@ -467,7 +610,7 @@ export default {
   color: #fff;
   display: grid;
   grid-template-columns: 49% 49%;
-  grid-template-rows: 30rem auto;
+  grid-template-rows: auto;
   gap: 2%;
   margin-bottom: 2rem solid #00001a;
 }
@@ -488,9 +631,9 @@ export default {
   background-color: #00001a;
   border: solid 2px white;
 }
-.acceptMentee:hover {
-  color: black;
-  background-color: white;
+.acceptMentee:hover, .mentor_button:hover {
+  color: black !important;
+  background-color: white !important;
 }
 .mentor_button {
   background-color: transparent;

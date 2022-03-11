@@ -117,6 +117,17 @@ export default {
           content: "Feeling a bit burnt out, need to arrange a meeting with the boss"
         }]
       },
+      {
+        name: "Mr Mentee2",
+        jump: "/Dashboard?t="+this.token,
+        poa: [{
+          id:1,
+          upcoming_milestones: "Learn how to be a better mentee",
+          comoplete_by: "March 23 2022",
+          time_remaining: "12 days left",
+          content: "Talk to my mentor more"
+        }]
+      },
     ];
   },
 };

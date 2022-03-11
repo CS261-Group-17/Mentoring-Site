@@ -29,6 +29,9 @@
       <div v-if="v.time_remaining" style="color: #bdc9e3; width: 33%">
         {{ v.time_remaining }}
       </div>
+      <button v-if="v.showButton" class="end" @click="this.$emit('end_relationship', v.username)">
+        End Relationship
+      </button>
     </div>
     <div class="collapse collapse-content" :id="'collapse_' + random + i">
       {{ v.content }}
@@ -43,6 +46,7 @@ export default {
     list: Array,
     random: String,
   },
+  emits: ['end_relationship']
 };
 </script>
 
@@ -71,5 +75,15 @@ export default {
 .collapse-content {
   margin-left: 26px;
   color: #bdc9e3;
+}
+.end {
+  color: white;
+  border: solid white 2px;
+  background-color: #00001a;
+  margin-right: 1rem;
+}
+.end:hover {
+  color: black;
+  background-color: white;
 }
 </style>

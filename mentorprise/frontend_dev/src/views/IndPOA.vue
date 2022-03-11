@@ -50,7 +50,15 @@
             if(failed) {
                 this.$router.push("/")
             }
-
+            const getFname = await fetch("backend/api/users/account/", {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    "Authorization": "Token "+this.token
+                }
+            })
+            const fname = await getFname.json()
+            this.profile.fname = fname.first_name
             const res = await fetch("backend/api/plans_of_action/", {
                 method: "GET",
                 headers: {
