@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from app.models import *
+from app.sentiment import SentimentAnalyser
+
 
 ##############
 ### Topics ###
@@ -14,17 +16,20 @@ class StrengthWeaknessSerializer(serializers.ModelSerializer):
 ### User ###
 ############
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude = ['user']
+
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'profile']
+        fields = ['username', 'first_name',
+                  'last_name', 'email', 'password', 'profile']
 
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
@@ -32,17 +37,12 @@ class UserSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=user, **profile_data)
         return user
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     profile = ProfileSerializer()
-
-#     class Meta:
-#         model = User
-#         fields = ['profile']
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+
 
 class StrengthListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,6 +53,7 @@ class StrengthListSerializer(serializers.ModelSerializer):
         validated_data["user"] = self.context["request"].user
         validated_data["sw_type"] = self.context["sw_type"]
         return super().create(validated_data)
+
 
 class WeaknessListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -87,31 +88,51 @@ class PairingSerializer(serializers.ModelSerializer):
 class SystemFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = SystemFeedback
-        fields = '__all__'
+        exclude = ['sentiment']
+
+    def create(self, validated_data):
+        validated_data["sentiment"] = SentimentAnalyser.analyse(
+            validated_data["description"])
+        print(validated_data["sentiment"])
+        return super().create(validated_data)
+
 
 class MeetingFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingFeedback
-        exclude = ['giver', 'meeting'] # fields = '__all__'
+        exclude = ['giver', 'meeting', 'sentiment']
 
     def create(self, validated_data):
         validated_data["giver"] = self.context["request"].user
         validated_data["meeting"] = self.context["meeting"]
+        validated_data["sentiment"] = SentimentAnalyser.analyse_both(
+            validated_data["positives"], validated_data["negatives"])
         return super().create(validated_data)
 
-# class GroupEventFeedbackSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = GroupEventFeedback
-#         fields = '__all__'
+
+class GroupEventFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupEventFeedback
+        exclude = ['giver', 'group_event', 'sentiment']
+
+    def create(self, validated_data):
+        validated_data["giver"] = self.context["request"].user
+        validated_data["group_event"] = self.context["group_event"]
+        validated_data["sentiment"] = SentimentAnalyser.analyse_both(
+            validated_data["positives"], validated_data["negatives"])
+        return super().create(validated_data)
+
 
 class GeneralFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = GeneralFeedback
-        exclude = ['giver', 'mentor']
+        exclude = ['giver', 'mentor', 'sentiment']
 
     def create(self, validated_data):
         validated_data["giver"] = self.context["request"].user
         validated_data["mentor"] = self.context["mentor"]
+        validated_data["sentiment"] = SentimentAnalyser.analyse_both(
+            validated_data["positives"], validated_data["negatives"])
         return super().create(validated_data)
 
 
@@ -128,6 +149,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         validated_data["mentee"] = self.context["request"].user
         return super().create(validated_data)
 
+
 class MeetingRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingRequest
@@ -138,10 +160,11 @@ class MeetingRequestSerializer(serializers.ModelSerializer):
         validated_data["mentor"] = self.context["mentor"]
         return super().create(validated_data)
 
+
 class MeetingProposalSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingProposal
-        exclude = ['mentor']
+        exclude = ['mentor']  # TODO: does this need meeting request?
 
     def create(self, validated_data):
         validated_data["mentor"] = self.context["request"].user
@@ -156,17 +179,35 @@ class MeetingProposalSerializer(serializers.ModelSerializer):
 class GroupEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupEvent
-        fields = '__all__'
+        exclude = ['instructor']
+
+    def create(self, validated_data):
+        validated_data["instructor"] = self.context["request"].user
+        return super().create(validated_data)
+
 
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = '__all__'
+        exclude = ['attendee_id', 'group_event']
 
+    def create(self, validated_data):
+        validated_data["attendee_id"] = self.context["request"].user
+        validated_data["group_event"] = self.context["event"]
+        return super().create(validated_data)
+
+
+class AttendanceGetterSerializer(serializers.ModelSerializer):
+    group_event = GroupEventSerializer()
+
+    class Meta:
+        model = Attendance
+        fields = '__all__'
 
 #######################
 ### Plans of action ###
 #######################
+
 
 class MilestoneSerializer(serializers.ModelSerializer):
     class Meta:
@@ -181,6 +222,7 @@ class MilestoneSerializer(serializers.ModelSerializer):
 ### Notifications ###
 #####################
 
+
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
@@ -189,8 +231,3 @@ class NotificationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["user"] = self.context["request"].user
         return super().create(validated_data)
-
-# class NotificationReadSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Notification
-#         fields = 'is_read'
