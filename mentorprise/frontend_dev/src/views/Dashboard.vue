@@ -172,7 +172,7 @@
                   <li class="potentialMentees" v-for="pot in potential_mentees" :key="pot.id">
                     <p>
                       <b>{{pot.name}}</b><br>
-                      {{pot.busArea}} <button class="acceptMentee" @click="offerMentorship(pot.username)"><span v-if="!mentee_to_confirm[pot.id]">Accept</span><span v-if="mentee_to_confirm[pot.id]">Waiting</span></button><br>
+                      {{pot.busArea}} <button class="acceptMentee" @click="offerMentorship(pot.username)"><span v-if="!showWait(pot.id)">Accept</span><span v-if="showWait(pot.id)">Waiting</span></button><br>
                       {{pot.bio}}
                     </p>
                   </li>
@@ -332,7 +332,6 @@ export default {
     if(failed) {
       this.$router.push("/")
     }
-
     //getting mentor
     const mentorRes = await fetch("backend/api/mentoring/mentor/", {
       method: "GET",
@@ -415,7 +414,6 @@ export default {
         "Authorization": "Token " +this.token
       }
     })
-
     // mentees_data: [
     //   { upcoming_milestones: "Bill", content: "content..." },
     //   { upcoming_milestones: "Harry", content: "content..." },
@@ -451,7 +449,6 @@ export default {
           "mentor": username
         })
       }) 
-
       if(acceptOffer.status >= 200 && acceptOffer.status < 300) {
         alert("Mentoring established")
       }
@@ -513,7 +510,6 @@ export default {
           "Authorization": "Token "+this.token
         }
       })
-
       const potMentees = await getMenteesRes.json()
       if(getMenteesRes.status >= 200 && getMenteesRes.status < 300) {
         this.potential_mentees = []
@@ -535,29 +531,44 @@ export default {
       //alert(this.potential_mentees.length)
     },
     async offerMentorship(username) {
-      const offerMentorRes = await fetch("backend/api/mentoring/potential_mentees/", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          "Authorization": "Token " + this.token
-        },
-        body: JSON.stringify({
-          "mentee": username
-        })
-      })
-
-      //const offerMentorRep = await offerMentorRes.text()
-      if(offerMentorRes.status >= 200 && offerMentorRes.status < 300) {
-        for(let i;i<this.potential_mentees.length;i++) {
-          if(this.potential_mentees[i].username == username) {
-            this.mentee_to_confirm[i] = true
-          }
+      let noReq = false
+      for(let i=0;i<this.mentee_to_confirm.length;i++) {
+        if(this.mentees_data[i].username == username && this.mentee_to_confirm[i]) {
+          noReq = true
         }
-        alert("Request sent")
       }
-      else {
-        alert("Request failed")
+      if(!noReq) {
+        const offerMentorRes = await fetch("backend/api/mentoring/potential_mentees/", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Token " + this.token
+          },
+          body: JSON.stringify({
+            "mentee": username
+          })
+        })
+        //const offerMentorRep = await offerMentorRes.text()
+        if(offerMentorRes.status >= 200 && offerMentorRes.status < 300) {
+          for(let i;i<this.potential_mentees.length;i++) {
+            if(this.potential_mentees[i].username == username) {
+              this.mentee_to_confirm[i] = true
+            }
+          }
+          alert("Request sent")
+        }
+        else {
+          alert("Request failed")
+        }
       }
+    },
+    showWait(id) {
+      for(let i=0;i<this.mentee_to_confirm.length;i++) {
+        if(this.mentees_data[i].id == id) {
+          return this.mentee_to_confirm[i]
+        }
+      }
+      return false
     },
     async endRelationship(mentee) {
       //username of mentee
@@ -571,7 +582,6 @@ export default {
           "mentee": mentee
         })
       })
-
       if(endRes.status >= 200 && endRes.status < 300) {
         for(let i=0;i<this.mentees_data.length;i++) {
           if(this.mentees_data[i].username == mentee) {
