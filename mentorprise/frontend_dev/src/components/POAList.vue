@@ -12,18 +12,18 @@
                 <div class="modal" v-if="checkToShow(poa.id)">
                     <h1>Edit Milestone</h1>
                     <label for="title">Title:&nbsp;</label>
-                    <input :id="'title' + poa.id" name="title" :value="poa.title"/>
+                    <input :id="'title' + poa.id" name="title" v-model="poa.title"/>
                     <p id="descLabel">Description: </p>
                     <textarea :id="'desc' + poa.id" name="desc" rows=3 cols= 40 v-model="poa.description"></textarea>
                     <br>
                     <label for="chooseDate">Deadline:&nbsp;</label>
-                    <input :id="'chooseDate' + poa.id" name="chooseDate" type="datetime-local" :min="setMin()" :value="poa.deadline" />
+                    <input :id="'chooseDate' + poa.id" name="chooseDate" type="datetime-local" :min="setMin()" v-model="poa.deadline" />
                     <br><br>
                     <button class="btn btn-primary" type="button" @click="submitEdits(poa.id)">
                         Submit Form
                     </button>
                     &nbsp;&nbsp;
-                    <button class="btn btn-danger" type="button" @click="editMileStone(poa.id, false)">
+                    <button class="btn btn-danger" type="button" @click="closeForm(poa.id)">
                         Close Form
                     </button>
                 </div>
@@ -93,10 +93,25 @@ export default {
         checkToShow(id) {
             for(let i=0;i<this.showModal.length;i++) {
                 if(this.poaList[i].id == id) {
+                    //alert(this.poaList[i].deadline.substring(0, this.poaList[i].deadline.length-4))
                     return this.showModal[i]
                 }
             }
             return false
+        },
+        closeForm(id) {
+            // for(let i=0;i<this.poaList.length;i++) {
+            //     if(this.poaList[i].id == id) {
+            //         //alert(this.poaList[i].title)
+            //         if(this.poaList[i].title == "") {
+            //             this.poaList[i].title = "Default Title"
+            //         }
+            //         if(this.poaList[i].description == "") {
+            //             this.poaList[i].description = "Default Description"
+            //         }
+            //     }
+            // }
+            this.editMileStone(id, false)
         },
         editMileStone(id, newVal) {
             this.showModal = []

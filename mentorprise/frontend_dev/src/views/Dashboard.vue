@@ -239,7 +239,7 @@
           </span>
 
           <span>
-            <router-link to="/POA">
+            <router-link :to="'/IndPOA?t='+this.token">
               <button class="part_title_button">View Plans of Action</button>
             </router-link>
           </span>
@@ -293,15 +293,15 @@ export default {
       today_data: [
         {
           title: "Meeting with Bill",
-          time: "14:00-15:00",
-          room: "R1.03",
+          time: "11:00-13:00",
+          room: "CS35.1",
           color: "#1e2d50",
           bg_color: "#001934",
         },
         {
           title: "Meeting with Harry",
-          time: "14:00-15:00",
-          room: "R1.03",
+          time: "16:00-17:00",
+          room: "CS36.2",
           color: "#232364",
           bg_color: "#160046",
         },
@@ -310,13 +310,13 @@ export default {
         {
           title: "You",
           content: "Learn Python",
-          time: "38 days late",
-          warning: true,
+          time: "20 days left",
+          warning: false,
         },
         {
           title: "Bill",
           content: "Get a better job",
-          time: "12 days late",
+          time: "12 days left",
           warning: false,
         },
       ],
@@ -356,7 +356,7 @@ export default {
       looking_for_mentees: false
     };
   },
-  created() {
+  async created() {
     //alert(document.URL.split("?")[1])
     let splitURL = document.URL.split("?")
     let failed = true
@@ -370,6 +370,22 @@ export default {
     }
     if(failed) {
       this.$router.push("/")
+    }
+
+    //getting mentor
+    const mentorRes = await fetch("backend/api/mentoring/mentor/", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": "Token "+this.token
+      }
+    })
+    //const mentorRep = await mentorRes.json()
+    if(mentorRes.status >= 200 && mentorRes.status < 300) {
+      alert("Worked")
+    }
+    else {
+      alert("Could not load mentor")
     }
   },
   methods: {

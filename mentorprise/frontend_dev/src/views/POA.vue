@@ -14,8 +14,8 @@
       <Collapse :list="yourPOA" random="your-poa" />
     </div>
 
-    <router-link to="/indpoa" class="view">
-      <button>View your POA</button>
+    <router-link :to="'/IndPOA?t='+this.token" class="view">
+      <button class="ownPOA">View your POA</button>
     </router-link>
 
     <br /><br />
@@ -28,7 +28,7 @@
         <div>Time remaining:</div>
         <div class="view-full-poa">
           <router-link :to="v.jump">
-            <button>View full POA</button>
+            <button class="ownPOA">View full POA</button>
           </router-link>
         </div>
       </div>
@@ -72,39 +72,50 @@ export default {
       {
         id: 1,
         upcoming_milestones: "Learn Python",
-        comoplete_by: "9 January 2022",
-        time_remaining: "38 days left",
+        comoplete_by: "March 31 2022",
+        time_remaining: "20 days left",
         content:
-          "content... content... content... content... content... content...",
+          "For the group project",
       },
       {
         id: 2,
-        upcoming_milestones: "Complete mentoring course",
-        comoplete_by: "28 January 2022",
-        time_remaining: "12 days left",
+        upcoming_milestones: "Help Bill find a job",
+        comoplete_by: "March 25 2022",
+        time_remaining: "14 days left",
         content:
-          "content... content... content... content... content... content...",
-      },
-      {
-        id: 3,
-        upcoming_milestones: "Find a new house",
-        comoplete_by: "2 January 2022",
-        time_remaining: "147 days left",
-        content:
-          "content... content... content... content... content... content...",
+          "Need to organise a meeting with him",
       },
     ];
 
     this.yourMenteesPOA = [
       {
         name: "Bill",
-        jump: "/dashboard",
-        poa: this.yourPOA,
+        jump: "/Dashboard?t="+this.token,
+        poa: [{
+          id:1,
+          upcoming_milestones: "Get a better job",
+          comoplete_by: "March 23 2022",
+          time_remaining: "12 days left",
+          content: "Organise a meeting with mentor"
+        }]
       },
       {
         name: "Harry",
-        jump: "/dashboard",
-        poa: this.yourPOA,
+        jump: "/Dashboard?t="+this.token,
+        poa: [{
+          id: 1,
+          upcoming_milestones: "Improve my networking skills",
+          comonplete_by: "April 1 2022",
+          time_remaining: "21 days left",
+          content: "Go to seminars on networking, try and meet influential people"
+        },
+        {
+          id: 2,
+          upcoming_milestones: "Talk to boss about lack of motivation",
+          comoplete_by: "March 9 2022",
+          time_remaining: "2 days late",
+          content: "Feeling a bit burnt out, need to arrange a meeting with the boss"
+        }]
       },
     ];
   },
@@ -128,6 +139,11 @@ export default {
   opacity: 1;
   height: 2px;
   margin-top: 0px;
+}
+
+.ownPOA:hover {
+  color: black !important;
+  background-color: white !important;
 }
 
 .your-poa {

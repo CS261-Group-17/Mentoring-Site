@@ -60,6 +60,9 @@
             })
             const poa = await res.json()
             this.milestones = poa
+            for(let i=0;i<this.milestones.length;i++) {
+                this.milestones[i].deadline = this.milestones[i].deadline.substring(0, this.milestones[i].deadline.length-4)
+            }
             // this.milestones = [
             //     { //Needs to be in YYYY-MM-DD
             //         id: 1,
@@ -134,6 +137,9 @@
                 if(status >= 300) {
                     alert("Milestone failed to be added")
                     this.milestones = this.milestones.slice(-1)
+                }
+                else {
+                    this.milestones[this.milestones.length-1].deadline += "T00:00"
                 }
             },
             async deleteCancelled(id) {
@@ -224,7 +230,7 @@
                                 milestone: id,
                                 title: newTitle,
                                 description: newDesc,
-                                deadline: newDate
+                                deadline: newDate+":00Z"
                             })
                         })
 
@@ -235,7 +241,7 @@
                         else {
                             this.milestones[i].title = newTitle
                             this.milestones[i].description = newDesc
-                            this.milestones[i].deadline = newDate
+                            this.milestones[i].deadline = newDate+":00Z"
                         }
                         return null
                     }
