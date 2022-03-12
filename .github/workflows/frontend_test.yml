@@ -13,7 +13,8 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: stefanoeb/eslint-action@1.0.2
-        with:
-          files: mentorprise/frontend_dev/
+    - uses: actions/checkout@v2
+    - name: Install ESLint
+      run: npm install eslint --save-dev
+    - name: Run ESLint
+      run: npx eslint mentorprise/frontend_dev/ --ext .js,.jsx,.ts,.tsx --ignore-pattern mentorprise/frontend_dev/node_modules/
