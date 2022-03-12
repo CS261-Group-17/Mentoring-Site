@@ -1,11 +1,12 @@
 module.exports = {
   devServer: {
     proxy: {
-      "^/backend": {
-        target: "http://127.0.0.1:8000",
+      "^/backend/*": {
+        target: "http://localhost:8000",
+        secure: false,
         changeOrigin: true,
         logLevel: "debug",
-        pathRewrite: { "^/backend": "/" },
+        pathRewrite: { "^/backend": "" },
       },
     },
   },
