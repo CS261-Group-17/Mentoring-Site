@@ -23,7 +23,7 @@ jobs:
     - name: Start PostgreSQL
       run: |
         sudo systemctl start postgresql.service
-        sudo -u postgres createuser -s runner
+        sudo -u postgres createuser -s mentorprise
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
