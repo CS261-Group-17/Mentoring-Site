@@ -13,10 +13,7 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install modules
-      run: yarn
-    - name: Run ESLint
-      run: |
-        cd mentorprise/frontend_dev
-        eslint . --ext .js,.jsx,.ts,.tsx
+      - uses: actions/checkout@v1
+      - uses: stefanoeb/eslint-action@1.0.2
+        with:
+          files: mentorprise/frontend_dev/
