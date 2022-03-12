@@ -1,19 +1,15 @@
-import Vue from 'vue'
-import store from '@/store'
-import router from '@/router'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-import axios from 'axios'
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import App from '@/App.vue'
-import './registerServiceWorker'
-axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
-Vue.config.productionTip = false
+library.add(fas);
 
-new Vue({
-  router,
-  store,
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-  render: h => h(App)
-}).$mount('#app')
+createApp(App).component("fa", FontAwesomeIcon).use(router).mount("#app");

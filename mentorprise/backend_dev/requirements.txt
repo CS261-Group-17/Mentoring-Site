@@ -4,5 +4,7 @@ flake8
 psycopg2-binary #psycopg2 cannot be successfully built
 pylint
 drf_yasg
-numpy
 nltk
+
+django-environ==0.4.5
+gunicorn==20.1.0

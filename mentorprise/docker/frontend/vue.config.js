@@ -1,20 +1,12 @@
-// vue.config.js
 module.exports = {
-  lintOnSave: false,
   devServer: {
-    hot: true,
-    hotOnly: true,
-    disableHostCheck: true,
-    historyApiFallback: true,
-    public: '0.0.0.0:8000',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
+    proxy: {
+      "^/backend": {
+        target: "http://127.0.0.1:8000",
+        changeOrigin: true,
+        logLevel: "debug",
+        pathRewrite: { "^/backend": "/" },
+      },
     },
-    watchOptions: {
-      poll: 1000,
-      ignored: '/app/node_modules/'
-    }
-  }
-}
+  },
+};
