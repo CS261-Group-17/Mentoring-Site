@@ -1,19 +1,16 @@
-# Stage 1 - build frontend app
-FROM node:10-alpine as build-deps
-
+# dev
+FROM node:16.3.0-alpine3.11 as build-stage
 WORKDIR /app/
-
-COPY frontend/package.json frontend/package-lock.json /app/
+COPY frontend/package.json /app/
+RUN npm cache verify
 RUN npm install
-
 COPY frontend /app/
-COPY .env /app/.env
 RUN npm run build
 
-# Stage 2 - nginx & frontend dist
-FROM nginx:alpine
-
+# prod
+FROM nginx:1.21.0-alpine as production-stage
 COPY nginx/prod.conf /etc/nginx/nginx.conf
-COPY --from=build-deps /app/dist/ /dist/
-
+COPY backend/static /usr/src/app/static/
+COPY --from=build-stage /app/dist /dist/
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

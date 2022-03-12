@@ -6,6 +6,7 @@ pylint
 drf_yasg
 nltk
 
+# pillow
 django-environ==0.4.5
 gunicorn==20.1.0
-config
+# environs
