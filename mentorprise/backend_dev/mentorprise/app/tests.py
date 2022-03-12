@@ -2,8 +2,8 @@ from django.test import TestCase
 import json
 
 user1 = {
-    "email":"egoodman3141@gmail.com", 
-    "username":"EdmundGoodman", 
+    "email":"egoodman3141@gmail.com",
+    "username":"EdmundGoodman",
     "first_name":"Edmund",
     "last_name":"Goodman",
     "password":"12345",
@@ -32,9 +32,9 @@ user2 = {
 }
 
 class AuthTestCase(TestCase):
-    
+
     def test_login_sequence(self):
-        register_response = self.client.post('/api/users/register/', user1, content_type='application/json') 
+        register_response = self.client.post('/api/users/register/', user1, content_type='application/json')
         self.assertEqual(register_response.status_code // 100, 2)
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.assertEqual(login_response.status_code // 100, 2)
@@ -43,13 +43,13 @@ class AuthTestCase(TestCase):
         self.assertEqual(logout_response.status_code // 100, 2)
 
     def test_register_twice(self):
-        register_response_1 = self.client.post('/api/users/register/', user1, content_type='application/json') 
+        register_response_1 = self.client.post('/api/users/register/', user1, content_type='application/json')
         self.assertEqual(register_response_1.status_code // 100, 2)
-        register_response_2 = self.client.post('/api/users/register/', user1, content_type='application/json') 
+        register_response_2 = self.client.post('/api/users/register/', user1, content_type='application/json')
         self.assertEqual(register_response_2.status_code, 400)
 
     def test_login_twice(self):
-        register_response = self.client.post('/api/users/register/', user1, content_type='application/json') 
+        register_response = self.client.post('/api/users/register/', user1, content_type='application/json')
         self.assertEqual(register_response.status_code // 100, 2)
         login_response_1 = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.assertEqual(login_response_1.status_code // 100, 2)
@@ -59,7 +59,7 @@ class AuthTestCase(TestCase):
         self.assertEqual(token_1, token_2)
 
     def test_log_back_in(self):
-        register_response = self.client.post('/api/users/register/', user1, content_type='application/json') 
+        register_response = self.client.post('/api/users/register/', user1, content_type='application/json')
         self.assertEqual(register_response.status_code // 100, 2)
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.assertEqual(login_response.status_code // 100, 2)
@@ -71,12 +71,12 @@ class AuthTestCase(TestCase):
         self.assertNotEqual(token_1, token_2)
 
     def test_user_deletion(self):
-        register_response = self.client.post('/api/users/register/', user1, content_type='application/json') 
+        register_response = self.client.post('/api/users/register/', user1, content_type='application/json')
         self.assertEqual(register_response.status_code // 100, 2)
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.assertEqual(login_response.status_code // 100, 2)
         token = json.loads(login_response.content)['token']
-        response = self.client.delete('/api/users/delete/', HTTP_AUTHORIZATION='Token {}'.format(token)) 
+        response = self.client.delete('/api/users/delete/', HTTP_AUTHORIZATION='Token {}'.format(token))
         self.assertEqual(response.status_code // 100, 2)
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.assertEqual(login_response.status_code, 400)
@@ -85,7 +85,7 @@ class TopicTestCase(TestCase):
     def test_topics(self):
         topics = set(['Django', 'Python', 'Java'])
         for t in topics:
-            response = self.client.post('/api/topics/', {'sw_type':t}, content_type='application/json') 
+            response = self.client.post('/api/topics/', {'sw_type':t}, content_type='application/json')
             self.assertEqual(response.status_code // 100, 2)
 
         while topics:
@@ -107,14 +107,14 @@ class TopicTestCase(TestCase):
 class UserTestCase(TestCase):
     def setUp(self):
         #registers and logins in the user to obtain an auth token
-        self.client.post('/api/users/register/', user1, content_type='application/json') 
+        self.client.post('/api/users/register/', user1, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.token = json.loads(login_response.content)['token']
 
         #adds topics to the API
         self.topics = ['Django', 'Python', 'Java']
         for t in self.topics:
-            self.client.post('/api/topics/', {'sw_type':t}, content_type='application/json') 
+            self.client.post('/api/topics/', {'sw_type':t}, content_type='application/json')
 
     def test_profile(self):
         response = self.client.get('/api/users/profile/', HTTP_AUTHORIZATION='Token {}'.format(self.token))
@@ -123,7 +123,7 @@ class UserTestCase(TestCase):
         res = True
         for k,v in user1['profile'].items():
             if not(k in profile and profile[k] == v):
-                res = False 
+                res = False
                 break
         self.assertTrue(res)
 
@@ -209,7 +209,7 @@ class UserTestCase(TestCase):
 class NotificationsTestCase(TestCase):
     def setUp(self):
         #registers and logins in the user to obtain an auth token
-        self.client.post('/api/users/register/', user1, content_type='application/json') 
+        self.client.post('/api/users/register/', user1, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.token = json.loads(login_response.content)['token']
         # example notification
@@ -220,7 +220,7 @@ class NotificationsTestCase(TestCase):
                     'description':'This is a description',
                     'is_read':False,
                     'link':'https://example.com/'
-                
+
                 },
                 {
                     'title':'Notification 2',
@@ -256,7 +256,7 @@ class NotificationsTestCase(TestCase):
             if not res:
                 break
         self.assertTrue(res)
-        
+
         #tests if notification changes work
         response = self.client.patch('/api/notifications/', {'is_read':not(notifications[0]['is_read']), 'notification':notifications[0]['id']}, content_type='application/json', HTTP_AUTHORIZATION='Token {}'.format(self.token))
         self.assertEqual(response.status_code // 100, 2)
@@ -271,15 +271,15 @@ class NotificationsTestCase(TestCase):
 class MentoringTestCase(TestCase):
     def setUp(self):
         #registers and logins in user1 to obtain an auth token
-        self.client.post('/api/users/register/', user1, content_type='application/json') 
+        self.client.post('/api/users/register/', user1, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.token_1 = json.loads(login_response.content)['token']
 
         #registers and logins in user2 to obtain an auth token
-        self.client.post('/api/users/register/', user2, content_type='application/json') 
+        self.client.post('/api/users/register/', user2, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user2['username'], 'password':user2['password']}, content_type='application/json')
         self.token_2 = json.loads(login_response.content)['token']
-       
+
     def test_potential_mentees(self):
         response = self.client.get('/api/mentoring/potential_mentees/', HTTP_AUTHORIZATION='Token {}'.format(self.token_1))
         self.assertEqual(response.status_code // 100, 2)
@@ -294,11 +294,11 @@ class MentoringTestCase(TestCase):
         res = True
         for k,v in user2['profile'].items():
             if not(k in mentee['profile'] and mentee['profile'][k] == v):
-                res = False 
+                res = False
                 break
         self.assertTrue(res)
         self.assertTrue('password' not in mentee)
-    
+
     def test_mentoring(self):
         #creates the mentoring relationship
         response = self.client.get('/api/mentoring/potential_mentees/', HTTP_AUTHORIZATION='Token {}'.format(self.token_1))
@@ -347,7 +347,7 @@ class MentoringTestCase(TestCase):
 class POATestCase(TestCase):
     def setUp(self):
         #registers and logins in user to obtain an auth token
-        self.client.post('/api/users/register/', user1, content_type='application/json') 
+        self.client.post('/api/users/register/', user1, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.token = json.loads(login_response.content)['token']
 
@@ -406,7 +406,7 @@ class POATestCase(TestCase):
                     break
             if not res:
                 break
-        self.assertTrue(res)        
+        self.assertTrue(res)
 
         #completes a milestone
         response = self.client.patch('/api/plans_of_action/milestones/', {'milestone':poa[0]['id'], 'complete':True}, content_type='application/json', HTTP_AUTHORIZATION='Token {}'.format(self.token))
@@ -437,12 +437,12 @@ class POATestCase(TestCase):
 class MeetingsTestCase(TestCase):
     def setUp(self):
         #registers and logins in user1 to obtain an auth token
-        self.client.post('/api/users/register/', user1, content_type='application/json') 
+        self.client.post('/api/users/register/', user1, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.token_1 = json.loads(login_response.content)['token']
 
         #registers and logins in user2 to obtain an auth token
-        self.client.post('/api/users/register/', user2, content_type='application/json') 
+        self.client.post('/api/users/register/', user2, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user2['username'], 'password':user1['password']}, content_type='application/json')
         self.token_2 = json.loads(login_response.content)['token']
 
@@ -486,12 +486,12 @@ class MeetingsTestCase(TestCase):
 class FeedbackTestCase(TestCase):
     def setUp(self):
         #registers and logins in user1 to obtain an auth token
-        self.client.post('/api/users/register/', user1, content_type='application/json') 
+        self.client.post('/api/users/register/', user1, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user1['username'], 'password':user1['password']}, content_type='application/json')
         self.token_1 = json.loads(login_response.content)['token']
 
         #registers and logins in user2 to obtain an auth token
-        self.client.post('/api/users/register/', user2, content_type='application/json') 
+        self.client.post('/api/users/register/', user2, content_type='application/json')
         login_response = self.client.post('/api/users/login/', {'username':user2['username'], 'password':user1['password']}, content_type='application/json')
         self.token_2 = json.loads(login_response.content)['token']
 
@@ -514,10 +514,10 @@ class FeedbackTestCase(TestCase):
                     }
                 ]
         for f in system_feedback:
-            response = self.client.post('/api/feedback/system/', f, content_type='application/json') 
+            response = self.client.post('/api/feedback/system/', f, content_type='application/json')
             self.assertEqual(response.status_code // 100, 2)
 
-        response = self.client.get('/api/feedback/system/') 
+        response = self.client.get('/api/feedback/system/')
         self.assertEqual(response.status_code // 100, 2)
         loaded_feedback = json.loads(response.content)
         for f in loaded_feedback:
@@ -532,7 +532,7 @@ class FeedbackTestCase(TestCase):
         response = self.client.get('/api/mentoring/proposed_mentors/', HTTP_AUTHORIZATION='Token {}'.format(self.token_2))
         mentor = json.loads(response.content)[0]
         response = self.client.post('/api/mentoring/proposed_mentors/', {'mentor':mentor['username']}, content_type='application/json', HTTP_AUTHORIZATION='Token {}'.format(self.token_2))
-        
+
         response = self.client.get('/api/feedback/mentor/?mentor_id=1', HTTP_AUTHORIZATION='Token {}'.format(self.token_2))
         self.assertEqual(response.status_code // 100, 2)
         feedback = json.loads(response.content)
@@ -545,7 +545,7 @@ class FeedbackTestCase(TestCase):
         self.assertEqual(response.status_code // 100, 2)
         retreived_feedback = json.loads(response.content)
         retreived_feedback = retreived_feedback[0]
-        
+
         self.assertEqual(feedback['rating'] + 1, retreived_feedback['rating'])
 
     def test_meeting_feedback(self):

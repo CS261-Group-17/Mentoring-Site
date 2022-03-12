@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name',
-                  'last_name', 'email', 'password', 'profile']
+                  'last_name', 'email', 'profile'] # 'password', 
 
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
@@ -164,10 +164,11 @@ class MeetingRequestSerializer(serializers.ModelSerializer):
 class MeetingProposalSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingProposal
-        exclude = ['mentor']  # TODO: does this need meeting request?
+        exclude = ['mentor', 'mentee']
 
     def create(self, validated_data):
         validated_data["mentor"] = self.context["request"].user
+        validated_data["mentee"] = self.context["mentee"]
         validated_data["request"] = self.context["meeting_request"]
         return super().create(validated_data)
 

@@ -66,11 +66,11 @@ def user_profile(request):
             # data in the request
             serializer = ProfileSerializer(
                 profile, data=request.data, partial=True)
-            #print(serializer)
+            # print(serializer)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            #print(serializer.errors)
+            # print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Profile.DoesNotExist:
         return Response("Cannot get profile for non-existent user", status=status.HTTP_400_BAD_REQUEST)
@@ -125,6 +125,13 @@ def user_strengths(request):
             # Get the strength with the name
             strength = StrengthWeakness.objects.get(
                 sw_type__exact=request.data.get('sw_type'))
+            # Check there aren't already duplicates
+            strength_already_exists = StrengthList.objects.filter(user__exact=request.user).filter(
+                sw_type__exact=strength).exists()
+            weakness_already_exists = WeaknessList.objects.filter(user__exact=request.user).filter(
+                sw_type__exact=strength).exists()
+            if strength_already_exists or weakness_already_exists:
+                return Response("Cannot add duplicate strength/weakness", status=status.HTTP_400_BAD_REQUEST)
             # Add the user as having that strength
             serializer = StrengthListSerializer(
                 data=request.data, context={'request': request, 'sw_type': strength})
@@ -175,6 +182,13 @@ def user_weaknesses(request):
             # Get the weakness with the name
             weakness = StrengthWeakness.objects.get(
                 sw_type__exact=request.data.get('sw_type'))
+            # Check there aren't already duplicates
+            strength_already_exists = StrengthList.objects.filter(user__exact=request.user).filter(
+                sw_type__exact=weakness).exists()
+            weakness_already_exists = WeaknessList.objects.filter(user__exact=request.user).filter(
+                sw_type__exact=weakness).exists()
+            if strength_already_exists or weakness_already_exists:
+                return Response("Cannot add duplicate strength/weakness", status=status.HTTP_400_BAD_REQUEST)
             # Add the user as having that weakness
             serializer = WeaknessListSerializer(
                 data=request.data, context={'request': request, 'sw_type': weakness})
@@ -407,18 +421,16 @@ def mentoring_potential_mentees_list(request):
     """
     if request.method == 'GET':
 
-
         # # TODO: This is our mentor matching bit
         # # .filter(mentee=False) # filter not self etc
         # possible_mentees = User.objects.order_by('-first_name')
         # serializer = UserSerializer(possible_mentees, many=True)
         # return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-        ordered_mentees = Matcher.get_ordered_list(request.user, User.objects.all())
+        ordered_mentees = Matcher.get_ordered_list(
+            request.user, User.objects.all())
         serializer = UserSerializer(ordered_mentees, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
     elif request.method == 'POST':
         if 'mentee' in request.data:
@@ -521,7 +533,8 @@ def feedback_meeting(request):
                 id__exact=request.data.get('meeting'))
             meeting_feedback = MeetingFeedback.objects.all()
             if request.method == 'GET':
-                serializer = MeetingFeedbackSerializer(meeting_feedback, many=True)
+                serializer = MeetingFeedbackSerializer(
+                    meeting_feedback, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             elif request.method == 'POST':
                 serializer = MeetingFeedbackSerializer(
@@ -568,7 +581,8 @@ def feedback_group_event(request):
                 id__exact=request.data.get('group_event'))
             group_event_feedback = GroupEventFeedback.objects.all()
             if request.method == 'GET':
-                serializer = GroupEventFeedbackSerializer(group_event_feedback, many=True)
+                serializer = GroupEventFeedbackSerializer(
+                    group_event_feedback, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             elif request.method == 'POST':
                 serializer = GroupEventFeedbackSerializer(
@@ -678,7 +692,7 @@ def meetings_propose(request):
         # Serialize and return the meeting requests from the authenticated user
         serializer = MeetingRequestSerializer(meeting_requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'POST' and 'meeting_request_id' in request.data:
+    elif request.method == 'POST' and 'meeting_request_id' in request.data and 'mentee' in request.data:
         # Mark the meeting request as proposed
         try:
             meeting_request = MeetingRequest.objects.get(
@@ -687,16 +701,20 @@ def meetings_propose(request):
                 meeting_request, data={"is_proposed": True}, partial=True)
             if serializer.is_valid():
                 serializer.save()
+        except MeetingRequest.DoesNotExist:
+            return Response("Cannot propose times for non-existent meeting request", status=status.HTTP_400_BAD_REQUEST)
+        try:
             # Add a new meeting proposal
             # TODO: THIS IS NOT TOTALLY SECURE AS USER CAN CHANGE MEETING DATA
+            mentee = User.objects.all().get(id=request.data.get("mentee"))
             serializer = MeetingProposalSerializer(data=request.data, context={
-                                                   'request': request, 'meeting_request': meeting_request})
+                                                   'request': request, 'meeting_request': meeting_request, 'mentee': mentee})
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except MeetingRequest.DoesNotExist:
-            return Response("Cannot propose times for non-existent meeting request", status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response("Mentee does not exist", status=status.HTTP_400_BAD_REQUEST)
     return Response("No meeting request provided", status=status.HTTP_400_BAD_REQUEST)
 
 
