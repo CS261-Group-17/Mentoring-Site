@@ -6,7 +6,7 @@ services:
       context: ./backend
     command: /start_prod.sh
     environment:
-      - "DJANGO_SECRET_KEY=00GENERATE A SECRET KEY00"
+      - "DJANGO_SECRET_KEY=zU-lxqO8BLbG-zXIDXovRjKgk93pI3qEgQsNfvXha6XlFN4meAw"
       - "DJANGO_DEBUG=False"
     networks:
       - django-nginx

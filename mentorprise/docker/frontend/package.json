@@ -52,5 +52,13 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8000",
+      "secure": false,
+      "changeOrigin": "true",
+      "pathRewrite": {"^/api": ""}
+    }
+  }
 }
