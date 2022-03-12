@@ -10,9 +10,9 @@ on:
     branches: [ main, backend ]
 
 jobs:
-  build:
+  test:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 # Comes with postgresql installed!
 
     steps:
     - uses: actions/checkout@v2
@@ -20,6 +20,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
+    - name: Start PostgreSQL
+      run: |
+        sudo systemctl start postgresql.service
+        sudo -u postgres createuser -s runner
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -34,7 +38,11 @@ jobs:
       run: |
         cd mentorprise/backend_dev/
         pylint . --fail-under=0
-    # - name: Run Django test cases
-    #   run: |
-    #     cd mentorprise/backend_dev/mentorprise
-    #     python manage.py test
+    - name: Run Tests
+      env:
+        DB: mentorprise
+        DB_USER: mentorprise
+        DB_PASSWORD: 12345
+      run: |
+        cd mentorprise/backend_dev/mentorprise
+        python manage.py test

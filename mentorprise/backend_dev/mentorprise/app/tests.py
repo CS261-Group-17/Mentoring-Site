@@ -194,7 +194,7 @@ class UserTestCase(TestCase):
 
         #checks if a strength can also be a weakness (this shouldn't happen)
         response = self.client.post('/api/users/weaknesses/', {'sw_type':self.topics[1]}, content_type='application/json', HTTP_AUTHORIZATION='Token {}'.format(self.token))
-        self.assertEqual(response.status_code // 100, 2)
+        self.assertEqual(response.status_code // 100, 4) # It will return an error 404 - test intentionally changed
 
         response = self.client.get('/api/users/strengths/', HTTP_AUTHORIZATION='Token {}'.format(self.token))
         self.assertEqual(response.status_code // 100, 2)
