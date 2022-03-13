@@ -47,3 +47,6 @@ jobs:
       run: |
         cd mentorprise/backend_dev/mentorprise
         python manage.py test
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
