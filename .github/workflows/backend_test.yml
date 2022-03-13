@@ -47,6 +47,6 @@ jobs:
       run: |
         cd mentorprise/backend_dev/mentorprise
         coverage run --source='.' manage.py test app
-        cp .coverage ../../../.coverage
+        coverage xml
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v2
