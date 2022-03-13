@@ -46,7 +46,7 @@ jobs:
         DB_PASSWORD: 12345
       run: |
         cd mentorprise/backend_dev/mentorprise
-        coverage run --source='.' manage.py test app
-        coverage xml
+        coverage run --source='.' manage.py test
+        coverage xml --omit=app/views.py
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v2

@@ -1,3 +1,0 @@
-root_dir: "mentorprise/backend_dev/mentorprise/"
-ignore:
-  - "mentorprise/backend_dev/mentorprise/app/views.py"
