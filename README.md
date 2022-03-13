@@ -4,13 +4,7 @@ The implementation of group 17's software engineering project for the Warwick CS
 
 ## Usage
 
-The development version of the site can be accessed at [http://localhost:8000](http://localhost:8000) when running through docker.
-
-## Setup
-
-See the `GETTING_STARTED.md` document for in-depth instructions on how to start developing.
-
-See the `DOCKER_SETUP.md` document for a summary of how the docker container was setup.
+See the `INSTALLATION.md` document for installations instructions for the development and production environments.
 
 ## License
 
