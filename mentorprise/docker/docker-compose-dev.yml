@@ -5,7 +5,10 @@ services:
     container_name: db
     image: postgres
     environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    environment:
+      - POSTGRES_USER=mentorprise
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=mentorprise
     networks:
       - django-nginx
 
